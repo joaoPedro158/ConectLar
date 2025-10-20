@@ -5,3 +5,4 @@ public interface RotasBases {
     String Delete = "/delete";
 
     String Cadastra = "/Cadastra";
+}
