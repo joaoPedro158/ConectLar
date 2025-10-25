@@ -10,4 +10,6 @@ public interface UsuarioService {
     UsuarioDTO saveUsuario(UsuarioRecord usuario);
 
     List<UsuarioDTO> getAll();
+
+    void deleteUsuario(Long id);
 }

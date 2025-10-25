@@ -43,4 +43,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<UsuarioEntity> entities = usuarioRepository.findAll();
         return entities.stream().map(mapper::toDTO).toList();
     }
+
+    @Override
+    public void deleteUsuario(Long id) {
+        if (!usuarioRepository.existsById(id)){
+            throw new RuntimeException("Usuário não encontrado com ID: " + id);
+        }
+        usuarioRepository.deleteById(id);
+    }
 }

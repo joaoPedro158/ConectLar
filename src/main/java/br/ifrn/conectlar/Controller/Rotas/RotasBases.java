@@ -1,8 +1,8 @@
-package br.ifrn.conectlar.Controller.RotasUsuario;
+package br.ifrn.conectlar.Controller.Rotas;
 
 public interface RotasBases {
 
-    String Delete = "/delete";
+    String Delete = "/delete/{id}";
 
     String Cadastra = "/form";
 

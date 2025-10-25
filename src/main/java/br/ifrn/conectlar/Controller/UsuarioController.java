@@ -1,13 +1,12 @@
 package br.ifrn.conectlar.Controller;
 
-import br.ifrn.conectlar.Controller.RotasUsuario.Rotas;
-import br.ifrn.conectlar.Controller.RotasUsuario.RotasBases;
+import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
+import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(Rotas.ROOT)
+@RequestMapping(RotasPrincipais.RootUsuario)
 @AllArgsConstructor
 public class UsuarioController {
 
@@ -32,5 +31,11 @@ public class UsuarioController {
     public  ResponseEntity getUsuarios(){
         List<UsuarioDTO> usuarios = usuarioService.getAll();
         return ResponseEntity.ok(usuarios);
+    }
+
+    @DeleteMapping(RotasBases.Delete)
+    public ResponseEntity deleteUsuario(@PathVariable Long id){
+        usuarioService.deleteUsuario(id);
+        return ResponseEntity.ok().build();
     }
 }
