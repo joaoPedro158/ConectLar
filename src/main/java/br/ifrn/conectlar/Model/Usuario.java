@@ -16,6 +16,7 @@ public class Usuario {
     private String email;
     private String senha;
     private String telefone;
+    private String localizacao;
 
     // Padrão de e-mail (reaproveitado do seu Contact)
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
@@ -30,13 +31,14 @@ public class Usuario {
     private static final int MIN_PASSWORD_LENGTH = 8;
 
     @Builder
-    private Usuario(Long id, String nome, String login, String email, String senha,String telefone) {
+    private Usuario(Long id, String nome, String login, String email, String senha,String telefone,String localizacao) {
         this.id = id;
         this.nome = nome;
        this.login = login;
        this.email = email;
        this.senha = senha;
        this.telefone = telefone;
+       this.localizacao = localizacao;
 
 
         validateInternalState();
