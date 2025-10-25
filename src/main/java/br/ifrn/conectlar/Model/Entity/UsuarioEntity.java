@@ -4,10 +4,28 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "usuarios", )
+@Table(schema = "usuario", name= "cliente" )
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsuarioEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
+    private String nome;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
+
+    @Column(nullable = false)
+    private String senha;
+
+    @Column(length = 150)
+    private String localizacao;
+
+    @Column(length = 150)
+    private String telefone;
 }
