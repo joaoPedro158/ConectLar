@@ -7,4 +7,6 @@ public interface RotasBases {
     String Cadastra = "/form";
 
     String Lista = "/list";
+
+    String Atualiza = "/update/{id}";
 }

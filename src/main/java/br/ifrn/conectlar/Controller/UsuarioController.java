@@ -38,4 +38,9 @@ public class UsuarioController {
         usuarioService.deleteUsuario(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping(RotasBases.Atualiza)
+    public ResponseEntity updateUsuario(@PathVariable Long id, @RequestBody UsuarioRecord usuario){
+        return ResponseEntity.ok(usuarioService.updateUsuario(id, usuario));
+    }
 }

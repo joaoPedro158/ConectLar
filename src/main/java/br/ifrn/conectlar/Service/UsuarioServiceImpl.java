@@ -6,6 +6,7 @@ import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,5 +51,30 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new RuntimeException("Usuário não encontrado com ID: " + id);
         }
         usuarioRepository.deleteById(id);
+    }
+
+    @Override
+    public UsuarioDTO updateUsuario(Long id, UsuarioRecord usuario) {
+        Usuario usuarioModel = mapper.toModel(usuario);
+
+
+        UsuarioEntity entityToUpdate = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
+
+
+        if (usuarioRepository.findByEmailAndIdNot(usuarioModel.getEmail(), id).isPresent()) {
+            throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
+        }
+        if (usuarioRepository.findByLoginAndIdNot(usuarioModel.getLogin(), id).isPresent()) {
+            throw new IllegalArgumentException("Este login já está em uso por outro usuário.");
+        }
+        if (usuarioRepository.findByTelefoneAndIdNot(usuarioModel.getTelefone(), id).isPresent()) {
+            throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
+        }
+        mapper.updateEntityFromModel(usuarioModel, entityToUpdate);
+        entityToUpdate.setSenha(usuarioModel.getSenha());
+        UsuarioEntity updatedEntity = usuarioRepository.save(entityToUpdate);
+
+        return mapper.toDTO(updatedEntity);
     }
 }
