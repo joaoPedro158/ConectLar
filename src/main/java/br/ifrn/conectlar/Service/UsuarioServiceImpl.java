@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
@@ -22,8 +24,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public UsuarioDTO saveUsuario(UsuarioRecord usuarioRecord) {
-
-
         Usuario usuarioModel = mapper.toModel(usuarioRecord);
 
         if (usuarioRepository.existsByEmail(usuarioModel.getEmail())) {
@@ -32,17 +32,15 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioRepository.existsByTelefone(usuarioModel.getTelefone())) {
             throw new IllegalArgumentException("Já existe um usuário cadastrado com este telefone.");
         }
-
-
         UsuarioEntity entityToSave = mapper.toEntity(usuarioModel);
-
-
         entityToSave.setSenha(usuarioModel.getSenha());
-
-
         UsuarioEntity savedEntity = usuarioRepository.save(entityToSave);
-
-
         return mapper.toDTO(savedEntity);
+    }
+
+    @Override
+    public List<UsuarioDTO> getAll() {
+        List<UsuarioEntity> entities = usuarioRepository.findAll();
+        return entities.stream().map(mapper::toDTO).toList();
     }
 }
