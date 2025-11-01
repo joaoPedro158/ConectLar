@@ -1,13 +1,14 @@
 package br.ifrn.conectlar.Model; // Ou br.ifrn.conectlar.model;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import org.flywaydb.core.internal.util.StringUtils;
 
 import java.util.regex.Pattern;
 
 
 @Getter
+@SuperBuilder
 public class Usuario {
 
     private Long id;
@@ -30,8 +31,8 @@ public class Usuario {
     // Mínimo de 8 caracteres para a senha
     private static final int MIN_PASSWORD_LENGTH = 8;
 
-    @Builder
-    private Usuario(Long id, String nome, String login, String email, String senha,String telefone,String localizacao) {
+
+    protected Usuario(Long id, String nome, String login, String email, String senha,String telefone,String localizacao) {
         this.id = id;
         this.nome = nome;
        this.login = login;
@@ -44,7 +45,9 @@ public class Usuario {
         validateInternalState();
     }
 
-    private void validateInternalState() {
+
+
+    protected void validateInternalState() {
 
         // --- 1. Validação de Presença (Não Nulo/Vazio) ---
 
