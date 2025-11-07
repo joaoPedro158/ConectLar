@@ -46,8 +46,6 @@ public class Usuario {
 
     private void validateInternalState() {
 
-        // --- 1. Validação de Presença (Não Nulo/Vazio) ---
-
         if (!StringUtils.hasText(this.nome)) {
             throw new IllegalArgumentException("O nome do usuário não pode ser nulo ou vazio.");
         }
@@ -64,7 +62,6 @@ public class Usuario {
             throw new IllegalArgumentException("O telefone do usuário não pode ser nulo ou vazio.");
         }
 
-        // --- 2. Validação de Formato (Regex) ---
 
         if (!EMAIL_PATTERN.matcher(this.email).matches()) {
             throw new IllegalArgumentException("O formato do e-mail é inválido.");
@@ -76,24 +73,23 @@ public class Usuario {
             throw new IllegalArgumentException("O login deve ter entre 3 e 20 caracteres e conter apenas letras, números, underscore (_) ou ponto (.).");
         }
 
-        // --- 3. Validação de Regras de Negócio (Senha) ---
 
-        // Regra 3.1: Comprimento mínimo
+
         if (this.senha.length() < MIN_PASSWORD_LENGTH) {
             throw new IllegalArgumentException("A senha deve ter no mínimo " + MIN_PASSWORD_LENGTH + " caracteres.");
         }
 
-        // Regra 3.2: Pelo menos uma letra minúscula
+
         if (!this.senha.matches(".*[a-z].*")) {
             throw new IllegalArgumentException("A senha deve conter pelo menos uma letra minúscula.");
         }
 
-        // Regra 3.3: Pelo menos uma letra maiúscula
+
         if (!this.senha.matches(".*[A-Z].*")) {
             throw new IllegalArgumentException("A senha deve conter pelo menos uma letra maiúscula.");
         }
 
-        // Regra 3.4: Pelo menos um número
+
         if (!this.senha.matches(".*[0-9].*")) {
             throw new IllegalArgumentException("A senha deve conter pelo menos um número.");
         }
