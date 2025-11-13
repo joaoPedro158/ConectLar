@@ -45,6 +45,7 @@ public class Usuario {
 
 
 
+
         if (!StringUtils.hasText(this.nome)) {
             throw new IllegalArgumentException("O nome do usuário não pode ser nulo ou vazio.");
         }
@@ -72,7 +73,6 @@ public class Usuario {
         if (!LOGIN_PATTERN.matcher(this.login).matches()) {
             throw new IllegalArgumentException("O login deve ter entre 3 e 20 caracteres e conter apenas letras, números, underscore (_) ou ponto (.).");
         }
-
 
 
 
