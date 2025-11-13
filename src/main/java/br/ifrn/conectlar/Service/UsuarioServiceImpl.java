@@ -57,10 +57,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioDTO updateUsuario(Long id, UsuarioRecord usuario) {
         Usuario usuarioModel = mapper.toModel(usuario);
 
-
-        UsuarioEntity entityToUpdate = usuarioRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
-
+        UsuarioEntity entityToUpdate = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
         if (usuarioRepository.findByEmailAndIdNot(usuarioModel.getEmail(), id).isPresent()) {
             throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");

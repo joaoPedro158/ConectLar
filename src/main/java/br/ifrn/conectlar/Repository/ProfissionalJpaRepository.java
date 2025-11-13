@@ -14,12 +14,10 @@ public interface ProfissionalJpaRepository extends JpaRepository<ProfissionalEnt
     boolean existsByLogin(String login);
     boolean existsByFuncao(String funcao);
 
-    /** Verifica se o email existe em um usuário com ID diferente */
+
     Optional<UsuarioEntity> findByEmailAndIdNot(String email, Long id);
 
-    /** Verifica se o login existe em um usuário com ID diferente */
     Optional<UsuarioEntity> findByLoginAndIdNot(String login, Long id);
 
-    /** Verifica se o telefone existe em um usuário com ID diferente */
     Optional<UsuarioEntity> findByTelefoneAndIdNot(String telefone, Long id);
 }
