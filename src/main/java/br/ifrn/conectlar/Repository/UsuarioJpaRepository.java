@@ -9,10 +9,10 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Long>
     boolean existsByNome(String nome);
     boolean existsByEmail(String email);
     boolean existsByTelefone(String telefone);
+    boolean existsById(Long id);
 
 
     Optional<UsuarioEntity> findByEmailAndIdNot(String email, Long id);
-
 
     Optional<UsuarioEntity> findByLoginAndIdNot(String login, Long id);
 

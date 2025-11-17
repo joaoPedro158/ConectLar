@@ -5,4 +5,8 @@ public interface RotasPrincipais {
     String RootUsuario = "/usuario";
 
     String RootProfissional = "/profissional";
+
+    String RootTrabalho = "/trabalho";
+
+    String RootAdm = "/adm";
 }
