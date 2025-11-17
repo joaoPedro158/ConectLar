@@ -15,13 +15,13 @@ public class Profissional extends Usuario {
 
         this.funcao = funcao;
 
-        validateInternalState();
+        validacao();
 
     }
     @Override
-    protected void validateInternalState() {
+    public void validacao() {
 
-        super.validateInternalState();
+        super.validacao();
 
 
         if (!StringUtils.hasText(this.funcao)) {

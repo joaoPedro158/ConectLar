@@ -4,6 +4,7 @@ import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -18,4 +19,8 @@ public interface ProfissionalMapper {
     @Mapping(target = "id", ignore = true)
     void updateEntityFromModel(Profissional model, @MappingTarget ProfissionalEntity entity);
 
+    @AfterMapping
+    default void validade(@MappingTarget Profissional model) {
+        model.validacao();
+    }
 }

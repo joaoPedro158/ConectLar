@@ -36,12 +36,12 @@ public class Usuario {
        this.localizacao = localizacao;
 
 
-        validateInternalState();
+        validacao();
     }
 
 
 
-    protected void validateInternalState() {
+    public void validacao() {
 
 
 
