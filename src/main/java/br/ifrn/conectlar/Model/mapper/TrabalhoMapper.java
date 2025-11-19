@@ -13,6 +13,7 @@ public interface TrabalhoMapper {
     Trabalho  toModel(TrabalhoRecord record);
 
     @Mapping(source = "usuario.id", target = "idUsuario")
+    @Mapping(source = "usuario.nome", target = "nomeUsuario")
     TrabalhoDTO toDTO(TrabalhoEntity entity);
     TrabalhoEntity toEntity(Trabalho model);
 

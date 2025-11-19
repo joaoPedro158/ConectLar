@@ -50,6 +50,7 @@ public class TrabalhoEntity {
 
 
 
+
     // --- DICA DE OURO ---
     // Este método roda automaticamente antes de salvar no banco.
     // Garante que a data nunca seja nula, mesmo que o Java esqueça de setar.
