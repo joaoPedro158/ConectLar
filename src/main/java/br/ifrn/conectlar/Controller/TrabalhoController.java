@@ -33,4 +33,20 @@ public class TrabalhoController {
         List<TrabalhoDTO> trabalhos = trabalhoService.getAll();
         return ResponseEntity.ok(trabalhos);
     }
+    @PutMapping(RotasBases.Atualiza)
+    public ResponseEntity updateTrabalho(@PathVariable Long id, @RequestBody TrabalhoRecord trabalho){
+        return ResponseEntity.ok(trabalhoService.update(id, trabalho));
+    }
+
+    @GetMapping(RotasBases.PorId)
+    public ResponseEntity getTrabalhoById(@PathVariable Long id){
+        return ResponseEntity.ok(trabalhoService.findById(id));
+    }
+
+    @DeleteMapping(RotasBases.Delete)
+    public ResponseEntity deleteTrabalho(@PathVariable Long id){
+        trabalhoService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

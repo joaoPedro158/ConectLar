@@ -9,4 +9,6 @@ public interface RotasBases {
     String Lista = "/list";
 
     String Atualiza = "/update/{id}";
+
+    String PorId = "/{id}";
 }

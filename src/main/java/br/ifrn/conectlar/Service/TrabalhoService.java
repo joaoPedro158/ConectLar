@@ -10,6 +10,6 @@ public interface TrabalhoService {
     List<TrabalhoDTO> getAll();
     TrabalhoDTO findById(Long id);
     TrabalhoDTO save(TrabalhoRecord record);
-    TrabalhoDTO update(Long id, TrabalhoDTO dto);
+    TrabalhoDTO update(Long id, TrabalhoRecord trabalho);
     void delete(Long id);
 }

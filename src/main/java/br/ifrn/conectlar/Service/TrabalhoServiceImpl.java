@@ -34,7 +34,10 @@ public class TrabalhoServiceImpl implements TrabalhoService {
 
     @Override
     public TrabalhoDTO findById(Long id) {
-        return null;
+        TrabalhoEntity entity = trabalhoRepository.findById(id).orElseThrow(()
+        -> new EntityNotFoundException("Trabalho do ID: " + id + " não encontrado " ));
+
+        return mapper.toDTO(entity);
     }
 
     @Override
@@ -43,8 +46,6 @@ public class TrabalhoServiceImpl implements TrabalhoService {
 
         UsuarioEntity usuario = usuarioRepository.findById(trabalhoRecord.idUsuario())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario do ID: " + trabalhoRecord.idUsuario()));
-
-
         TrabalhoEntity entityToSave = mapper.toEntity(TrabalhoModel);
         entityToSave.setUsuario(usuario);
 
@@ -53,12 +54,26 @@ public class TrabalhoServiceImpl implements TrabalhoService {
     }
 
     @Override
-    public TrabalhoDTO update(Long id, TrabalhoDTO dto) {
-        return null;
+    public TrabalhoDTO update(Long id, TrabalhoRecord trabalho) {
+        Trabalho TrabalhoModel = mapper.toModel(trabalho);
+
+        TrabalhoEntity entityToUpdate = trabalhoRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException("Trabalho do ID: " + id + "  nao encontrado "));
+
+        mapper.updateEntityFromModel(TrabalhoModel, entityToUpdate);
+
+        TrabalhoEntity entityUpdated = trabalhoRepository.save(entityToUpdate);
+
+        return mapper.toDTO(entityUpdated);
     }
+
 
     @Override
     public void delete(Long id) {
+        if (!trabalhoRepository.existsById(id)){
+            throw new RuntimeException("Trabalho do ID: " + id + " nao encontrado ");
+        }
 
+        trabalhoRepository.deleteById(id);
     }
 }

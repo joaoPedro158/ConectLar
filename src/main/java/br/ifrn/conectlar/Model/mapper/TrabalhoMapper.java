@@ -6,11 +6,17 @@ import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface TrabalhoMapper {
     Trabalho  toModel(TrabalhoRecord record);
+
     @Mapping(source = "usuario.id", target = "idUsuario")
     TrabalhoDTO toDTO(TrabalhoEntity entity);
     TrabalhoEntity toEntity(Trabalho model);
+
+    @Mapping(target = "dataHoraAberta", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    void updateEntityFromModel(Trabalho model, @MappingTarget TrabalhoEntity entity);
 }
