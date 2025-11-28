@@ -20,7 +20,7 @@ public class AdmServiceImpl implements AdmService {
     private final AdmMapper admMapper;
     @Override
     public AdmDTO save(AdmRecord record) {
-        Adm  admModel = admMapper.toModel(record);
+        Adm admModel = admMapper.toModel(record);
 
         AdmEntity EntityToSave =admMapper.toEntity(admModel);
         AdmEntity SavedEntity = admRepository.save(EntityToSave);

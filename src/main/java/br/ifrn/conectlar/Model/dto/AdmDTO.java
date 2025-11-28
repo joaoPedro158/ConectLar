@@ -8,7 +8,7 @@ import lombok.Getter;
 public class AdmDTO {
     private Long id;
     private String nome;
-    private String email_adm;
-    private String senha_adm;
-    private String login_adm;
+    private String emailAdm;
+    private String senhaAdm;
+    private String loginAdm;
 }

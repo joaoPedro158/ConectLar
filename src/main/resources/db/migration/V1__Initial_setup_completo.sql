@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS adm (
                                    id BIGSERIAL PRIMARY KEY,
                                    nome VARCHAR(150) NOT NULL,
     email_adm VARCHAR(255) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
+    senha_adm VARCHAR(255) NOT NULL,
     login_adm VARCHAR(100) NOT NULL UNIQUE DEFAULT CURRENT_TIMESTAMP::varchar
     );
 

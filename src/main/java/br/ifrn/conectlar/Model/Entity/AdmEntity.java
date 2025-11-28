@@ -29,12 +29,11 @@ public class AdmEntity {
 
     /*
      * No seu script SQL V1, a coluna se chama "senha".
-     * No seu DTO, você colocou "senha_adm".
      * Aqui na Entity, deve refletir o banco ("senha").
      * O Mapper cuidará de converter DTO.senha_adm -> Entity.senha
      */
-    @Column(name = "senha", nullable = false)
-    private String senha;
+    @Column(name = "senha_adm", nullable = false)
+    private String senhaAdm;
 
     /*
      * Este campo existe no seu script SQL (login_adm),
