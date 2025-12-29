@@ -9,9 +9,8 @@ public class ProfissionalDTO {
     private Long id;
     private String nome;
     private String email;
-    private String login;
     private String senha;
     private String localizacao;
     private String telefone;
-    private String funcao;
+    private String categoria;
 }

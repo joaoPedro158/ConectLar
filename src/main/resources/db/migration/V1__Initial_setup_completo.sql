@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS usuario (
                                        nome VARCHAR(150) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    login VARCHAR(100) NOT NULL UNIQUE,
     localizacao VARCHAR(100) NOT NULL,
     telefone VARCHAR(50) NOT NULL UNIQUE
     );
@@ -31,8 +30,8 @@ CREATE TABLE IF NOT EXISTS adm (
                                    id BIGSERIAL PRIMARY KEY,
                                    nome VARCHAR(150) NOT NULL,
     email_adm VARCHAR(255) NOT NULL UNIQUE,
-    senha_adm VARCHAR(255) NOT NULL,
-    login_adm VARCHAR(100) NOT NULL UNIQUE DEFAULT CURRENT_TIMESTAMP::varchar
+    senha_adm VARCHAR(255) NOT NULL
+    -- REMOVIDA A VÍRGULA QUE ESTAVA AQUI
     );
 
 -- -----------------------------------------------------
@@ -45,23 +44,21 @@ CREATE TABLE IF NOT EXISTS trabalho (
     data_hora_aberta TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     pagamento DECIMAL(10, 2) NOT NULL,
     descricao VARCHAR(255) NOT NULL,
-
     id_usuario BIGINT NOT NULL,
-
-    -- REMOVI id_profissional DAQUI
 
     CONSTRAINT fk_trabalho_usuario
     FOREIGN KEY (id_usuario)
     REFERENCES usuario (id)
     );
+
 -- -----------------------------------------------------
 -- 5. Tabela HISTORICO_TRABALHO
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS historico_trabalho (
                                                   id BIGSERIAL PRIMARY KEY,
                                                   avaliacao_recebida VARCHAR(255),
-    data_hora TIMESTAMP NOT NULL,
-    trabalho_feito VARCHAR(100) NOT NULL DEFAULT CURRENT_TIMESTAMP::varchar,
+    data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Ajustei para ser TIMESTAMP real
+    trabalho_feito VARCHAR(100) NOT NULL, -- Removi o default estranho
     localidade VARCHAR(100) NOT NULL,
     id_profissional BIGINT NOT NULL,
 
@@ -78,7 +75,6 @@ CREATE TABLE IF NOT EXISTS historico_pedidos (
                                                  avaliacao VARCHAR(255) NOT NULL,
     trabalho_feito VARCHAR(100) NOT NULL,
     data_hora_feito TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     id_profissional BIGINT NOT NULL,
     id_usuario BIGINT NOT NULL,
     id_trabalho BIGINT NOT NULL,
@@ -102,10 +98,9 @@ CREATE TABLE IF NOT EXISTS historico_pedidos (
 CREATE TABLE IF NOT EXISTS disputa (
                                        id BIGSERIAL PRIMARY KEY,
                                        data_fechamento TIMESTAMP NOT NULL,
-                                       data_abertura TIMESTAMP NOT NULL,
+                                       data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Adicionei default para facilitar
                                        status VARCHAR(45) NOT NULL,
     descricao VARCHAR(255) NOT NULL,
-
     id_usuario BIGINT NOT NULL,
     id_profissional BIGINT NOT NULL,
     id_adm BIGINT NOT NULL,

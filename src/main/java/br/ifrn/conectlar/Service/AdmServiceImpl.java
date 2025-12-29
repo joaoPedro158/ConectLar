@@ -61,7 +61,6 @@ public class AdmServiceImpl implements AdmService {
         if (!admRepository.existsById(id)){
             throw new RuntimeException("Adm do ID: " + id + " nao encontrado ");
         }
-
         admRepository.deleteById(id);
 
     }

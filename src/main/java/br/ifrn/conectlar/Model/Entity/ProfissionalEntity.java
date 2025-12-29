@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class ProfissionalEntity extends BaseUsuarioEntity {
     @Column(length = 150)
-    private String funcao;
+    private String categoria;
 
 
 }

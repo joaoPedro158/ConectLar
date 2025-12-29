@@ -62,9 +62,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioRepository.findByEmailAndIdNot(usuarioModel.getEmail(), id).isPresent()) {
             throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
         }
-        if (usuarioRepository.findByLoginAndIdNot(usuarioModel.getLogin(), id).isPresent()) {
-            throw new IllegalArgumentException("Este login já está em uso por outro usuário.");
-        }
         if (usuarioRepository.findByTelefoneAndIdNot(usuarioModel.getTelefone(), id).isPresent()) {
             throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
         }

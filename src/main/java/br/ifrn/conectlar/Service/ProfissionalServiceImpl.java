@@ -6,10 +6,12 @@ import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
 import br.ifrn.conectlar.Model.mapper.ProfissionalMapper;
 import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -22,9 +24,6 @@ public class ProfissionalServiceImpl implements ProfissionalService {
     public ProfissionalDTO saveProfissional(ProfissionalRecord profissionalRecord) {
         Profissional profissionalModel = mapper.toModel(profissionalRecord);
 
-        if (profissionalRepository.existsByLogin(profissionalModel.getLogin())) {
-            throw new IllegalArgumentException("Este login já está em uso por outro profissional.");
-        }
         if (profissionalRepository.existsByEmail(profissionalModel.getEmail())) {
             throw new IllegalArgumentException("Este e-mail já está em uso por outro profissional.");
         }
@@ -41,6 +40,32 @@ public class ProfissionalServiceImpl implements ProfissionalService {
     public List<ProfissionalDTO> getAll(){
         List<ProfissionalEntity> entidades = profissionalRepository.findAll();
         return entidades.stream().map(mapper::toDTO).toList();
+    }
+
+    @Override
+    public void deleteProfissional(long id) {
+        if (!profissionalRepository.existsById(id)) {
+            throw new RuntimeException("Usuário não encontrado com ID: " + id);
+        }
+        profissionalRepository.deleteById(id);
+    }
+
+    @Override
+    public ProfissionalDTO updateProfissional(long id, ProfissionalRecord profissionalRecord) {
+        Profissional profissionalModel = mapper.toModel(profissionalRecord);
+
+        ProfissionalEntity entityToUpdate = profissionalRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("o profissional não encontrado com o ID: " + id ));
+
+        if (profissionalRepository.findByEmailAndIdNot(profissionalModel.getEmail(), id).isPresent()) {
+            throw new IllegalArgumentException("Este e-mail ja esta em uso por outro profissional.");
+        }
+        if (profissionalRepository.findByTelefoneAndIdNot(profissionalModel.getTelefone(), id).isPresent()) {
+            throw new IllegalArgumentException("Este telefone ja esta em uso por outro profissional.");
+        }
+        mapper.updateEntityFromModel(profissionalModel, entityToUpdate);
+        ProfissionalEntity updateEntity = profissionalRepository.save(entityToUpdate);
+
+        return mapper.toDTO(updateEntity);
     }
 
 }

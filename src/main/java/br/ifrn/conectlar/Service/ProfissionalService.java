@@ -10,4 +10,6 @@ public interface ProfissionalService {
    ProfissionalDTO saveProfissional(ProfissionalRecord profissionalRecord);
 
    List<ProfissionalDTO> getAll();
+   void deleteProfissional(long id);
+   ProfissionalDTO updateProfissional(long id, ProfissionalRecord profissionalRecord);
 }

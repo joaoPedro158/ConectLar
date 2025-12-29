@@ -10,14 +10,12 @@ public class Adm {
     private String nome;
     private String emailAdm;
     private String senhaAdm;
-    private String loginAdm;
 
-    protected Adm(Long id, String nome, String emailAdm, String senhaAdm, String loginAdm) {
+    protected Adm(Long id, String nome, String emailAdm, String senhaAdm) {
         this.id = id;
         this.nome = nome;
         this.emailAdm = emailAdm;
         this.senhaAdm = senhaAdm;
-        this.loginAdm = loginAdm;
 
 //        validacao();
     }

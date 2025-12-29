@@ -28,4 +28,15 @@ public class ProfissionalController {
     public ResponseEntity getProfissionais(){
         return ResponseEntity.ok(profissionalService.getAll());
     }
+
+    @DeleteMapping(value = RotasBases.Delete)
+    public ResponseEntity deleteProfissional(@PathVariable Long id){
+        profissionalService.deleteProfissional(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(RotasBases.Atualiza)
+    public ResponseEntity updateProfissional(@PathVariable Long id, @RequestBody ProfissionalRecord profissionalRecord){
+        return ResponseEntity.ok(profissionalService.updateProfissional(id, profissionalRecord));
+    }
 }

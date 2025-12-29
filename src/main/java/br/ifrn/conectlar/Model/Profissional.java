@@ -7,13 +7,13 @@ import org.flywaydb.core.internal.util.StringUtils;
 @Getter
 @SuperBuilder
 public class Profissional extends Usuario {
-    private String funcao;
+    private String categoria;
 
 
-    protected Profissional(Long id, String nome, String login, String email, String senha, String telefone, String localizacao, String funcao) {
-        super(id, nome, login, email, senha, telefone, localizacao);
+    protected Profissional(Long id, String nome, String email, String senha, String telefone, String localizacao, String categoria) {
+        super(id, nome, email, senha, telefone, localizacao);
 
-        this.funcao = funcao;
+        this.categoria = categoria;
 
         validacao();
 
@@ -24,8 +24,8 @@ public class Profissional extends Usuario {
         super.validacao();
 
 
-        if (!StringUtils.hasText(this.funcao)) {
-            throw new IllegalArgumentException("A função do profissional não pode ser nula ou vazia.");
+        if (!StringUtils.hasText(this.categoria)) {
+            throw new IllegalArgumentException("A categoria do profissional não pode ser nula ou vazia.");
         }
 
     }

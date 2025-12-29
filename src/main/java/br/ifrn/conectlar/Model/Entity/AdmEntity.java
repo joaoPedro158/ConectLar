@@ -35,10 +35,5 @@ public class AdmEntity {
     @Column(name = "senha_adm", nullable = false)
     private String senhaAdm;
 
-    /*
-     * Este campo existe no seu script SQL (login_adm),
-     * então ele precisa existir na Entity, mesmo que não esteja no DTO agora.
-     */
-    @Column(name = "login_adm", nullable = false, unique = true)
-    private String loginAdm;
+
 }

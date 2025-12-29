@@ -13,7 +13,6 @@ public class Usuario {
 
     private Long id;
     private String nome;
-    private String login;
     private String email;
     private String senha;
     private String telefone;
@@ -26,10 +25,9 @@ public class Usuario {
     private static final int MIN_PASSWORD_LENGTH = 8;
 
 
-    protected Usuario(Long id, String nome, String login, String email, String senha,String telefone,String localizacao) {
+    protected Usuario(Long id, String nome, String email, String senha,String telefone,String localizacao) {
         this.id = id;
         this.nome = nome;
-       this.login = login;
        this.email = email;
        this.senha = senha;
        this.telefone = telefone;
@@ -43,14 +41,8 @@ public class Usuario {
 
     public void validacao() {
 
-
-
-
         if (!StringUtils.hasText(this.nome)) {
             throw new IllegalArgumentException("O nome do usuário não pode ser nulo ou vazio.");
-        }
-        if (!StringUtils.hasText(this.login)) {
-            throw new IllegalArgumentException("O login do usuário não pode ser nulo ou vazio.");
         }
         if (!StringUtils.hasText(this.email)) {
             throw new IllegalArgumentException("O e-mail do usuário não pode ser nulo ou vazio.");
@@ -69,9 +61,6 @@ public class Usuario {
         }
         if (!PHONE_PATTERN.matcher(this.telefone).matches()) {
             throw new IllegalArgumentException("O formato do telefone é inválido. Use o formato (99) 99999-9999.");
-        }
-        if (!LOGIN_PATTERN.matcher(this.login).matches()) {
-            throw new IllegalArgumentException("O login deve ter entre 3 e 20 caracteres e conter apenas letras, números, underscore (_) ou ponto (.).");
         }
 
 
