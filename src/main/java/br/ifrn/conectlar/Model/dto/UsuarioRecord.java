@@ -5,5 +5,6 @@ public record UsuarioRecord(
         String email,
         String senha,
         String telefone,
-        String localizacao) {
+        String localizacao,
+        String role) {
 }

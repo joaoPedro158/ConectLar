@@ -14,18 +14,13 @@ import java.util.List;
 @Table(name= "usuario")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class UsuarioEntity extends BaseUsuarioEntity implements UserDetails {
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UsuarioRole role;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UsuarioRole.ADM) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        if(getRole() == UsuarioRole.ADM) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

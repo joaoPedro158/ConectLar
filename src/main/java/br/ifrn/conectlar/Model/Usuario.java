@@ -17,6 +17,7 @@ public class Usuario {
     private String senha;
     private String telefone;
     private String localizacao;
+    private String role;
 
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
@@ -25,13 +26,14 @@ public class Usuario {
     private static final int MIN_PASSWORD_LENGTH = 8;
 
 
-    protected Usuario(Long id, String nome, String email, String senha,String telefone,String localizacao) {
+    protected Usuario(Long id, String nome, String email, String senha,String telefone,String localizacao,String role) {
         this.id = id;
         this.nome = nome;
        this.email = email;
        this.senha = senha;
        this.telefone = telefone;
        this.localizacao = localizacao;
+       this.role = role;
 
 
         validacao();
@@ -83,5 +85,6 @@ public class Usuario {
         if (!this.senha.matches(".*[0-9].*")) {
             throw new IllegalArgumentException("A senha deve conter pelo menos um número.");
         }
+
     }
 }

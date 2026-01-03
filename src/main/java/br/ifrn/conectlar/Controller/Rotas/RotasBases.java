@@ -11,4 +11,6 @@ public interface RotasBases {
     String Atualiza = "/update/{id}";
 
     String PorId = "/{id}";
+
+    String Login = "/login";
 }

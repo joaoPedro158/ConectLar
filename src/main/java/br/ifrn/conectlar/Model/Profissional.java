@@ -10,8 +10,8 @@ public class Profissional extends Usuario {
     private String categoria;
 
 
-    protected Profissional(Long id, String nome, String email, String senha, String telefone, String localizacao, String categoria) {
-        super(id, nome, email, senha, telefone, localizacao);
+    protected Profissional(Long id, String nome, String email, String senha, String telefone, String localizacao, String categoria,String role) {
+        super(id, nome, email, senha, telefone, localizacao,role);
 
         this.categoria = categoria;
 

@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Security;
 
+import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import br.ifrn.conectlar.Service.TokenService;
 import jakarta.servlet.FilterChain;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -34,7 +36,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
             var email = tokenservice.validarToken(token);
-            UserDetails usuario = usuarioRepository.findByEmail(email);
+            UsuarioEntity usuario = usuarioRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

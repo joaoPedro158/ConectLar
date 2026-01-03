@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS usuario (
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     localizacao VARCHAR(100) NOT NULL,
-    telefone VARCHAR(50) NOT NULL UNIQUE
+    telefone VARCHAR(50) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL -- Nova coluna
     );
 
 -- -----------------------------------------------------
@@ -20,7 +21,8 @@ CREATE TABLE IF NOT EXISTS profissional (
     senha VARCHAR(255) NOT NULL,
     localizacao VARCHAR(100) NOT NULL,
     categoria VARCHAR(250) NOT NULL,
-    telefone VARCHAR(50) NOT NULL UNIQUE
+    telefone VARCHAR(50) NOT NULL UNIQUE,
+    role VARCHAR(50) NOT NULL -- Nova coluna
     );
 
 -- -----------------------------------------------------
@@ -30,8 +32,8 @@ CREATE TABLE IF NOT EXISTS adm (
                                    id BIGSERIAL PRIMARY KEY,
                                    nome VARCHAR(150) NOT NULL,
     email_adm VARCHAR(255) NOT NULL UNIQUE,
-    senha_adm VARCHAR(255) NOT NULL
-    -- REMOVIDA A VÍRGULA QUE ESTAVA AQUI
+    senha_adm VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL -- Nova coluna
     );
 
 -- -----------------------------------------------------
@@ -57,8 +59,8 @@ CREATE TABLE IF NOT EXISTS trabalho (
 CREATE TABLE IF NOT EXISTS historico_trabalho (
                                                   id BIGSERIAL PRIMARY KEY,
                                                   avaliacao_recebida VARCHAR(255),
-    data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Ajustei para ser TIMESTAMP real
-    trabalho_feito VARCHAR(100) NOT NULL, -- Removi o default estranho
+    data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    trabalho_feito VARCHAR(100) NOT NULL,
     localidade VARCHAR(100) NOT NULL,
     id_profissional BIGINT NOT NULL,
 
@@ -98,7 +100,7 @@ CREATE TABLE IF NOT EXISTS historico_pedidos (
 CREATE TABLE IF NOT EXISTS disputa (
                                        id BIGSERIAL PRIMARY KEY,
                                        data_fechamento TIMESTAMP NOT NULL,
-                                       data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Adicionei default para facilitar
+                                       data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                        status VARCHAR(45) NOT NULL,
     descricao VARCHAR(255) NOT NULL,
     id_usuario BIGINT NOT NULL,

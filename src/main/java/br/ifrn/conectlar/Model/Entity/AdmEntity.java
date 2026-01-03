@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.Entity;
 
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,5 +36,7 @@ public class AdmEntity {
     @Column(name = "senha_adm", nullable = false)
     private String senhaAdm;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UsuarioRole role;
 }

@@ -12,7 +12,7 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Long>
     boolean existsByTelefone(String telefone);
     boolean existsById(Long id);
 
-    UserDetails findByEmail(String email);
+    Optional<UsuarioEntity> findByEmail(String email);
     Optional<UsuarioEntity> findByEmailAndIdNot(String email, Long id);
 
     Optional<UsuarioEntity> findByTelefoneAndIdNot(String telefone, Long id);

@@ -1,5 +1,7 @@
 package br.ifrn.conectlar.Security;
 
+import br.ifrn.conectlar.Controller.Rotas.RotasBases;
+import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +31,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
                         .requestMatchers(HttpMethod.POST, "/product").hasRole("ADM") // Autorização
                         .anyRequest().authenticated()
                 )

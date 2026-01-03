@@ -6,6 +6,7 @@ public record ProfissionalRecord(
         String senha,
         String localizacao,
         String telefone,
-        String categoria
+        String categoria,
+        String role
 ){
 }

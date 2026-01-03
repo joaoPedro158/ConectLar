@@ -13,4 +13,5 @@ public class ProfissionalDTO {
     private String localizacao;
     private String telefone;
     private String categoria;
+    private String role;
 }

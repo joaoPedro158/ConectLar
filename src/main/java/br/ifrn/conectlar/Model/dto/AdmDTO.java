@@ -10,4 +10,5 @@ public class AdmDTO {
     private String nome;
     private String emailAdm;
     private String senhaAdm;
+    private String role;
 }

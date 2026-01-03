@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.Entity;
 
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import jakarta.persistence.*;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -29,4 +30,8 @@ public abstract class BaseUsuarioEntity {
 
     @Column(length = 150, nullable = false, unique = true)
     private String telefone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UsuarioRole role;
 }
