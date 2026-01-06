@@ -8,6 +8,8 @@ import br.ifrn.conectlar.Model.mapper.ProfissionalMapper;
 import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,8 @@ public class ProfissionalServiceImpl implements ProfissionalService {
 
     private final ProfissionalJpaRepository profissionalRepository;
     private final ProfissionalMapper mapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public ProfissionalDTO saveProfissional(ProfissionalRecord profissionalRecord) {
@@ -32,6 +36,9 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         }
 
         ProfissionalEntity entityToSave = mapper.toEntity(profissionalModel);
+        String senhaCriptografada = passwordEncoder.encode(profissionalModel.getSenha());
+        entityToSave.setSenha(senhaCriptografada);
+
         ProfissionalEntity savedEntity = profissionalRepository.save(entityToSave);
         return mapper.toDTO(savedEntity);
     }

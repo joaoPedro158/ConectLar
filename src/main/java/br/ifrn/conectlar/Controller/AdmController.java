@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Controller;
 
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
+import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Model.dto.AdmDTO;
 import br.ifrn.conectlar.Model.dto.AdmRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/adm")
+@RequestMapping(RotasPrincipais.RootAdm)
 @AllArgsConstructor
 public class AdmController {
     final private AdmService admService;

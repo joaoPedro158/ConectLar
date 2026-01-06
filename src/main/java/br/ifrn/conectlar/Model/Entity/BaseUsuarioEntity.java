@@ -5,12 +5,18 @@ import jakarta.persistence.*;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @MappedSuperclass
 @Getter
 @Setter
 
-public abstract class BaseUsuarioEntity {
+public abstract class BaseUsuarioEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +40,55 @@ public abstract class BaseUsuarioEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UsuarioRole role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Lógica centralizada para TODOS os tipos de usuário
+        if (this.getRole() == UsuarioRole.ADM) {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USUARIO"),
+                    new SimpleGrantedAuthority("ROLE_PROFISSIONAL")
+            );
+        }
+        else if (this.getRole() == UsuarioRole.PROFISSIONAL) {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_PROFISSIONAL"),
+                    new SimpleGrantedAuthority("ROLE_USUARIO")
+            );
+        }
+        else {
+            return List.of(new SimpleGrantedAuthority("ROLE_USUARIO"));
+        }
+    }
+
+    @Override
+    public String getPassword() {
+        return getSenha();
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

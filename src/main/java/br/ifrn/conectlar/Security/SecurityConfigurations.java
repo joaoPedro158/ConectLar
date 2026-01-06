@@ -30,8 +30,9 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // CRUCIAL PARA REST
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootProfissional + RotasBases.Cadastra).permitAll()
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootUsuario + RotasBases.Lista).permitAll()
                         .requestMatchers(HttpMethod.POST, "/product").hasRole("ADM") // Autorização
                         .anyRequest().authenticated()
                 )
@@ -44,9 +45,9 @@ public class SecurityConfigurations {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // Ensina ao Spring como fazer o Hash da senha (nunca salvar senha pura)
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
+//     Ensina ao Spring como fazer o Hash da senha (nunca salvar senha pura)
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 }

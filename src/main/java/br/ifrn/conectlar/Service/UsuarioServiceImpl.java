@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
@@ -8,6 +9,8 @@ import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +24,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final UsuarioJpaRepository usuarioRepository;
     private final UsuarioMapper mapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -34,7 +39,13 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new IllegalArgumentException("Já existe um usuário cadastrado com este telefone.");
         }
         UsuarioEntity entityToSave = mapper.toEntity(usuarioModel);
-        entityToSave.setSenha(usuarioModel.getSenha());
+        String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
+        entityToSave.setSenha(senhaCriptografada);
+
+        if (entityToSave.getRole() == null) {
+            entityToSave.setRole(UsuarioRole.USUARIO);
+        }
+
         UsuarioEntity savedEntity = usuarioRepository.save(entityToSave);
         return mapper.toDTO(savedEntity);
     }

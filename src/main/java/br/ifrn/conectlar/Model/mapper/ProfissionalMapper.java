@@ -13,6 +13,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface ProfissionalMapper {
     Profissional toModel(ProfissionalRecord record);
+    @Mapping(target = "senha", ignore = true)
     ProfissionalEntity toEntity(Profissional model);
     ProfissionalDTO toDTO(ProfissionalEntity entity);
 
