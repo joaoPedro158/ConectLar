@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -20,12 +20,13 @@ public class TokenServiceImpl implements TokenService {
 
 
     @Override
-    public String gerarToken(UsuarioEntity usuario) {
+    public String gerarToken(BaseUsuarioEntity usuario) {
         try {
             Algorithm algoritimo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("auth-api") // quem emitiu
+                    .withIssuer("auth-api")
                     .withSubject(usuario.getEmail())
+                    .withClaim("role", usuario.getRole().name())
                     .withExpiresAt(gerarDataExpiracao())
                     .sign(algoritimo);
         } catch (Exception e) {

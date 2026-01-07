@@ -1,10 +1,11 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
+
 
 public interface TokenService {
 
-    String gerarToken(UsuarioEntity usuario);
+    String gerarToken(BaseUsuarioEntity usuario);
 
     String validarToken(String token);
 }

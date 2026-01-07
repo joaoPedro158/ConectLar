@@ -10,10 +10,10 @@ public interface ProfissionalJpaRepository extends JpaRepository<ProfissionalEnt
     boolean existsByNome(String nome);
     boolean existsByEmail(String email);
     boolean existsByTelefone(String telefone);
-    boolean existsByLocalizacao(String localizacao);
 
 
     Optional<ProfissionalEntity> findByEmailAndIdNot(String email, Long id);
+    Optional<ProfissionalEntity> findByEmail(String email);
 
     Optional<ProfissionalEntity> findByTelefoneAndIdNot(String telefone, Long id);
 }

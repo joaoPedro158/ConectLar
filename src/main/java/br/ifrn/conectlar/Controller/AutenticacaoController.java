@@ -2,7 +2,7 @@ package br.ifrn.conectlar.Controller;
 
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
 import br.ifrn.conectlar.Model.dto.AutenticacaoRecord;
 import br.ifrn.conectlar.Model.dto.LoginResponseRecord;
 import br.ifrn.conectlar.Service.TokenService;
@@ -29,7 +29,7 @@ public class AutenticacaoController {
     public ResponseEntity login(@RequestBody @Valid AutenticacaoRecord dadosRecord){
         var usuarioSenha = new UsernamePasswordAuthenticationToken(dadosRecord.login(), dadosRecord.senha());
         var auth =this.authenticationManager.authenticate(usuarioSenha);
-        var token = tokenService.gerarToken((UsuarioEntity) auth.getPrincipal());
+        var token = tokenService.gerarToken((BaseUsuarioEntity) auth.getPrincipal());
         return  ResponseEntity.ok(new LoginResponseRecord(token));
     }
 }
