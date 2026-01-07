@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS profissional (
     localizacao VARCHAR(100) NOT NULL,
     categoria VARCHAR(250) NOT NULL,
     telefone VARCHAR(50) NOT NULL UNIQUE,
-    role VARCHAR(50) NOT NULL -- Nova coluna
+    role VARCHAR(50) NOT NULL
     );
 
 -- -----------------------------------------------------
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS profissional (
 CREATE TABLE IF NOT EXISTS adm (
                                    id BIGSERIAL PRIMARY KEY,
                                    nome VARCHAR(150) NOT NULL,
-    email_adm VARCHAR(255) NOT NULL UNIQUE,
-    senha_adm VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL -- Nova coluna
+    email VARCHAR(255) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL
     );
 
 -- -----------------------------------------------------

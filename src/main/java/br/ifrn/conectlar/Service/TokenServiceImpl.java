@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.Entity.BaseAuthEntity;
 import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -20,7 +21,7 @@ public class TokenServiceImpl implements TokenService {
 
 
     @Override
-    public String gerarToken(BaseUsuarioEntity usuario) {
+    public String gerarToken(BaseAuthEntity usuario) {
         try {
             Algorithm algoritimo = Algorithm.HMAC256(secret);
             return JWT.create()
