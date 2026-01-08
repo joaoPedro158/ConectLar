@@ -8,15 +8,15 @@ import lombok.Getter;
 public class Adm {
     private Long id;
     private String nome;
-    private String emailAdm;
-    private String senhaAdm;
+    private String email;
+    private String senha;
     private String role;
 
-    protected Adm(Long id, String nome, String emailAdm, String senhaAdm, String role) {
+    protected Adm(Long id, String nome, String email, String senha, String role) {
         this.id = id;
         this.nome = nome;
-        this.emailAdm = emailAdm;
-        this.senhaAdm = senhaAdm;
+        this.email = email;
+        this.senha = senha;
         this.role = role;
 
 //        validacao();

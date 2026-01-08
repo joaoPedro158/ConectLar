@@ -8,6 +8,7 @@ import br.ifrn.conectlar.Model.mapper.AdmMapper;
 import br.ifrn.conectlar.Repository.AdmJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,17 @@ public class AdmServiceImpl implements AdmService {
 
     private final AdmJpaRepository admRepository;
     private final AdmMapper admMapper;
+    private PasswordEncoder passwordEncoder;
     @Override
     public AdmDTO save(AdmRecord record) {
         Adm admModel = admMapper.toModel(record);
 
+        if (admRepository.existsByEmail(admModel.getEmail())) {
+            throw new IllegalArgumentException("Já existe um usuário cadastrado com este e-mail.");
+        }
         AdmEntity EntityToSave =admMapper.toEntity(admModel);
+        String senhaCriptografada = passwordEncoder.encode(admModel.getSenha());
+        EntityToSave.setSenha(senhaCriptografada);
         AdmEntity SavedEntity = admRepository.save(EntityToSave);
 
         return admMapper.toDTO(SavedEntity);

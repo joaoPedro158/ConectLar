@@ -3,6 +3,9 @@ package br.ifrn.conectlar.Repository;
 import br.ifrn.conectlar.Model.Entity.AdmEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AdmJpaRepository extends JpaRepository<AdmEntity, Long> {
+import java.util.Optional;
 
+public interface AdmJpaRepository extends JpaRepository<AdmEntity, Long> {
+    boolean existsByEmail(String email);
+    Optional<AdmEntity> findByEmail(String email);
 }
