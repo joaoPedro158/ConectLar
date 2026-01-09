@@ -9,7 +9,6 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 public class AdmEntity extends BaseAuthEntity {
 
 

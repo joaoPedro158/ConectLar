@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Model; // Ou br.ifrn.conectlar.model;
+package br.ifrn.conectlar.Model;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

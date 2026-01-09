@@ -4,9 +4,11 @@ import br.ifrn.conectlar.Model.Adm;
 import br.ifrn.conectlar.Model.Entity.AdmEntity;
 import br.ifrn.conectlar.Model.dto.AdmDTO;
 import br.ifrn.conectlar.Model.dto.AdmRecord;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
 
 @Mapper(componentModel = "spring")
 public interface AdmMapper {

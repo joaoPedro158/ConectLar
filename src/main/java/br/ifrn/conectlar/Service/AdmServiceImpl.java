@@ -20,6 +20,7 @@ public class AdmServiceImpl implements AdmService {
     private final AdmJpaRepository admRepository;
     private final AdmMapper admMapper;
     private PasswordEncoder passwordEncoder;
+
     @Override
     public AdmDTO save(AdmRecord record) {
         Adm admModel = admMapper.toModel(record);

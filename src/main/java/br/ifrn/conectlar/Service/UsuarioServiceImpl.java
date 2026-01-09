@@ -23,8 +23,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioJpaRepository usuarioRepository;
     private final UsuarioMapper mapper;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override

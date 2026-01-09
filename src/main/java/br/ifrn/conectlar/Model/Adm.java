@@ -1,9 +1,10 @@
 package br.ifrn.conectlar.Model;
 
-import lombok.Builder;
-import lombok.Getter;
 
-@Builder
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder
 @Getter
 public class Adm {
     private Long id;
