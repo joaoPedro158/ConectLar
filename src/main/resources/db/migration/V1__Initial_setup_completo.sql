@@ -6,9 +6,16 @@ CREATE TABLE IF NOT EXISTS usuario (
                                        nome VARCHAR(150) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    localizacao VARCHAR(100) NOT NULL,
     telefone VARCHAR(50) NOT NULL UNIQUE,
-    role VARCHAR(50) NOT NULL -- Nova coluna
+    role VARCHAR(50) NOT NULL,
+
+    -- Campos de Endereço (@Embeddable)
+    rua VARCHAR(150),
+    bairro VARCHAR(100),
+    numero VARCHAR(20),
+    cidade VARCHAR(100),
+    cep VARCHAR(20),
+    estado VARCHAR(50)
     );
 
 -- -----------------------------------------------------
@@ -19,10 +26,17 @@ CREATE TABLE IF NOT EXISTS profissional (
                                             nome VARCHAR(150) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    localizacao VARCHAR(100) NOT NULL,
     categoria VARCHAR(250) NOT NULL,
     telefone VARCHAR(50) NOT NULL UNIQUE,
-    role VARCHAR(50) NOT NULL
+    role VARCHAR(50) NOT NULL,
+
+    -- Campos de Endereço (@Embeddable)
+    rua VARCHAR(150),
+    bairro VARCHAR(100),
+    numero VARCHAR(20),
+    cidade VARCHAR(100),
+    cep VARCHAR(20),
+    estado VARCHAR(50)
     );
 
 -- -----------------------------------------------------

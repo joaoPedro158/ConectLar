@@ -16,7 +16,7 @@ public class Usuario {
     private String email;
     private String senha;
     private String telefone;
-    private String localizacao;
+    private Localizacao localizacao;
     private String role;
 
 
@@ -26,7 +26,7 @@ public class Usuario {
     private static final int MIN_PASSWORD_LENGTH = 8;
 
 
-    protected Usuario(Long id, String nome, String email, String senha,String telefone,String localizacao,String role) {
+    protected Usuario(Long id, String nome, String email, String senha,String telefone,Localizacao localizacao,String role) {
         this.id = id;
         this.nome = nome;
        this.email = email;

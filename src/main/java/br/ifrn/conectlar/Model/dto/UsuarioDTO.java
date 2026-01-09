@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.dto;
 
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,6 +12,6 @@ public class UsuarioDTO {
     private String nome;
     private String email;
     private String telefone;
-    private String localizacao;
+    private LocalizacaoDTO localizacao;
     private String role;
 }

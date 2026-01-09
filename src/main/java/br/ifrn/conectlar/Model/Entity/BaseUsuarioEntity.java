@@ -1,8 +1,9 @@
 package br.ifrn.conectlar.Model.Entity;
 
 
+import br.ifrn.conectlar.Model.Localizacao;
 import jakarta.persistence.*;
-import jakarta.persistence.MappedSuperclass;
+        import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +13,8 @@ import lombok.Setter;
 public abstract class BaseUsuarioEntity extends BaseAuthEntity {
 
 
-    @Column(length = 150, nullable = false)
-    private String localizacao;
+    @Embedded
+    private Localizacao localizacao;
 
     @Column(length = 150, nullable = false, unique = true)
     private String telefone;
