@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Model.dto;
 
 
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 
 public record UsuarioRecord(
         String nome,
@@ -8,5 +9,5 @@ public record UsuarioRecord(
         String senha,
         String telefone,
         LocalizacaoRecord localizacao,
-        String role) {
+        UsuarioRole role) {
 }

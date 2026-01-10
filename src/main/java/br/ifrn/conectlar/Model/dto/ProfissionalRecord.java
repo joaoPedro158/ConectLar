@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Model.dto;
 
 
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 
 public record ProfissionalRecord(
         String nome,
@@ -9,6 +10,6 @@ public record ProfissionalRecord(
         LocalizacaoRecord localizacao,
         String telefone,
         String categoria,
-        String role
+        UsuarioRole role
 ){
 }

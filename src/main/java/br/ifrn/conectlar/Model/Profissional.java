@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model;
 
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.flywaydb.core.internal.util.StringUtils;
@@ -10,7 +11,7 @@ public class Profissional extends Usuario {
     private String categoria;
 
 
-    protected Profissional(Long id, String nome, String email, String senha, String telefone, Localizacao localizacao, String categoria,String role) {
+    protected Profissional(Long id, String nome, String email, String senha, String telefone, Localizacao localizacao, String categoria, UsuarioRole role) {
         super(id, nome, email, senha, telefone, localizacao,role);
 
         this.categoria = categoria;

@@ -32,35 +32,46 @@ public class Trabalho {
     }
 
     public void validacao() {
-        // --- 1. Validação de Strings (Não Nulo e Não Vazio) ---
+        // --- 1. Validação de Conteúdo (Qualidade do Pedido) ---
 
-        if (this.problema == null || this.problema.isBlank()) {
-            throw new IllegalArgumentException("O problema do trabalho não pode ser nulo ou vazio.");
+        // Regra: O problema deve ser claro (mínimo de 5 caracteres)
+        if (this.problema == null || this.problema.trim().length() < 5) {
+            throw new IllegalArgumentException("O título do problema deve ter pelo menos 5 caracteres.");
         }
 
-        if (this.descricao == null || this.descricao.isBlank()) {
-            throw new IllegalArgumentException("A descrição do trabalho não pode ser nula ou vazia.");
+        // Regra: A descrição deve ser detalhada (mínimo de 10 caracteres)
+        if (this.descricao == null || this.descricao.trim().length() < 10) {
+            throw new IllegalArgumentException("A descrição deve ser detalhada (mínimo de 10 caracteres) para ajudar o profissional.");
         }
 
-        // --- 2. Validação Financeira (Pagamento) ---
+        // --- 2. Validação de Localização (Obrigatória) ---
+        // Regra: Um trabalho físico NÃO pode existir sem endereço
+        if (this.localizacao == null) {
+            throw new IllegalArgumentException("A localização do trabalho é obrigatória.");
+        }
+        // Nota: Não precisamos validar rua/cep aqui, pois a própria classe Localizacao já se valida no construtor dela!
+
+        // --- 3. Validação Financeira (Pagamento) ---
 
         if (this.pagamento == null) {
             throw new IllegalArgumentException("O valor do pagamento é obrigatório.");
         }
 
-        // Verifica se o pagamento é maior que zero (pagamento.compareTo(Zero) > 0)
+        // Regra: Não aceitamos pagamentos negativos ou zero
         if (this.pagamento.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("O valor do pagamento deve ser maior que zero.");
         }
 
-        // --- 3. Validação de Relacionamentos (IDs Obrigatórios) ---
-        // Um trabalho não pode existir sem um cliente e um profissional
+        // (Opcional) Regra: Pagamento mínimo da plataforma? Ex: R$ 20,00
+        // if (this.pagamento.compareTo(new BigDecimal("20.00")) < 0) {
+        //     throw new IllegalArgumentException("O valor mínimo para um serviço é R$ 20,00.");
+        // }
+
+        // --- 4. Validação de Vínculo (Quem pediu?) ---
 
         if (this.idUsuario == null) {
-            throw new IllegalArgumentException("O ID do usuário solicitante é obrigatório.");
+            throw new IllegalArgumentException("Erro de Sistema: O trabalho deve estar vinculado a um usuário solicitante.");
         }
-
-
 
     }
 }

@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.dto;
 
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,5 +10,5 @@ public class AdmDTO {
     private Long id;
     private String nome;
     private String email;
-    private String role;
+    private UsuarioRole role;
 }
