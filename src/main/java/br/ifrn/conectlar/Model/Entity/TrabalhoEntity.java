@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.Entity;
 
+import br.ifrn.conectlar.Model.Localizacao;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,8 +20,8 @@ public class TrabalhoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
-    private String localidade;
+    @Embedded
+    private Localizacao localizacao;
 
     @Column(nullable = false, length = 250)
     private String problema;

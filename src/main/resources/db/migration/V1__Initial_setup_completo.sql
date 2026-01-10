@@ -10,12 +10,13 @@ CREATE TABLE IF NOT EXISTS usuario (
     role VARCHAR(50) NOT NULL,
 
     -- Campos de Endereço (@Embeddable)
-    rua VARCHAR(150),
-    bairro VARCHAR(100),
-    numero VARCHAR(20),
-    cidade VARCHAR(100),
-    cep VARCHAR(20),
-    estado VARCHAR(50)
+    rua VARCHAR(150) NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    cep VARCHAR(20) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    complemento VARCHAR(50)
     );
 
 -- -----------------------------------------------------
@@ -31,12 +32,14 @@ CREATE TABLE IF NOT EXISTS profissional (
     role VARCHAR(50) NOT NULL,
 
     -- Campos de Endereço (@Embeddable)
-    rua VARCHAR(150),
-    bairro VARCHAR(100),
-    numero VARCHAR(20),
-    cidade VARCHAR(100),
-    cep VARCHAR(20),
-    estado VARCHAR(50)
+    rua VARCHAR(150) NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    cep VARCHAR(20) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    complemento VARCHAR(50)
+
     );
 
 -- -----------------------------------------------------
@@ -55,12 +58,19 @@ CREATE TABLE IF NOT EXISTS adm (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS trabalho (
                                         id BIGSERIAL PRIMARY KEY,
-                                        localidade VARCHAR(100) NOT NULL,
     problema VARCHAR(250) NOT NULL,
     data_hora_aberta TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     pagamento DECIMAL(10, 2) NOT NULL,
     descricao VARCHAR(255) NOT NULL,
     id_usuario BIGINT NOT NULL,
+
+    rua VARCHAR(150) NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    cep VARCHAR(20) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    complemento VARCHAR(50),
 
     CONSTRAINT fk_trabalho_usuario
     FOREIGN KEY (id_usuario)
@@ -75,8 +85,8 @@ CREATE TABLE IF NOT EXISTS historico_trabalho (
                                                   avaliacao_recebida VARCHAR(255),
     data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     trabalho_feito VARCHAR(100) NOT NULL,
-    localidade VARCHAR(100) NOT NULL,
     id_profissional BIGINT NOT NULL,
+
 
     CONSTRAINT fk_historico_profissional
     FOREIGN KEY (id_profissional)

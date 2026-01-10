@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class TrabalhoDTO {
 
     private Long id;
-    private String localidade;
+    private LocalizacaoDTO localizacao;
     private String problema;
     private BigDecimal pagamento;
     private String descricao;

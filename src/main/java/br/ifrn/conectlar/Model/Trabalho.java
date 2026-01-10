@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Trabalho {
     private Long id;
-    private String localidade;
+    private Localizacao localizacao;
     private String problema;
     private BigDecimal pagamento;
     private String descricao;
@@ -18,9 +18,9 @@ public class Trabalho {
     private Long idUsuario;
 
 
-    protected Trabalho(Long id, String localidade, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta, Long idUsuario) {
+    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta, Long idUsuario) {
         this.id = id;
-        this.localidade = localidade;
+        this.localizacao = localizacao;
         this.problema = problema;
         this.pagamento = pagamento;
         this.descricao = descricao;
@@ -33,10 +33,6 @@ public class Trabalho {
 
     public void validacao() {
         // --- 1. Validação de Strings (Não Nulo e Não Vazio) ---
-
-        if (this.localidade == null || this.localidade.isBlank()) {
-            throw new IllegalArgumentException("A localidade do trabalho não pode ser nula ou vazia.");
-        }
 
         if (this.problema == null || this.problema.isBlank()) {
             throw new IllegalArgumentException("O problema do trabalho não pode ser nulo ou vazio.");

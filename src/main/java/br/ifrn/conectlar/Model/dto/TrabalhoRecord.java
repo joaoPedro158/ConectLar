@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 
 public record TrabalhoRecord(
-        String localidade,
+        LocalizacaoRecord localizacao,
         String problema,
         BigDecimal pagamento,
         String descricao,

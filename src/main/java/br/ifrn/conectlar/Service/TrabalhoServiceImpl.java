@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -48,6 +49,7 @@ public class TrabalhoServiceImpl implements TrabalhoService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuario do ID: " + trabalhoRecord.idUsuario()));
         TrabalhoEntity entityToSave = mapper.toEntity(TrabalhoModel);
         entityToSave.setUsuario(usuario);
+        entityToSave.setDataHoraAberta(LocalDateTime.now());
 
         TrabalhoEntity saveEntity = trabalhoRepository.save(entityToSave);
         return mapper.toDTO(saveEntity);

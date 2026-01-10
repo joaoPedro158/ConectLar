@@ -12,4 +12,5 @@ public class LocalizacaoDTO {
     private String cidade;
     private String cep;
     private String estado;
+    private String Complemento;
 }
