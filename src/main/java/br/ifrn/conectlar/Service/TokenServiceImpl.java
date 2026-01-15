@@ -5,6 +5,7 @@ import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class TokenServiceImpl implements TokenService {
         try {
             Algorithm algoritimo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("auth-api")
+                    .withIssuer("conectlar-api")
                     .withSubject(usuario.getEmail())
                     .withClaim("role", usuario.getRole().name())
                     .withExpiresAt(gerarDataExpiracao())
@@ -44,6 +45,20 @@ public class TokenServiceImpl implements TokenService {
                     .build()
                     .verify(token)
                     .getSubject();
+        } catch (JWTVerificationException e) {
+            return null;
+        }
+    }
+    @Override
+    public String obterRole(String token) {
+        try {
+            Algorithm algoritmo = Algorithm.HMAC256(secret);
+            DecodedJWT jwt = JWT.require(algoritmo)
+                    .withIssuer("conectlar-api")
+                    .build()
+                    .verify(token);
+
+            return jwt.getClaim("role").asString();
         } catch (JWTVerificationException e) {
             return null;
         }

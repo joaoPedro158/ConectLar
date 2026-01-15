@@ -9,4 +9,5 @@ public interface TokenService {
     String gerarToken(BaseAuthEntity usuario);
 
     String validarToken(String token);
+    String obterRole(String token);
 }

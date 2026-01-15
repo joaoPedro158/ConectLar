@@ -29,14 +29,16 @@ public class SecurityConfigurations {
                 .csrf( csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
-                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootProfissional + RotasBases.Cadastra).permitAll()
-                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra).permitAll()
+                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
+                                .requestMatchers(HttpMethod.POST, RotasPrincipais.RootProfissional + RotasBases.Cadastra).permitAll()
+                                .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra).permitAll()
                                 .requestMatchers(HttpMethod.GET, RotasPrincipais.RootUsuario + RotasBases.Lista).permitAll()
-//                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootAdm + RotasBases.Cadastra).permitAll()
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootAdm + RotasBases.Cadastra).permitAll()
+                                .requestMatchers("/error").permitAll()
 
-                        .requestMatchers("/error").permitAll()
+
+
 
                         .requestMatchers(RotasPrincipais.RootAdm + "/**").hasRole("ADM")
                         .anyRequest().authenticated()
