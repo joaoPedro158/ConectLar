@@ -27,26 +27,20 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = recuperarToken(request);
 
         if (token != null) {
-            // Se o token for inválido, validarToken retorna null e não entra no if
             var email = tokenService.validarToken(token);
-
             if (email != null) {
-                // 1. Pega a role direto do token
                 String roleDoToken = tokenService.obterRole(token);
-                // 2. Cria a autoridade com o prefixo ROLE_
+                Long id = tokenService.obterId(token);
                 var authorities = Collections.singletonList(
                         new SimpleGrantedAuthority("ROLE_" + roleDoToken)
                 );
 
-                // 3. Cria o usuário do Spring Security em memória
-                User principal = new User(email, "", authorities);
+                UsuarioDetails principal = new UsuarioDetails(email, authorities, id, roleDoToken);
 
-                // 4. Autentica
                 var authentication = new UsernamePasswordAuthenticationToken(principal, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        // O filterChain deve ser chamado APENAS UMA VEZ no final
         filterChain.doFilter(request, response);
     }
 

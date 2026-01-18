@@ -11,4 +11,5 @@ public interface RotasPrincipais {
     String RootAdm = "/adm";
 
     String Auth = "/auth";
+
 }

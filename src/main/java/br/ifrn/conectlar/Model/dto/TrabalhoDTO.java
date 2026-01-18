@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.dto;
 
+import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class TrabalhoDTO {
     private BigDecimal pagamento;
     private String descricao;
     private LocalDateTime dataHoraAberta;
+    private StatusTrabalho  status;
 
     // Dados do Usuário
     private Long idUsuario;

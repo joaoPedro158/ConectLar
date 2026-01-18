@@ -1,7 +1,6 @@
 package br.ifrn.conectlar.Service;
 
 import br.ifrn.conectlar.Model.Entity.BaseAuthEntity;
-import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
 
 
 public interface TokenService {
@@ -10,4 +9,5 @@ public interface TokenService {
 
     String validarToken(String token);
     String obterRole(String token);
+    Long obterId(String token);
 }

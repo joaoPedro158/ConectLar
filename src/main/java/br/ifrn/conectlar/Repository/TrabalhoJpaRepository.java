@@ -3,6 +3,11 @@ package br.ifrn.conectlar.Repository;
 import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface TrabalhoJpaRepository extends JpaRepository<TrabalhoEntity, Long> {
-    boolean existsById(Long aLong);
+
+  List<TrabalhoEntity> findByUsuarioIdOrderByDataHoraAbertaDesc(Long id);
+
+
 }

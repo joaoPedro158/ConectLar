@@ -6,10 +6,12 @@ import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
+import br.ifrn.conectlar.Security.UsuarioDetails;
 import br.ifrn.conectlar.Service.TrabalhoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,6 +49,13 @@ public class TrabalhoController {
     public ResponseEntity deleteTrabalho(@PathVariable Long id){
         trabalhoService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(RotasBases.historico)
+    public ResponseEntity ListaHistorico(@AuthenticationPrincipal UsuarioDetails user){
+        Long idUsuario = user.getId();
+        var lista = trabalhoService.ListaHistorico(idUsuario);
+        return ResponseEntity.ok(lista);
     }
 
 }

@@ -13,4 +13,6 @@ public interface RotasBases {
     String PorId = "/{id}";
 
     String Login = "/login";
+
+    String historico = "/historico";
 }

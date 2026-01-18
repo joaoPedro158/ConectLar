@@ -1,13 +1,13 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
+
 import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Trabalho;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
-import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +25,7 @@ public class TrabalhoServiceImpl implements TrabalhoService {
     private final TrabalhoMapper mapper;
 
     private final UsuarioJpaRepository usuarioRepository;
-    private final ProfissionalJpaRepository profissionalRepository;
+
 
     @Override
     public List<TrabalhoDTO> getAll() {
@@ -50,6 +50,9 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         TrabalhoEntity entityToSave = mapper.toEntity(TrabalhoModel);
         entityToSave.setUsuario(usuario);
         entityToSave.setDataHoraAberta(LocalDateTime.now());
+        if (entityToSave.getStatus() == null) {
+            entityToSave.setStatus(StatusTrabalho.ABERTO);
+        }
 
         TrabalhoEntity saveEntity = trabalhoRepository.save(entityToSave);
         return mapper.toDTO(saveEntity);
@@ -78,4 +81,12 @@ public class TrabalhoServiceImpl implements TrabalhoService {
 
         trabalhoRepository.deleteById(id);
     }
+
+    @Override
+    public List<TrabalhoDTO> ListaHistorico(Long id) {
+        List<TrabalhoEntity> trabalhos = trabalhoRepository.findByUsuarioIdOrderByDataHoraAbertaDesc(id);
+        return trabalhos.stream().map(mapper::toDTO).toList();
+    }
+
+
 }

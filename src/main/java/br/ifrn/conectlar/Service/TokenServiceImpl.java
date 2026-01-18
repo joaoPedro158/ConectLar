@@ -29,6 +29,7 @@ public class TokenServiceImpl implements TokenService {
                     .withIssuer("conectlar-api")
                     .withSubject(usuario.getEmail())
                     .withClaim("role", usuario.getRole().name())
+                    .withClaim("id", usuario.getId())
                     .withExpiresAt(gerarDataExpiracao())
                     .sign(algoritimo);
         } catch (Exception e) {
@@ -49,6 +50,18 @@ public class TokenServiceImpl implements TokenService {
             return null;
         }
     }
+    public Long obterId(String token) {
+        try {
+            Algorithm algoritmo = Algorithm.HMAC256(secret);
+            return JWT.require(algoritmo)
+                    .withIssuer("conectlar-api")
+                    .build()
+                    .verify(token)
+                    .getClaim("id").asLong();
+        } catch (JWTVerificationException e) {
+            return null;
+        }
+    }
     @Override
     public String obterRole(String token) {
         try {
@@ -57,7 +70,6 @@ public class TokenServiceImpl implements TokenService {
                     .withIssuer("conectlar-api")
                     .build()
                     .verify(token);
-
             return jwt.getClaim("role").asString();
         } catch (JWTVerificationException e) {
             return null;
@@ -66,7 +78,7 @@ public class TokenServiceImpl implements TokenService {
 
     private Instant gerarDataExpiracao() {
         return LocalDateTime.now()
-                .plusHours(2)
+                .plusHours(48)
                 .toInstant(ZoneOffset.of("-03:00"));
     }
 }

@@ -3,7 +3,7 @@ package br.ifrn.conectlar.Model;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import org.flywaydb.core.internal.util.StringUtils;
+
 
 import java.util.regex.Pattern;
 

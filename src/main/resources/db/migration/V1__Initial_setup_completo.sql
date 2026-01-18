@@ -54,16 +54,26 @@ CREATE TABLE IF NOT EXISTS adm (
     );
 
 -- -----------------------------------------------------
--- 4. Tabela TRABALHO
+-- 4. Tabela TRABALHO (Refatorada)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS trabalho (
                                         id BIGSERIAL PRIMARY KEY,
-    problema VARCHAR(250) NOT NULL,
-    data_hora_aberta TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    pagamento DECIMAL(10, 2) NOT NULL,
+                                        problema VARCHAR(250) NOT NULL,
     descricao VARCHAR(255) NOT NULL,
+    pagamento DECIMAL(10, 2) NOT NULL,
+    data_hora_aberta TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_hora_finalizada TIMESTAMP, -- Nova coluna: Para saber quando acabou
+
+-- O SEGREDO ESTÁ AQUI:
+    status VARCHAR(20) NOT NULL DEFAULT 'ABERTO', -- Ex: ABERTO, ANDAMENTO, CONCLUIDO
+
+-- Quem pediu?
     id_usuario BIGINT NOT NULL,
 
+    -- Quem está fazendo? (Pode ser NULL no começo)
+    id_profissional BIGINT,
+
+    -- Endereço
     rua VARCHAR(150) NOT NULL,
     bairro VARCHAR(100) NOT NULL,
     numero VARCHAR(20) NOT NULL,
@@ -73,49 +83,25 @@ CREATE TABLE IF NOT EXISTS trabalho (
     complemento VARCHAR(50),
 
     CONSTRAINT fk_trabalho_usuario
-    FOREIGN KEY (id_usuario)
-    REFERENCES usuario (id)
+    FOREIGN KEY (id_usuario) REFERENCES usuario (id),
+
+    CONSTRAINT fk_trabalho_profissional
+    FOREIGN KEY (id_profissional) REFERENCES profissional (id)
     );
 
 -- -----------------------------------------------------
--- 5. Tabela HISTORICO_TRABALHO
+-- 5. Tabela AVALIACAO (Antiga Historico)
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS historico_trabalho (
-                                                  id BIGSERIAL PRIMARY KEY,
-                                                  avaliacao_recebida VARCHAR(255),
-    data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    trabalho_feito VARCHAR(100) NOT NULL,
-    id_profissional BIGINT NOT NULL,
+CREATE TABLE IF NOT EXISTS avaliacao (
+                                         id BIGSERIAL PRIMARY KEY,
+                                         nota INT NOT NULL, -- Ex: 1 a 5 estrelas
+                                         comentario VARCHAR(255),
+    data_avaliacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    id_trabalho BIGINT NOT NULL UNIQUE, -- 1 avaliação por trabalho
 
-    CONSTRAINT fk_historico_profissional
-    FOREIGN KEY (id_profissional)
-    REFERENCES profissional (id)
-    );
-
--- -----------------------------------------------------
--- 6. Tabela HISTORICO_PEDIDOS
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS historico_pedidos (
-                                                 id BIGSERIAL PRIMARY KEY,
-                                                 avaliacao VARCHAR(255) NOT NULL,
-    trabalho_feito VARCHAR(100) NOT NULL,
-    data_hora_feito TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_profissional BIGINT NOT NULL,
-    id_usuario BIGINT NOT NULL,
-    id_trabalho BIGINT NOT NULL,
-
-    CONSTRAINT fk_pedidos_usuario
-    FOREIGN KEY (id_usuario)
-    REFERENCES usuario (id),
-
-    CONSTRAINT fk_pedidos_profissional
-    FOREIGN KEY (id_profissional)
-    REFERENCES profissional (id),
-
-    CONSTRAINT fk_pedidos_trabalho
-    FOREIGN KEY (id_trabalho)
-    REFERENCES trabalho (id)
+    CONSTRAINT fk_avaliacao_trabalho
+    FOREIGN KEY (id_trabalho) REFERENCES trabalho (id)
     );
 
 -- -----------------------------------------------------

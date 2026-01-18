@@ -2,6 +2,7 @@ package br.ifrn.conectlar.Controller;
 
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
+import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Service.UsuarioService;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,11 @@ public class UsuarioController {
         List<UsuarioDTO> usuarios = usuarioService.getAll();
         return ResponseEntity.ok(usuarios);
     }
+//
+//    @GetMapping(RotasBases.ListaHistorico)
+//    public  ResponseEntity HistoricoPedidos(){
+//        List<TrabalhoDTO> trabalhos = usuarioService.HistoricoPedidos(Long id);
+//    }
 
     @DeleteMapping(RotasBases.Delete)
     public ResponseEntity deleteUsuario(@PathVariable Long id){

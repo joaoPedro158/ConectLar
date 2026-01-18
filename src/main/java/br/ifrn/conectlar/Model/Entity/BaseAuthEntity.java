@@ -34,7 +34,7 @@ public abstract class BaseAuthEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Lógica centralizada para TODOS os tipos de usuário
+
         if (this.getRole() == UsuarioRole.ADM) {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_ADMIN"),

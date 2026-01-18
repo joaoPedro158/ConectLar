@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model;
 
+import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,16 +16,18 @@ public class Trabalho {
     private BigDecimal pagamento;
     private String descricao;
     private LocalDateTime dataHoraAberta;
+    private StatusTrabalho status;
     private Long idUsuario;
 
 
-    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta, Long idUsuario) {
+    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta,StatusTrabalho status, Long idUsuario) {
         this.id = id;
         this.localizacao = localizacao;
         this.problema = problema;
         this.pagamento = pagamento;
         this.descricao = descricao;
         this.dataHoraAberta = dataHoraAberta;
+        this.status = status;
         this.idUsuario = idUsuario;
 
 

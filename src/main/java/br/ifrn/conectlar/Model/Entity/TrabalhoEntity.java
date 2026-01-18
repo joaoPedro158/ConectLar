@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.Entity;
 
+import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Localizacao;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,8 +27,6 @@ public class TrabalhoEntity {
     @Column(nullable = false, length = 250)
     private String problema;
 
-    // Mapeia para o TIMESTAMP do banco.
-    // O nome da coluna no banco é "data_hora_aberta" (snake_case)
     @Column(name = "data_hora_aberta", nullable = false)
     private LocalDateTime dataHoraAberta;
 
@@ -37,6 +36,10 @@ public class TrabalhoEntity {
 
     @Column(nullable = false) // Tamanho padrão 255
     private String descricao;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusTrabalho status;
 
     // --- RELACIONAMENTOS (Chaves Estrangeiras) ---
 
@@ -49,16 +52,4 @@ public class TrabalhoEntity {
     private UsuarioEntity usuario;
 
 
-
-
-
-    // --- DICA DE OURO ---
-    // Este método roda automaticamente antes de salvar no banco.
-    // Garante que a data nunca seja nula, mesmo que o Java esqueça de setar.
-    @PrePersist
-    public void prePersist() {
-        if (this.dataHoraAberta == null) {
-            this.dataHoraAberta = LocalDateTime.now();
-        }
-    }
 }
