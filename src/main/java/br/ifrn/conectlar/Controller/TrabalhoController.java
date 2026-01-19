@@ -51,6 +51,10 @@ public class TrabalhoController {
         return ResponseEntity.ok().build();
     }
 
-
-
+    @PostMapping(RotasBases.candidatar)
+    public ResponseEntity candidatar(@PathVariable Long id, @AuthenticationPrincipal UsuarioDetails usuario){
+        Long idProfissional = usuario.getId();
+        trabalhoService.solicitarTrabalho(id,idProfissional);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Service;
 
 
+import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
@@ -8,6 +9,7 @@ import br.ifrn.conectlar.Model.Trabalho;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
+import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,6 +27,8 @@ public class TrabalhoServiceImpl implements TrabalhoService {
     private final TrabalhoMapper mapper;
 
     private final UsuarioJpaRepository usuarioRepository;
+
+    private final ProfissionalJpaRepository profissionalRepository;
 
 
     @Override
@@ -82,7 +86,23 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         trabalhoRepository.deleteById(id);
     }
 
+    @Override
+    public void solicitarTrabalho(Long idTrabalho, Long idProfissional) {
+        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+                .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
 
+        if (trabalho.getStatus() != StatusTrabalho.ABERTO) {
+            throw new RuntimeException("Desculpe, este trabalho já foi reservado por outro profissional!");
+        }
+
+        ProfissionalEntity profissional = profissionalRepository.findById(idProfissional)
+                .orElseThrow(() -> new RuntimeException("Profissional nao encontrado"));
+
+        trabalho.setProfissional(profissional);
+        trabalho.setStatus(StatusTrabalho.EM_ANDAMENTO);
+
+        trabalhoRepository.save(trabalho);
+    }
 
 
 }
