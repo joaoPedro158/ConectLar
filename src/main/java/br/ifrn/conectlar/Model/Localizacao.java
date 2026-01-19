@@ -32,7 +32,7 @@ public class Localizacao {
     }
 
     private void validacao() {
-        // Validação: Verifica se é Nulo OU se está Vazio/Espaços
+
         if (rua == null || rua.isBlank()) {
             throw new IllegalArgumentException("A rua é obrigatória.");
         }
@@ -53,6 +53,5 @@ public class Localizacao {
             throw new IllegalArgumentException("O CEP é obrigatório.");
         }
 
-        // COMPLEMENTO NÃO ENTRA NA VALIDAÇÃO (É Opcional)
     }
 }

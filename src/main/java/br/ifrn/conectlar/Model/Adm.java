@@ -31,7 +31,6 @@ public class Adm {
     }
 
    public void validacao() {
-       // --- 1. Validação de Identificação ---
 
        if (this.nome == null || this.nome.trim().length() < 3) {
            throw new IllegalArgumentException("O nome do administrador é obrigatório e deve ter pelo menos 3 letras.");
@@ -45,8 +44,7 @@ public class Adm {
            throw new IllegalArgumentException("O formato do e-mail é inválido.");
        }
 
-       // --- 2. Validação de Segurança (Senha) ---
-       // Administradores devem ter senhas fortes obrigatoriamente
+
 
        if (this.senha == null || this.senha.isBlank()) {
            throw new IllegalArgumentException("A senha é obrigatória.");
@@ -68,16 +66,12 @@ public class Adm {
            throw new IllegalArgumentException("A senha deve conter pelo menos um número.");
        }
 
-       // --- 3. Invariante de Domínio (Regra de Ouro) ---
+
 
        if (this.role == null) {
            throw new IllegalArgumentException("O perfil de acesso (Role) é obrigatório.");
        }
 
-       // Esta validação garante que ninguém crie um 'Adm' com permissão de 'USUARIO' por engano
-       if (this.role != UsuarioRole.ADM) {
-           throw new IllegalArgumentException("Erro de consistência: Um objeto 'Adm' deve possuir exclusivamente a role 'ADM'.");
-       }
    }
 }
 

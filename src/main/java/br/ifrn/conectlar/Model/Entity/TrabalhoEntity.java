@@ -30,18 +30,18 @@ public class TrabalhoEntity {
     @Column(name = "data_hora_aberta", nullable = false)
     private LocalDateTime dataHoraAberta;
 
-    // Mapeia para DECIMAL(10, 2). BigDecimal é obrigatório para dinheiro.
+
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal pagamento;
 
-    @Column(nullable = false) // Tamanho padrão 255
+    @Column(nullable = false)
     private String descricao;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusTrabalho status;
 
-    // --- RELACIONAMENTOS (Chaves Estrangeiras) ---
+    //  (Chaves Estrangeiras) ---
 
     /*
      * @ManyToOne: "Muitos trabalhos podem ser de UM usuário"

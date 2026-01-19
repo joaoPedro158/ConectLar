@@ -65,10 +65,6 @@ public class Trabalho {
             throw new IllegalArgumentException("O valor do pagamento deve ser maior que zero.");
         }
 
-        // (Opcional) Regra: Pagamento mínimo da plataforma? Ex: R$ 20,00
-        // if (this.pagamento.compareTo(new BigDecimal("20.00")) < 0) {
-        //     throw new IllegalArgumentException("O valor mínimo para um serviço é R$ 20,00.");
-        // }
 
         // --- 4. Validação de Vínculo (Quem pediu?) ---
 

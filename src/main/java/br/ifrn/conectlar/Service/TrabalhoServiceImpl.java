@@ -29,8 +29,8 @@ public class TrabalhoServiceImpl implements TrabalhoService {
 
     @Override
     public List<TrabalhoDTO> getAll() {
-        List<TrabalhoEntity> entities = trabalhoRepository.findAll();
-        return entities.stream().map(mapper::toDTO).toList();
+        List<TrabalhoEntity> trabalhos = trabalhoRepository.findByStatusOrderByDataHoraAbertaDesc(StatusTrabalho.ABERTO);
+        return trabalhos.stream().map(mapper::toDTO).toList();
     }
 
     @Override

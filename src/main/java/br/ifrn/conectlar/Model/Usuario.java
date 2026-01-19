@@ -21,7 +21,6 @@ public class Usuario {
     private UsuarioRole role;
 
 
-    // Regex Padrões
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     // Formato estrito: (99) 99999-9999
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\(\\d{2}\\)\\s\\d{5}-\\d{4}$");
@@ -44,7 +43,7 @@ public class Usuario {
 
 
     public void validacao() {
-// --- 1. Dados Pessoais (Nome e Localização) ---
+
 
         if (this.nome == null || this.nome.trim().length() < 3) {
             throw new IllegalArgumentException("O nome do usuário é obrigatório e deve ter pelo menos 3 letras.");
@@ -54,7 +53,6 @@ public class Usuario {
             throw new IllegalArgumentException("A localização (endereço) é obrigatória para o cadastro.");
         }
 
-        // --- 2. Contato (Email e Telefone) ---
 
         if (this.email == null || this.email.isBlank()) {
             throw new IllegalArgumentException("O e-mail é obrigatório.");
@@ -72,7 +70,6 @@ public class Usuario {
             throw new IllegalArgumentException("O telefone deve estar no formato: (XX) XXXXX-XXXX");
         }
 
-        // --- 3. Segurança (Senha) ---
 
         if (this.senha == null || this.senha.isBlank()) {
             throw new IllegalArgumentException("A senha é obrigatória.");
