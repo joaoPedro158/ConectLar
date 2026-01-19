@@ -13,5 +13,6 @@ public interface TrabalhoService {
     TrabalhoDTO update(Long id, TrabalhoRecord trabalho);
     void delete(Long id);
     void solicitarTrabalho(Long idTrabalho, Long  idProfissional);
+    List<TrabalhoDTO> BuscarProblema(String problema);
 
 }

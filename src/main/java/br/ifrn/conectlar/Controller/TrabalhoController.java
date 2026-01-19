@@ -4,8 +4,6 @@ import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
-import br.ifrn.conectlar.Model.dto.UsuarioDTO;
-import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 import br.ifrn.conectlar.Security.UsuarioDetails;
 import br.ifrn.conectlar.Service.TrabalhoService;
 import lombok.AllArgsConstructor;
@@ -56,5 +54,11 @@ public class TrabalhoController {
         Long idProfissional = usuario.getId();
         trabalhoService.solicitarTrabalho(id,idProfissional);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(RotasBases.Busca)
+    public ResponseEntity<List<TrabalhoDTO>> busca(@RequestParam String termo){
+        List<TrabalhoDTO> busca = trabalhoService.BuscarProblema(termo);
+        return ResponseEntity.ok(busca);
     }
 }

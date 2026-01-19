@@ -10,10 +10,12 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface TrabalhoMapper {
-    Trabalho  toModel(TrabalhoRecord record);
+    Trabalho toModel(TrabalhoRecord record);
 
     @Mapping(source = "usuario.id", target = "idUsuario")
     @Mapping(source = "usuario.nome", target = "nomeUsuario")
+    @Mapping(source = "profissional.id", target = "idProfissional")
+    @Mapping(source = "profissional.nome", target = "nomeProfissional")
     TrabalhoDTO toDTO(TrabalhoEntity entity);
     TrabalhoEntity toEntity(Trabalho model);
 

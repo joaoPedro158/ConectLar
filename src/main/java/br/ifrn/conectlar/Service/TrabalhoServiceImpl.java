@@ -104,5 +104,16 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         trabalhoRepository.save(trabalho);
     }
 
+    @Override
+    public List<TrabalhoDTO> BuscarProblema(String problema) {
+        if (problema == null || problema.trim().isEmpty() ) {
+            return getAll();
+        }
+
+        List<TrabalhoEntity> busca = trabalhoRepository.findByProblemaContainingIgnoreCaseAndStatusOrderByDataHoraAbertaDesc(problema, StatusTrabalho.ABERTO);
+
+        return busca.stream().map(mapper::toDTO).toList() ;
+    }
+
 
 }

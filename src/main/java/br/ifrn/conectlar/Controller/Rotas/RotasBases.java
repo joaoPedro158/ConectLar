@@ -17,4 +17,6 @@ public interface RotasBases {
     String historico = "/historico";
 
     String candidatar = "/{id}/candidatar";
+
+    String Busca = "/busca";
 }
