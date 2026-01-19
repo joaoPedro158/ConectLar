@@ -1,11 +1,15 @@
 package br.ifrn.conectlar.Service;
 
 import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
+import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
+import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.mapper.ProfissionalMapper;
+import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
+import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,8 @@ public class ProfissionalServiceImpl implements ProfissionalService {
 
     private final ProfissionalJpaRepository profissionalRepository;
     private final ProfissionalMapper mapper;
+    private final TrabalhoJpaRepository trabalhoRepository;
+    private final TrabalhoMapper trabalhoMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -73,6 +79,12 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         ProfissionalEntity updateEntity = profissionalRepository.save(entityToUpdate);
 
         return mapper.toDTO(updateEntity);
+    }
+
+    @Override
+    public List<TrabalhoDTO> historico(Long id) {
+        List<TrabalhoEntity> historico = trabalhoRepository.findByProfissionalIdOrderByDataHoraAbertaDesc(id);
+        return historico.stream().map(trabalhoMapper::toDTO).toList();
     }
 
 }

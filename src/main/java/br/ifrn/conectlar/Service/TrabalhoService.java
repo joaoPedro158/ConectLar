@@ -13,5 +13,5 @@ public interface TrabalhoService {
     TrabalhoDTO update(Long id, TrabalhoRecord trabalho);
     void delete(Long id);
 
-    List<TrabalhoDTO> ListaHistorico(Long id);
+
 }

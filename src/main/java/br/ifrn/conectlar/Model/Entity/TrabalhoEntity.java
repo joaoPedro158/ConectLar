@@ -51,5 +51,10 @@ public class TrabalhoEntity {
     @JoinColumn(name = "id_usuario", nullable = false)
     private UsuarioEntity usuario;
 
+    // VOCÊ PRECISA DISSO AQUI:
+    @ManyToOne // Um profissional tem vários trabalhos
+    @JoinColumn(name = "id_profissional") // Nome da coluna no banco
+    private ProfissionalEntity profissional;
+
 
 }

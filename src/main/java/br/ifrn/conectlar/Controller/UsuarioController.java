@@ -4,10 +4,13 @@ import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
+import br.ifrn.conectlar.Security.UsuarioDetails;
+import br.ifrn.conectlar.Service.ProfissionalService;
 import br.ifrn.conectlar.Service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 
@@ -20,6 +23,7 @@ import java.util.List;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final ProfissionalService profissionalService;
 
     @PostMapping( value = RotasBases.Cadastra,
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -33,11 +37,6 @@ public class UsuarioController {
         List<UsuarioDTO> usuarios = usuarioService.getAll();
         return ResponseEntity.ok(usuarios);
     }
-//
-//    @GetMapping(RotasBases.ListaHistorico)
-//    public  ResponseEntity HistoricoPedidos(){
-//        List<TrabalhoDTO> trabalhos = usuarioService.HistoricoPedidos(Long id);
-//    }
 
     @DeleteMapping(RotasBases.Delete)
     public ResponseEntity deleteUsuario(@PathVariable Long id){
@@ -48,5 +47,12 @@ public class UsuarioController {
     @PutMapping(RotasBases.Atualiza)
     public ResponseEntity updateUsuario(@PathVariable Long id, @RequestBody UsuarioRecord usuario){
         return ResponseEntity.ok(usuarioService.updateUsuario(id, usuario));
+    }
+
+    @GetMapping(RotasBases.historico)
+    public  ResponseEntity getHistoricoUsuario(@AuthenticationPrincipal UsuarioDetails user){
+        Long usuarioId = user.getId();
+        List<TrabalhoDTO> historico = usuarioService.historico(usuarioId);
+        return ResponseEntity.ok(historico);
     }
 }

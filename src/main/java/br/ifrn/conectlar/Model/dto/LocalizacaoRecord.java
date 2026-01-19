@@ -7,5 +7,5 @@ public record LocalizacaoRecord(
    String cidade,
    String cep,
    String estado,
-   String Complemento
+   String complemento
 ) {}

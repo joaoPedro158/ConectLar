@@ -18,9 +18,10 @@ public class Trabalho {
     private LocalDateTime dataHoraAberta;
     private StatusTrabalho status;
     private Long idUsuario;
+    private Long idProfissional;
 
 
-    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta,StatusTrabalho status, Long idUsuario) {
+    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta,StatusTrabalho status, Long idUsuario, Long idProfissional) {
         this.id = id;
         this.localizacao = localizacao;
         this.problema = problema;
@@ -29,6 +30,7 @@ public class Trabalho {
         this.dataHoraAberta = dataHoraAberta;
         this.status = status;
         this.idUsuario = idUsuario;
+        this.idProfissional = idProfissional;
 
 
         validacao();

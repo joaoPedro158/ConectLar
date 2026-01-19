@@ -23,5 +23,10 @@ public class TrabalhoDTO {
     private Long idUsuario;
     private String nomeUsuario;
 
+    //dados do profissional
+
+    private  Long idProfissional;
+    private String nomeProfissional;
+
 
 }

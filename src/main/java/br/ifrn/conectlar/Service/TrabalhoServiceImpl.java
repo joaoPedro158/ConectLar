@@ -82,11 +82,7 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         trabalhoRepository.deleteById(id);
     }
 
-    @Override
-    public List<TrabalhoDTO> ListaHistorico(Long id) {
-        List<TrabalhoEntity> trabalhos = trabalhoRepository.findByUsuarioIdOrderByDataHoraAbertaDesc(id);
-        return trabalhos.stream().map(mapper::toDTO).toList();
-    }
+
 
 
 }

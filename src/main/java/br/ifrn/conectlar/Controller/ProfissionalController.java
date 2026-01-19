@@ -3,11 +3,16 @@ package br.ifrn.conectlar.Controller;
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
+import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
+import br.ifrn.conectlar.Security.UsuarioDetails;
 import br.ifrn.conectlar.Service.ProfissionalService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -38,5 +43,12 @@ public class ProfissionalController {
     @PutMapping(RotasBases.Atualiza)
     public ResponseEntity updateProfissional(@PathVariable Long id, @RequestBody ProfissionalRecord profissionalRecord){
         return ResponseEntity.ok(profissionalService.updateProfissional(id, profissionalRecord));
+    }
+
+    @GetMapping(RotasBases.historico)
+    public ResponseEntity getHistoricoProfissional(@AuthenticationPrincipal UsuarioDetails user){
+        Long profissionalId = user.getId();
+        List<TrabalhoDTO> historico = profissionalService.historico(profissionalId);
+        return ResponseEntity.ok(historico);
     }
 }

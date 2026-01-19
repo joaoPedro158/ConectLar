@@ -1,11 +1,15 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
+import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
+import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -23,6 +27,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioJpaRepository usuarioRepository;
     private final UsuarioMapper mapper;
+    private final TrabalhoJpaRepository trabalhoRepository;
+    private final TrabalhoMapper trabalhoMapper;
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -79,5 +85,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         UsuarioEntity updatedEntity = usuarioRepository.save(entityToUpdate);
 
         return mapper.toDTO(updatedEntity);
+    }
+
+    @Override
+    public List<TrabalhoDTO> historico(Long id) {
+        List<TrabalhoEntity> historico = trabalhoRepository.findByUsuarioIdOrderByDataHoraAbertaDesc(id);
+        return historico.stream().map(trabalhoMapper::toDTO).toList();
     }
 }

@@ -51,11 +51,6 @@ public class TrabalhoController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(RotasBases.historico)
-    public ResponseEntity ListaHistorico(@AuthenticationPrincipal UsuarioDetails user){
-        Long idUsuario = user.getId();
-        var lista = trabalhoService.ListaHistorico(idUsuario);
-        return ResponseEntity.ok(lista);
-    }
+
 
 }

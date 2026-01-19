@@ -11,6 +11,7 @@ public record TrabalhoRecord(
         BigDecimal pagamento,
         String descricao,
         StatusTrabalho status,
-        Long idUsuario
+        Long idUsuario,
+        Long idProfissional
 ) {
 }

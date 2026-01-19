@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 
@@ -14,5 +15,5 @@ public interface UsuarioService {
     void deleteUsuario(Long id);
 
     UsuarioDTO updateUsuario(Long id, UsuarioRecord usuario);
-
+    List<TrabalhoDTO> historico(Long id);
 }
