@@ -15,7 +15,7 @@ public class AuthorizationService implements UserDetailsService {
     UsuarioJpaRepository usuarioJpaRepository;
     @Autowired
     ProfissionalJpaRepository profissionalJpaRepository;
-
+    
     @Autowired
     AdmJpaRepository admJpaRepository;
 

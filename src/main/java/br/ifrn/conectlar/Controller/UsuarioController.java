@@ -45,8 +45,9 @@ public class UsuarioController {
     }
 
     @PutMapping(RotasBases.Atualiza)
-    public ResponseEntity updateUsuario(@PathVariable Long id, @RequestBody UsuarioRecord usuario){
-        return ResponseEntity.ok(usuarioService.updateUsuario(id, usuario));
+    public ResponseEntity updateUsuario(@AuthenticationPrincipal UsuarioDetails user, @RequestBody UsuarioRecord usuario){
+        Long usuarioId = user.getId();
+        return ResponseEntity.ok(usuarioService.updateUsuario(usuarioId, usuario));
     }
 
     @GetMapping(RotasBases.historico)
