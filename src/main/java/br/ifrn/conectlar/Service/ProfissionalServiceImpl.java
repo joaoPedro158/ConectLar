@@ -63,8 +63,9 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         profissionalRepository.deleteById(id);
     }
 
+
     @Override
-    public ProfissionalDTO updateProfissional(long id, ProfissionalRecord profissionalRecord) {
+    public ProfissionalDTO updateProfissional(Long id, ProfissionalRecord profissionalRecord) {
         Profissional profissionalModel = mapper.toModel(profissionalRecord);
 
         ProfissionalEntity entityToUpdate = profissionalRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("o profissional não encontrado com o ID: " + id ));

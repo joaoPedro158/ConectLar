@@ -29,6 +29,7 @@ public class SecurityConfigurations {
                 .csrf( csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        // qualquer ususario tem permissão
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
                                 .requestMatchers(HttpMethod.POST, RotasPrincipais.RootProfissional + RotasBases.Cadastra).permitAll()
@@ -37,7 +38,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, RotasPrincipais.RootAdm + RotasBases.Cadastra).permitAll()
                                 .requestMatchers("/error").permitAll()
 
-
+                        //somente profissionais
+                        .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootProfissional + RotasBases.Atualiza).permitAll()
 
 
                         .requestMatchers(RotasPrincipais.RootAdm + "/**").hasRole("ADM")

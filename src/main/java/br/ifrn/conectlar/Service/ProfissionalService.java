@@ -12,6 +12,6 @@ public interface ProfissionalService {
 
    List<ProfissionalDTO> getAll();
    void deleteProfissional(long id);
-   ProfissionalDTO updateProfissional(long id, ProfissionalRecord profissionalRecord);
+   ProfissionalDTO updateProfissional(Long id, ProfissionalRecord profissionalRecord);
    List<TrabalhoDTO> historico(Long id);
 }

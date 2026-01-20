@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.Entity;
 
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfissionalEntity extends BaseUsuarioEntity {
+    @Enumerated(EnumType.STRING)
     @Column(length = 150)
-    private String categoria;
+    private CategoriaEnum categoria;
 
 }

@@ -41,8 +41,9 @@ public class ProfissionalController {
     }
 
     @PutMapping(RotasBases.Atualiza)
-    public ResponseEntity updateProfissional(@PathVariable Long id, @RequestBody ProfissionalRecord profissionalRecord){
-        return ResponseEntity.ok(profissionalService.updateProfissional(id, profissionalRecord));
+    public ResponseEntity updateProfissional(@AuthenticationPrincipal UsuarioDetails user, @RequestBody ProfissionalRecord profissionalRecord){
+        Long profissionalId = user.getId();
+        return ResponseEntity.ok(profissionalService.updateProfissional(profissionalId, profissionalRecord));
     }
 
     @GetMapping(RotasBases.historico)

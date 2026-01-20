@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Model.dto;
 
 
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,6 @@ public class ProfissionalDTO {
     private String email;
     private LocalizacaoDTO localizacao;
     private String telefone;
-    private String categoria;
+    private CategoriaEnum categoria;
     private UsuarioRole role;
 }

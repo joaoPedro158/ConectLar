@@ -8,7 +8,7 @@ public interface RotasBases {
 
     String Lista = "/list";
 
-    String Atualiza = "/update/{id}";
+    String Atualiza = "/update";
 
     String PorId = "/{id}";
 
