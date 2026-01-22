@@ -7,12 +7,15 @@ import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Security.UsuarioDetails;
 import br.ifrn.conectlar.Service.ProfissionalService;
 import br.ifrn.conectlar.Service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,14 +25,16 @@ import java.util.List;
 @AllArgsConstructor
 public class UsuarioController {
 
+    @Autowired
     private final UsuarioService usuarioService;
     private final ProfissionalService profissionalService;
 
     @PostMapping( value = RotasBases.Cadastra,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity saveUsuario(@RequestBody UsuarioRecord usuario){
-        return ResponseEntity.ok(usuarioService.saveUsuario(usuario));
+    public ResponseEntity saveUsuario(@RequestPart("dados") @Valid UsuarioRecord usuario, @RequestPart(value = "arquivo", required = false)MultipartFile arquivo){
+        UsuarioDTO novoUsuario = usuarioService.saveUsuario(usuario, arquivo);
+        return ResponseEntity.ok(novoUsuario);
     }
 
     @GetMapping(RotasBases.Lista)
@@ -44,10 +49,14 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(RotasBases.Atualiza)
-    public ResponseEntity updateUsuario(@AuthenticationPrincipal UsuarioDetails user, @RequestBody UsuarioRecord usuario){
+    @PutMapping(value =RotasBases.Atualiza,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity updateUsuario(@AuthenticationPrincipal UsuarioDetails user,
+                                        @RequestPart(value ="dados", required = false)  UsuarioRecord usuario,
+                                        @RequestPart(value = "arquivo", required = false )MultipartFile arquivo){
         Long usuarioId = user.getId();
-        return ResponseEntity.ok(usuarioService.updateUsuario(usuarioId, usuario));
+        UsuarioDTO usuarioAtualizado = usuarioService.updateUsuario(usuarioId,usuario,arquivo);
+        return ResponseEntity.ok(usuarioAtualizado);
     }
 
     @GetMapping(RotasBases.historico)

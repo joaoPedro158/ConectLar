@@ -4,13 +4,11 @@ import br.ifrn.conectlar.Model.Usuario;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UsuarioMapper {
     Usuario toModel(UsuarioRecord record);
     @Mapping(target = "senha", ignore = true)
@@ -20,8 +18,8 @@ public interface UsuarioMapper {
     @Mapping(target = "id", ignore = true)
     void updateEntityFromModel(Usuario model, @MappingTarget UsuarioEntity entity);
 
-    @AfterMapping
-    default void validade(@MappingTarget Usuario model) {
-        model.validacao();
-    }
+//    @AfterMapping
+//    default void validade(@MappingTarget Usuario model) {
+//        model.validacao();
+//    }
 }
