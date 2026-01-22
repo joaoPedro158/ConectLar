@@ -4,13 +4,11 @@ import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ProfissionalMapper {
     Profissional toModel(ProfissionalRecord record);
     @Mapping(target = "senha", ignore = true)

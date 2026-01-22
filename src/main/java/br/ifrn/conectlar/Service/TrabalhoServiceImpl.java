@@ -15,8 +15,11 @@ import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +32,8 @@ public class TrabalhoServiceImpl implements TrabalhoService {
     private final UsuarioJpaRepository usuarioRepository;
 
     private final ProfissionalJpaRepository profissionalRepository;
+
+    private final SalvaArquivoService salvaArquivoService;
 
 
     @Override
@@ -46,12 +51,28 @@ public class TrabalhoServiceImpl implements TrabalhoService {
     }
 
     @Override
-    public TrabalhoDTO save(TrabalhoRecord trabalhoRecord) {
+    public TrabalhoDTO save(TrabalhoRecord trabalhoRecord, List<MultipartFile> arquivos, Long idUsuario) {
         Trabalho TrabalhoModel = mapper.toModel(trabalhoRecord);
 
-        UsuarioEntity usuario = usuarioRepository.findById(trabalhoRecord.idUsuario())
-                .orElseThrow(() -> new EntityNotFoundException("Usuario do ID: " + trabalhoRecord.idUsuario()));
+        UsuarioEntity usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario do ID: " + idUsuario));
         TrabalhoEntity entityToSave = mapper.toEntity(TrabalhoModel);
+        List<String> caminhosImagem = new ArrayList<>();
+        try {
+            if (arquivos != null && !arquivos.isEmpty()) {
+                for (MultipartFile arquivo : arquivos) {
+                    if (!arquivo.isEmpty()) {
+                        String nomeArquivo = salvaArquivoService.salvaImagem(arquivo);
+                        caminhosImagem.add(nomeArquivo);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw  new RuntimeException("Erro ao salvar do arquivo");
+        }
+
+
+        entityToSave.setImagens(caminhosImagem);
         entityToSave.setUsuario(usuario);
         entityToSave.setDataHoraAberta(LocalDateTime.now());
         if (entityToSave.getStatus() == null) {
@@ -63,13 +84,36 @@ public class TrabalhoServiceImpl implements TrabalhoService {
     }
 
     @Override
-    public TrabalhoDTO update(Long id, TrabalhoRecord trabalho) {
-        Trabalho TrabalhoModel = mapper.toModel(trabalho);
-
+    public TrabalhoDTO update(Long id, TrabalhoRecord trabalho, List<MultipartFile> arquivos) {
         TrabalhoEntity entityToUpdate = trabalhoRepository.findById(id).orElseThrow(()
                 -> new EntityNotFoundException("Trabalho do ID: " + id + "  nao encontrado "));
+        if (trabalho != null) {
+            Trabalho TrabalhoModel = mapper.toModel(trabalho);
+            mapper.updateEntityFromModel(TrabalhoModel, entityToUpdate);
+        }
+        // 3. LÓGICA DE ATUALIZAÇÃO DAS FOTOS 🖼️
+        try {
+            // Verifica se chegou uma lista e se ela tem itens
+            if (arquivos != null && !arquivos.isEmpty()) {
+                // Garante que a lista da entidade não está nula (evita NullPointerException)
+                if (entityToUpdate.getImagens() == null) {
+                    entityToUpdate.setImagens(new ArrayList<>());
+                }
 
-        mapper.updateEntityFromModel(TrabalhoModel, entityToUpdate);
+                for (MultipartFile arquivo : arquivos) {
+                    // Só processa se o arquivo tiver conteúdo
+                    if (!arquivo.isEmpty()) {
+                        // Salva no disco/bucket
+                        String nomeArquivo = salvaArquivoService.salvaImagem(arquivo);
+
+                        // ADICIONA na lista existente (JPA vai inserir na tabela auxiliar automaticamente)
+                        entityToUpdate.getImagens().add(nomeArquivo);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar novas fotos: " + e.getMessage());
+        }
 
         TrabalhoEntity entityUpdated = trabalhoRepository.save(entityToUpdate);
 
