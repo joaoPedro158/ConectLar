@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS usuario (
     telefone VARCHAR(50) NOT NULL UNIQUE,
     role VARCHAR(50) NOT NULL,
 
-    -- Campos de Endereço (@Embeddable)
     rua VARCHAR(150) NOT NULL,
     bairro VARCHAR(100) NOT NULL,
     numero VARCHAR(20) NOT NULL,
@@ -31,7 +30,6 @@ CREATE TABLE IF NOT EXISTS profissional (
     telefone VARCHAR(50) NOT NULL UNIQUE,
     role VARCHAR(50) NOT NULL,
 
-    -- Campos de Endereço (@Embeddable)
     rua VARCHAR(150) NOT NULL,
     bairro VARCHAR(100) NOT NULL,
     numero VARCHAR(20) NOT NULL,
@@ -62,10 +60,9 @@ CREATE TABLE IF NOT EXISTS trabalho (
     descricao VARCHAR(255) NOT NULL,
     pagamento DECIMAL(10, 2) NOT NULL,
     data_hora_aberta TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    data_hora_finalizada TIMESTAMP, -- Nova coluna: Para saber quando acabou
+    data_hora_finalizada TIMESTAMP,
 
--- O SEGREDO ESTÁ AQUI:
-    status VARCHAR(20) NOT NULL DEFAULT 'ABERTO', -- Ex: ABERTO, ANDAMENTO, CONCLUIDO
+    status VARCHAR(20) NOT NULL DEFAULT 'ABERTO',
 
 -- Quem pediu?
     id_usuario BIGINT NOT NULL,
@@ -128,4 +125,24 @@ CREATE TABLE IF NOT EXISTS disputa (
     CONSTRAINT fk_disputa_adm
     FOREIGN KEY (id_adm)
     REFERENCES adm (id)
+    );
+
+-- -----------------------------------------------------
+-- 6. Tabela TRABALHO_IMAGEM (Para múltiplas fotos)
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS trabalho_imagem (
+    -- ID próprio da imagem (opcional, mas recomendado)
+                                               id BIGSERIAL PRIMARY KEY,
+
+    -- O caminho do arquivo salvo no disco (ex: "upload/uuid_foto.jpg")
+                                               caminho_imagem VARCHAR(255) NOT NULL,
+
+    -- A qual trabalho essa imagem pertence?
+    id_trabalho BIGINT NOT NULL,
+
+    -- CONSTRAINT: Se o trabalho for deletado, as imagens somem do banco também
+    CONSTRAINT fk_trabalho_imagem_trabalho
+    FOREIGN KEY (id_trabalho)
+    REFERENCES trabalho (id)
+    ON DELETE CASCADE
     );

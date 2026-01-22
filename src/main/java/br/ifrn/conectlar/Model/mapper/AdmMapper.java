@@ -4,13 +4,11 @@ import br.ifrn.conectlar.Model.Adm;
 import br.ifrn.conectlar.Model.Entity.AdmEntity;
 import br.ifrn.conectlar.Model.dto.AdmDTO;
 import br.ifrn.conectlar.Model.dto.AdmRecord;
-import org.mapstruct.Builder;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AdmMapper {
     Adm toModel(AdmRecord record);
     AdmEntity toEntity(Adm Model);

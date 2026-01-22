@@ -17,7 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -30,10 +35,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final TrabalhoJpaRepository trabalhoRepository;
     private final TrabalhoMapper trabalhoMapper;
     private PasswordEncoder passwordEncoder;
+    private SalvaArquivoService salvaArquivoService;
 
     @Override
     @Transactional
-    public UsuarioDTO saveUsuario(UsuarioRecord usuarioRecord) {
+    public UsuarioDTO saveUsuario(UsuarioRecord usuarioRecord, MultipartFile fotoPerfil) {
         Usuario usuarioModel = mapper.toModel(usuarioRecord);
 
         if (usuarioRepository.existsByEmail(usuarioModel.getEmail())) {
@@ -48,6 +54,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if (entityToSave.getRole() == null) {
             entityToSave.setRole(UsuarioRole.USUARIO);
+        }
+
+
+        try {
+            if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+                String caminhoFoto = salvaArquivoService.salvaImagem(fotoPerfil);
+                entityToSave.setFotoPerfil(caminhoFoto);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar a foto de perfil: " + e.getMessage());
         }
 
         UsuarioEntity savedEntity = usuarioRepository.save(entityToSave);
@@ -69,19 +85,44 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public UsuarioDTO updateUsuario(Long id, UsuarioRecord usuario) {
-        Usuario usuarioModel = mapper.toModel(usuario);
-
+    public UsuarioDTO updateUsuario(Long id, UsuarioRecord usuario, MultipartFile fotoPerfil) {
         UsuarioEntity entityToUpdate = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
-        if (usuarioRepository.findByEmailAndIdNot(usuarioModel.getEmail(), id).isPresent()) {
-            throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
+        if (usuario != null){
+            Usuario usuarioModel = mapper.toModel(usuario);
+            if (usuarioRepository.findByEmailAndIdNot(usuarioModel.getEmail(), id).isPresent()) {
+                throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
+            }
+            if (usuarioRepository.findByTelefoneAndIdNot(usuarioModel.getTelefone(), id).isPresent()) {
+                throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
+            }
+
+            mapper.updateEntityFromModel(usuarioModel, entityToUpdate);
+            if (usuarioModel.getSenha() != null && !usuarioModel.getSenha().isBlank()) {
+                String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
+                entityToUpdate.setSenha(senhaCriptografada);
+            }
+
         }
-        if (usuarioRepository.findByTelefoneAndIdNot(usuarioModel.getTelefone(), id).isPresent()) {
-            throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
+
+        try {
+            if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+
+                String fotoAntiga = entityToUpdate.getFotoPerfil();
+                if (fotoAntiga != null && !fotoAntiga.isBlank()) {
+                    try {
+                        Files.deleteIfExists(Paths.get("upload/" + fotoAntiga));
+                    } catch (IOException e) {
+                        System.out.println("Não foi possível apagar a foto antiga: " + e.getMessage());
+                    }
+                }
+                String novaFoto = salvaArquivoService.salvaImagem(fotoPerfil);
+
+                entityToUpdate.setFotoPerfil(novaFoto);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao atualizar foto de perfil: " + e.getMessage());
         }
-        mapper.updateEntityFromModel(usuarioModel, entityToUpdate);
-        entityToUpdate.setSenha(usuarioModel.getSenha());
         UsuarioEntity updatedEntity = usuarioRepository.save(entityToUpdate);
 
         return mapper.toDTO(updatedEntity);

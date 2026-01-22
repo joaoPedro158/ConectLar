@@ -4,6 +4,7 @@ import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
+import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import br.ifrn.conectlar.Security.UsuarioDetails;
 import br.ifrn.conectlar.Service.TrabalhoService;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,10 +24,14 @@ public class TrabalhoController {
     private final TrabalhoService trabalhoService;
 
     @PostMapping(value = RotasBases.Cadastra,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity saveTrabalho(@RequestBody TrabalhoRecord trabalho){
-        return ResponseEntity.ok(trabalhoService.save(trabalho));
+    public ResponseEntity saveTrabalho(@RequestPart("dados") TrabalhoRecord trabalhoRecord,
+                                       @RequestPart(value = "imagen", required = false)List<MultipartFile> imagens,
+                                       @AuthenticationPrincipal UsuarioDetails usuario) {
+        Long id = usuario.getId();
+        TrabalhoDTO trabalho = trabalhoService.save(trabalhoRecord, imagens,id);
+        return ResponseEntity.ok(trabalho);
     }
 
     @GetMapping(RotasBases.Lista)
@@ -33,9 +39,14 @@ public class TrabalhoController {
         List<TrabalhoDTO> trabalhos = trabalhoService.getAll();
         return ResponseEntity.ok(trabalhos);
     }
-    @PutMapping(RotasBases.Atualiza)
-    public ResponseEntity updateTrabalho(@PathVariable Long id, @RequestBody TrabalhoRecord trabalho){
-        return ResponseEntity.ok(trabalhoService.update(id, trabalho));
+    @PutMapping(value = RotasBases.Atualiza + "/{id}",
+                consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+                produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateTrabalho(@PathVariable Long id,
+                                         @RequestPart(value = "dados", required = false) TrabalhoRecord trabalhoRecord,
+                                         @RequestPart(value = "imagen", required = false) List<MultipartFile> arquivo){
+       TrabalhoDTO trabalhoAtualizado = trabalhoService.update(id,trabalhoRecord,arquivo);
+       return ResponseEntity.ok(trabalhoAtualizado);
     }
 
     @GetMapping(RotasBases.PorId)

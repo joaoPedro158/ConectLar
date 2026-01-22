@@ -37,42 +37,27 @@ public class Trabalho {
     }
 
     public void validacao() {
-        // --- 1. Validação de Conteúdo (Qualidade do Pedido) ---
 
-        // Regra: O problema deve ser claro (mínimo de 5 caracteres)
         if (this.problema == null || this.problema.trim().length() < 5) {
             throw new IllegalArgumentException("O título do problema deve ter pelo menos 5 caracteres.");
         }
 
-        // Regra: A descrição deve ser detalhada (mínimo de 10 caracteres)
         if (this.descricao == null || this.descricao.trim().length() < 10) {
             throw new IllegalArgumentException("A descrição deve ser detalhada (mínimo de 10 caracteres) para ajudar o profissional.");
         }
 
-        // --- 2. Validação de Localização (Obrigatória) ---
-        // Regra: Um trabalho físico NÃO pode existir sem endereço
         if (this.localizacao == null) {
             throw new IllegalArgumentException("A localização do trabalho é obrigatória.");
         }
-        // Nota: Não precisamos validar rua/cep aqui, pois a própria classe Localizacao já se valida no construtor dela!
-
-        // --- 3. Validação Financeira (Pagamento) ---
 
         if (this.pagamento == null) {
             throw new IllegalArgumentException("O valor do pagamento é obrigatório.");
         }
 
-        // Regra: Não aceitamos pagamentos negativos ou zero
         if (this.pagamento.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("O valor do pagamento deve ser maior que zero.");
         }
 
-
-        // --- 4. Validação de Vínculo (Quem pediu?) ---
-
-        if (this.idUsuario == null) {
-            throw new IllegalArgumentException("Erro de Sistema: O trabalho deve estar vinculado a um usuário solicitante.");
-        }
 
     }
 }

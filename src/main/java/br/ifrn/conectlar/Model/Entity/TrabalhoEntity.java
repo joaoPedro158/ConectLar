@@ -7,6 +7,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "trabalho")
@@ -42,6 +44,13 @@ public class TrabalhoEntity {
     private StatusTrabalho status;
 
     //  (Chaves Estrangeiras) ---
+    @ElementCollection
+    @CollectionTable(
+            name = "trabalho_imagem",                        // 1. Nome da tabela que criamos no SQL
+            joinColumns = @JoinColumn(name = "id_trabalho")  // 2. Nome da coluna Foreign Key no SQL
+    )
+    @Column(name = "caminho_imagem")                     // 3. Nome da coluna de valor no SQL
+    private List<String> imagens = new ArrayList<>();
 
     /*
      * @ManyToOne: "Muitos trabalhos podem ser de UM usuário"

@@ -15,7 +15,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -29,9 +33,10 @@ public class ProfissionalServiceImpl implements ProfissionalService {
     private final TrabalhoMapper trabalhoMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private SalvaArquivoService salvaArquivoService;
 
     @Override
-    public ProfissionalDTO saveProfissional(ProfissionalRecord profissionalRecord) {
+    public ProfissionalDTO saveProfissional(ProfissionalRecord profissionalRecord, MultipartFile fotoPerfil) {
         Profissional profissionalModel = mapper.toModel(profissionalRecord);
 
         if (profissionalRepository.existsByEmail(profissionalModel.getEmail())) {
@@ -44,6 +49,14 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         ProfissionalEntity entityToSave = mapper.toEntity(profissionalModel);
         String senhaCriptografada = passwordEncoder.encode(profissionalModel.getSenha());
         entityToSave.setSenha(senhaCriptografada);
+        try {
+            if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+                String caminhoFoto = salvaArquivoService.salvaImagem(fotoPerfil);
+                entityToSave.setFotoPerfil(caminhoFoto);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar a foto de perfil: " + e.getMessage());
+        }
 
         ProfissionalEntity savedEntity = profissionalRepository.save(entityToSave);
         return mapper.toDTO(savedEntity);
@@ -65,20 +78,43 @@ public class ProfissionalServiceImpl implements ProfissionalService {
 
 
     @Override
-    public ProfissionalDTO updateProfissional(Long id, ProfissionalRecord profissionalRecord) {
-        Profissional profissionalModel = mapper.toModel(profissionalRecord);
-
+    public ProfissionalDTO updateProfissional(Long id, ProfissionalRecord profissionalRecord,MultipartFile fotoPerfil ) {
         ProfissionalEntity entityToUpdate = profissionalRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("o profissional não encontrado com o ID: " + id ));
 
-        if (profissionalRepository.findByEmailAndIdNot(profissionalModel.getEmail(), id).isPresent()) {
-            throw new IllegalArgumentException("Este e-mail ja esta em uso por outro profissional.");
+        if (profissionalRecord != null) {
+            Profissional profissionalModel = mapper.toModel(profissionalRecord);
+            if (profissionalRepository.findByEmailAndIdNot(profissionalModel.getEmail(), id).isPresent()) {
+                throw new IllegalArgumentException("Este e-mail ja esta em uso por outro profissional.");
+            }
+            if (profissionalRepository.findByTelefoneAndIdNot(profissionalModel.getTelefone(), id).isPresent()) {
+                throw new IllegalArgumentException("Este telefone ja esta em uso por outro profissional.");
+            }
+            mapper.updateEntityFromModel(profissionalModel, entityToUpdate);
+           if (profissionalModel.getSenha() != null && !profissionalModel.getSenha().isBlank()) {
+               String senhaCriptografada = passwordEncoder.encode(profissionalModel.getSenha());
+               entityToUpdate.setSenha(senhaCriptografada);
+           }
         }
-        if (profissionalRepository.findByTelefoneAndIdNot(profissionalModel.getTelefone(), id).isPresent()) {
-            throw new IllegalArgumentException("Este telefone ja esta em uso por outro profissional.");
-        }
-        mapper.updateEntityFromModel(profissionalModel, entityToUpdate);
-        ProfissionalEntity updateEntity = profissionalRepository.save(entityToUpdate);
+        try {
+            if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
 
+                String fotoAntiga = entityToUpdate.getFotoPerfil();
+                if (fotoAntiga != null && !fotoAntiga.isBlank()) {
+                    try {
+                        Files.deleteIfExists(Paths.get("upload/" + fotoAntiga));
+                    } catch (IOException e) {
+                        System.out.println("Não foi possível apagar a foto antiga: " + e.getMessage());
+                    }
+                }
+                String novaFoto = salvaArquivoService.salvaImagem(fotoPerfil);
+
+                entityToUpdate.setFotoPerfil(novaFoto);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao atualizar foto de perfil: " + e.getMessage());
+        }
+
+        ProfissionalEntity updateEntity = profissionalRepository.save(entityToUpdate);
         return mapper.toDTO(updateEntity);
     }
 

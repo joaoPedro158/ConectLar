@@ -2,6 +2,7 @@ package br.ifrn.conectlar.Controller;
 
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
+import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Security.UsuarioDetails;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,10 +24,12 @@ public class ProfissionalController {
     private final ProfissionalService profissionalService;
 
     @PostMapping(value = RotasBases.Cadastra,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity saveProfissional(@RequestBody ProfissionalRecord profissional){
-        return ResponseEntity.ok(profissionalService.saveProfissional(profissional));
+    public ResponseEntity saveProfissional(@RequestPart("dados") ProfissionalRecord profissionalRecord,
+                                           @RequestPart(value = "arquivo", required = false)MultipartFile arquivo){
+        ProfissionalDTO novoProfissional = profissionalService.saveProfissional(profissionalRecord, arquivo);
+        return ResponseEntity.ok().body(novoProfissional);
     }
 
     @GetMapping(value = RotasBases.Lista,
@@ -41,9 +45,12 @@ public class ProfissionalController {
     }
 
     @PutMapping(RotasBases.Atualiza)
-    public ResponseEntity updateProfissional(@AuthenticationPrincipal UsuarioDetails user, @RequestBody ProfissionalRecord profissionalRecord){
+    public ResponseEntity updateProfissional(@AuthenticationPrincipal UsuarioDetails user,
+                                             @RequestPart(value = "dados", required = false) ProfissionalRecord profissionalRecord,
+                                             @RequestPart(value = "arquivo", required = false)MultipartFile arquivo) {
         Long profissionalId = user.getId();
-        return ResponseEntity.ok(profissionalService.updateProfissional(profissionalId, profissionalRecord));
+        ProfissionalDTO profissionalAtualizado = profissionalService.updateProfissional(profissionalId,profissionalRecord,arquivo);
+        return ResponseEntity.ok().body(profissionalAtualizado);
     }
 
     @GetMapping(RotasBases.historico)

@@ -19,5 +19,6 @@ public abstract class BaseUsuarioEntity extends BaseAuthEntity {
     @Column(length = 150, nullable = false, unique = true)
     private String telefone;
 
-
+    @Column(nullable = false)
+    private String fotoPerfil;
 }

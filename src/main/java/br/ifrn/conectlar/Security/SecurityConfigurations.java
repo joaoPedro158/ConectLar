@@ -29,13 +29,14 @@ public class SecurityConfigurations {
                 .csrf( csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // qualquer ususario tem permissão
+                        // qualquer usuario tem permissão
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
                                 .requestMatchers(HttpMethod.POST, RotasPrincipais.RootProfissional + RotasBases.Cadastra).permitAll()
                                 .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra).permitAll()
                                 .requestMatchers(HttpMethod.GET, RotasPrincipais.RootUsuario + RotasBases.Lista).permitAll()
                         .requestMatchers(HttpMethod.POST, RotasPrincipais.RootAdm + RotasBases.Cadastra).permitAll()
+                        .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootTrabalho + RotasBases.Atualiza + "/{id}").permitAll()
                                 .requestMatchers("/error").permitAll()
 
                         //somente profissionais
