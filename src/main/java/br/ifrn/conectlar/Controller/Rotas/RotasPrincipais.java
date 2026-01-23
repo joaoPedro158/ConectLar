@@ -12,4 +12,5 @@ public interface RotasPrincipais {
 
     String Auth = "/auth";
 
+    String Avaliacao = "/avaliacao";
 }

@@ -39,6 +39,8 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootTrabalho + RotasBases.Atualiza + "/{id}").permitAll()
                                 .requestMatchers("/error").permitAll()
 
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.Avaliacao + RotasBases.avaliar).permitAll()
+
                         //somente profissionais
                         .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootProfissional + RotasBases.Atualiza).permitAll()
 
