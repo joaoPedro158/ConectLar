@@ -26,24 +26,27 @@ public class SecurityConfigurations {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf( csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+
+                        .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/favicon.ico", "/css/**", "/js/**").permitAll()
+
                         // qualquer usuario tem permissão
-                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
-                                .requestMatchers(HttpMethod.POST, RotasPrincipais.RootProfissional + RotasBases.Cadastra).permitAll()
-                                .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra).permitAll()
-                                .requestMatchers(HttpMethod.GET, RotasPrincipais.RootUsuario + RotasBases.Lista).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootProfissional + RotasBases.Cadastra).permitAll()
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra).permitAll()
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootUsuario + RotasBases.Lista).permitAll()
                         .requestMatchers(HttpMethod.POST, RotasPrincipais.RootAdm + RotasBases.Cadastra).permitAll()
                         .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootTrabalho + RotasBases.Atualiza + "/{id}").permitAll()
-                                .requestMatchers("/error").permitAll()
+                        .requestMatchers("/error").permitAll()
+
 
                         .requestMatchers(HttpMethod.POST, RotasPrincipais.Avaliacao + RotasBases.avaliar).permitAll()
 
-                        //somente profissionais
-                        .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootProfissional + RotasBases.Atualiza).permitAll()
 
+                        .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootProfissional + RotasBases.Atualiza).permitAll()
 
                         .requestMatchers(RotasPrincipais.RootAdm + "/**").hasRole("ADM")
                         .anyRequest().authenticated()
