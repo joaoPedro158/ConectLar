@@ -91,11 +91,10 @@ CREATE TABLE IF NOT EXISTS trabalho (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS avaliacao (
                                          id BIGSERIAL PRIMARY KEY,
-                                         nota INT NOT NULL, -- Ex: 1 a 5 estrelas
-                                         comentario VARCHAR(255),
+                    nota INT NOT NULL,
+    comentario VARCHAR(255),
     data_avaliacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    id_trabalho BIGINT NOT NULL UNIQUE, -- 1 avaliação por trabalho
+    id_trabalho BIGINT NOT NULL UNIQUE,
 
     CONSTRAINT fk_avaliacao_trabalho
     FOREIGN KEY (id_trabalho) REFERENCES trabalho (id)
@@ -131,16 +130,13 @@ CREATE TABLE IF NOT EXISTS disputa (
 -- 6. Tabela TRABALHO_IMAGEM (Para múltiplas fotos)
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS trabalho_imagem (
-    -- ID próprio da imagem (opcional, mas recomendado)
-                                               id BIGSERIAL PRIMARY KEY,
 
-    -- O caminho do arquivo salvo no disco (ex: "upload/uuid_foto.jpg")
-                                               caminho_imagem VARCHAR(255) NOT NULL,
+        id BIGSERIAL PRIMARY KEY,
 
-    -- A qual trabalho essa imagem pertence?
+    caminho_imagem VARCHAR(255) NOT NULL,
+
     id_trabalho BIGINT NOT NULL,
 
-    -- CONSTRAINT: Se o trabalho for deletado, as imagens somem do banco também
     CONSTRAINT fk_trabalho_imagem_trabalho
     FOREIGN KEY (id_trabalho)
     REFERENCES trabalho (id)

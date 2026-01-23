@@ -42,7 +42,10 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootTrabalho + RotasBases.Atualiza + "/{id}").permitAll()
                         .requestMatchers("/error").permitAll()
 
-                        // somente profissionais
+
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.Avaliacao + RotasBases.avaliar).permitAll()
+
+
                         .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootProfissional + RotasBases.Atualiza).permitAll()
 
                         .requestMatchers(RotasPrincipais.RootAdm + "/**").hasRole("ADM")

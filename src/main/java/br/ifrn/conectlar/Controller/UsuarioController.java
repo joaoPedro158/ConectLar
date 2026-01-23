@@ -65,4 +65,5 @@ public class UsuarioController {
         List<TrabalhoDTO> historico = usuarioService.historico(usuarioId);
         return ResponseEntity.ok(historico);
     }
+
 }

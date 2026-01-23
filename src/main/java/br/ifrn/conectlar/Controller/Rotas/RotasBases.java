@@ -19,4 +19,6 @@ public interface RotasBases {
     String candidatar = "/{id}/candidatar";
 
     String Busca = "/busca";
+
+    String avaliar = "/avaliar/{idTrabalho}";
 }

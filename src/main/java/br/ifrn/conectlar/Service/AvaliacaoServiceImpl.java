@@ -1,0 +1,45 @@
+package br.ifrn.conectlar.Service;
+
+import br.ifrn.conectlar.Model.Avaliacao;
+import br.ifrn.conectlar.Model.Entity.AvaliacaoEntity;
+import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
+import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Model.dto.AvaliacaoDTO;
+import br.ifrn.conectlar.Model.dto.AvaliacaoRecord;
+import br.ifrn.conectlar.Model.mapper.AvaliacaoMapper;
+import br.ifrn.conectlar.Repository.AvaliacaoJparepository;
+import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+@Service
+@AllArgsConstructor
+public class AvaliacaoServiceImpl implements AvaliacaoService {
+
+    private final TrabalhoJpaRepository  trabalhoJpaRepository;
+
+    private final AvaliacaoMapper avaliacaoMapper;
+    private final AvaliacaoJparepository avaliacaoJparepository;
+    @Override
+    public AvaliacaoDTO avaliar(AvaliacaoRecord avaliacaoRecord, Long idTrabalho) {
+        Avaliacao avaliacaoModel = avaliacaoMapper.toModel(avaliacaoRecord);
+
+        AvaliacaoEntity entityToSave = avaliacaoMapper.toEntity(avaliacaoModel);
+        TrabalhoEntity trabalho = trabalhoJpaRepository.findById(idTrabalho)
+                .orElseThrow(() -> new EntityNotFoundException("Trabalho não encontrado com o ID: " + idTrabalho));
+
+        if (avaliacaoJparepository.existsByTrabalhoId(idTrabalho)) {
+            throw new IllegalArgumentException("Este trabalho já foi avaliado anteriormente.");
+        }
+
+        entityToSave.setTrabalho(trabalho);
+        entityToSave.setDataAvaliacao(LocalDateTime.now());
+
+        AvaliacaoEntity saveEntity = avaliacaoJparepository.save(entityToSave);
+        return avaliacaoMapper.toDTO(saveEntity);
+    }
+}
