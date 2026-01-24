@@ -143,8 +143,23 @@ public class TrabalhoServiceImpl implements TrabalhoService {
                 .orElseThrow(() -> new RuntimeException("Profissional nao encontrado"));
 
         trabalho.setProfissional(profissional);
-        trabalho.setStatus(StatusTrabalho.EM_ANDAMENTO);
+        trabalho.setStatus(StatusTrabalho.EM_ESPERA);
 
+        trabalhoRepository.save(trabalho);
+    }
+
+    @Override
+    public void processarResposta(Long idTrabalho, boolean resposta) {
+        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+                .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
+
+        if (resposta) {
+            trabalho.setStatus(StatusTrabalho.EM_ANDAMENTO);
+
+        } else {
+            trabalho.setStatus(StatusTrabalho.ABERTO);
+            trabalho.setProfissional(null);
+        }
         trabalhoRepository.save(trabalho);
     }
 

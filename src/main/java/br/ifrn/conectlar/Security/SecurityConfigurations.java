@@ -40,6 +40,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, RotasPrincipais.RootUsuario + RotasBases.Lista).permitAll()
                         .requestMatchers(HttpMethod.POST, RotasPrincipais.RootAdm + RotasBases.Cadastra).permitAll()
                         .requestMatchers(HttpMethod.PUT, RotasPrincipais.RootTrabalho + RotasBases.Atualiza + "/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.PorId).permitAll()
                         .requestMatchers("/error").permitAll()
 
 
