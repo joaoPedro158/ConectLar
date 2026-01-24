@@ -74,6 +74,14 @@ public class TrabalhoController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(RotasBases.cancelarTrabalho)
+    public  ResponseEntity cancelarTrabalho(@PathVariable Long idTrabalho,
+                                            @AuthenticationPrincipal UsuarioDetails usuario){
+        Long idUsuario =  usuario.getId();
+        trabalhoService.cancelarTrabalho(idTrabalho, idUsuario);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(RotasBases.Busca)
     public ResponseEntity<List<TrabalhoDTO>> busca(@RequestParam String termo){
         List<TrabalhoDTO> busca = trabalhoService.BuscarProblema(termo);

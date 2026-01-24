@@ -14,6 +14,7 @@ import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -160,6 +161,32 @@ public class TrabalhoServiceImpl implements TrabalhoService {
             trabalho.setStatus(StatusTrabalho.ABERTO);
             trabalho.setProfissional(null);
         }
+        trabalhoRepository.save(trabalho);
+    }
+
+    @Override
+    public void cancelarTrabalho(Long idTrabalho, Long  idUsuario) {
+        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+                .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
+
+
+        if (!trabalho.getUsuario().getId().equals(idUsuario)) {
+            throw new AccessDeniedException("Você não tem permissão para cancelar este trabalho.");
+        }
+
+        if (trabalho.getStatus() == StatusTrabalho.CONCLUIDO) {
+            throw new IllegalStateException("Não é possível cancelar um trabalho que já foi concluído.");
+        }
+
+        if (trabalho.getStatus() == StatusTrabalho.CANCELADO) {
+            throw new IllegalStateException("Este trabalho já foi cancelado anteriormente.");
+        }
+
+
+
+
+        trabalho.setStatus(StatusTrabalho.CANCELADO);
+
         trabalhoRepository.save(trabalho);
     }
 

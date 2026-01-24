@@ -15,6 +15,7 @@ public interface TrabalhoService {
     void delete(Long id);
     void solicitarTrabalho(Long idTrabalho, Long  idProfissional);
     void processarResposta(Long idTrabalho, boolean resposta);
+    void cancelarTrabalho(Long idTrabalho, Long  idUsuario);
     List<TrabalhoDTO> BuscarProblema(String problema);
 
 }
