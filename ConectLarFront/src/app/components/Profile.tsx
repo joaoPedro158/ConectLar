@@ -1,11 +1,11 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { User, Mail, Phone, MapPin, Edit2, Save, LogOut, Shield, Camera } from "lucide-react";
-import { Profissional, Usuario } from "../types";
+import { Profissional } from "../types";
 
 interface ProfileProps {
   onBack?: () => void;
@@ -15,39 +15,62 @@ interface ProfileProps {
 export function Profile({ onBack, onLogout }: ProfileProps) {
   const { user, logout, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(user || {});
-  
-  // Referência para o input de arquivo oculto
+  const [formData, setFormData] = useState<any>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (user) setFormData(user);
+  }, [user]);
 
   if (!user) return null;
 
+  const displayName = user?.nome || user?.email || "U";
+
+  const currentPhoto =
+    (formData as Profissional)?.foto ||
+    (user as Profissional)?.foto ||
+    undefined;
+
+  const loc = formData?.localizacao || {};
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Função para lidar com o upload da imagem
+  const handleLocChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev: any) => ({
+      ...prev,
+      localizacao: {
+        ...(prev.localizacao || {}),
+        [name]: value,
+      },
+    }));
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Atualiza o estado com a string Base64 da imagem
-        setFormData(prev => ({ ...prev, foto: reader.result as string }));
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prev: any) => ({ ...prev, foto: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
   };
 
-  // Função auxiliar para clicar no input oculto
   const triggerFileInput = () => {
-    if (isEditing) {
-      fileInputRef.current?.click();
-    }
+    if (isEditing) fileInputRef.current?.click();
   };
 
-  const handleSave = () => {
-    updateUser(formData);
+  const handleSave = async () => {
+    // envia pro backend (nome/telefone/localizacao)
+    await updateUser({
+      nome: formData.nome,
+      telefone: formData.telefone,
+      localizacao: formData.localizacao,
+    } as any);
+
     setIsEditing(false);
   };
 
@@ -56,6 +79,7 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
       case "usuario": return "Cliente";
       case "profissional": return "Profissional";
       case "admin": return "Administrador";
+      default: return String(user.role);
     }
   };
 
@@ -64,11 +88,9 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
       case "usuario": return "bg-blue-500";
       case "profissional": return "bg-green-500";
       case "admin": return "bg-purple-500";
+      default: return "bg-gray-500";
     }
   };
-
-  // Helper para pegar a foto atual (do form em edição ou do user salvo)
-  const currentPhoto = (formData as Profissional).foto || (user as Profissional).foto || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200";
 
   return (
     <div className="space-y-4">
@@ -76,31 +98,23 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex gap-4 items-center">
-            
-            {/* Área do Avatar com Upload */}
             <div className="relative group cursor-pointer" onClick={triggerFileInput}>
               <Avatar className="w-20 h-20 border-2 border-gray-100 dark:border-gray-700">
-                <AvatarImage 
-                  src={currentPhoto} 
-                  alt={user.nome}
-                  className="object-cover" 
-                />
-                <AvatarFallback>{user.nome.slice(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage src={currentPhoto} alt={displayName} className="object-cover" />
+                <AvatarFallback>{displayName.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
-              
-              {/* Overlay de Edição de Foto */}
+
               {isEditing && (
                 <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center transition-opacity opacity-0 group-hover:opacity-100">
                   <Camera className="w-6 h-6 text-white" />
                 </div>
               )}
-              
-              {/* Input Oculto */}
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleImageUpload} 
-                className="hidden" 
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                className="hidden"
                 accept="image/*"
               />
             </div>
@@ -113,23 +127,15 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
               {isEditing && <p className="text-xs text-gray-500 mt-1">Clique na foto para alterar</p>}
             </div>
           </div>
-          
+
           {!isEditing ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsEditing(true)}
-            >
+            <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
               <Edit2 className="w-4 h-4 mr-2" />
               Editar
             </Button>
           ) : (
             <div className="flex flex-col gap-2">
-              <Button
-                size="sm"
-                onClick={handleSave}
-                className="bg-blue-500 hover:bg-blue-600"
-              >
+              <Button size="sm" onClick={handleSave} className="bg-blue-500 hover:bg-blue-600">
                 <Save className="w-4 h-4 mr-2" />
                 Salvar
               </Button>
@@ -152,6 +158,7 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
       {user.role !== "admin" && (
         <Card className="p-6">
           <h3 className="font-semibold mb-4 dark:text-white">Informações Pessoais</h3>
+
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -160,11 +167,7 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
                   Nome
                 </label>
                 {isEditing ? (
-                  <Input
-                    name="nome"
-                    value={(formData as Usuario).nome}
-                    onChange={handleChange}
-                  />
+                  <Input name="nome" value={formData.nome || ""} onChange={handleChange} />
                 ) : (
                   <p className="text-gray-700 dark:text-gray-300">{user.nome}</p>
                 )}
@@ -176,13 +179,9 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
                   Telefone
                 </label>
                 {isEditing ? (
-                  <Input
-                    name="telefone"
-                    value={(formData as Usuario).telefone}
-                    onChange={handleChange}
-                  />
+                  <Input name="telefone" value={formData.telefone || ""} onChange={handleChange} />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).telefone}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{user.telefone || "-"}</p>
                 )}
               </div>
             </div>
@@ -192,54 +191,8 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
                 <Mail className="w-4 h-4" />
                 Email
               </label>
-              {isEditing ? (
-                <Input
-                  name="email"
-                  type="email"
-                  value={(formData as Usuario).email}
-                  onChange={handleChange}
-                />
-              ) : (
-                <p className="text-gray-700 dark:text-gray-300">{user.email}</p>
-              )}
+              <p className="text-gray-700 dark:text-gray-300">{user.email}</p>
             </div>
-
-            {user.role === "profissional" && (
-              <div>
-                <label className="block text-sm font-medium mb-1 dark:text-gray-300">Categoria</label>
-                {isEditing ? (
-                  <select
-                    name="categoria"
-                    value={(formData as Profissional).categoria}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                  >
-                    <option value="1">Encanador</option>
-                    <option value="2">Eletricista</option>
-                    <option value="3">Limpeza</option>
-                    <option value="4">Pintor</option>
-                    <option value="5">Marceneiro</option>
-                    <option value="6">Jardineiro</option>
-                    <option value="7">Mecânico</option>
-                  </select>
-                ) : (
-                  <p className="text-gray-700 dark:text-gray-300">
-                    {(() => {
-                      const categorias: Record<string, string> = {
-                        "1": "Encanador",
-                        "2": "Eletricista",
-                        "3": "Limpeza",
-                        "4": "Pintor",
-                        "5": "Marceneiro",
-                        "6": "Jardineiro",
-                        "7": "Mecânico"
-                      };
-                      return categorias[(user as Profissional).categoria] || (user as Profissional).categoria;
-                    })()}
-                  </p>
-                )}
-              </div>
-            )}
           </div>
         </Card>
       )}
@@ -251,30 +204,23 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
             <MapPin className="w-5 h-5" />
             Endereço
           </h3>
+
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-2">
                 <label className="block text-sm font-medium mb-1 dark:text-gray-300">CEP</label>
                 {isEditing ? (
-                  <Input
-                    name="cep"
-                    value={(formData as Usuario).cep}
-                    onChange={handleChange}
-                  />
+                  <Input name="cep" value={loc.cep || ""} onChange={handleLocChange} />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).cep}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{loc.cep || "-"}</p>
                 )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 dark:text-gray-300">Estado</label>
                 {isEditing ? (
-                  <Input
-                    name="estado"
-                    value={(formData as Usuario).estado}
-                    onChange={handleChange}
-                  />
+                  <Input name="estado" value={loc.estado || ""} onChange={handleLocChange} />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).estado}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{loc.estado || "-"}</p>
                 )}
               </div>
             </div>
@@ -283,25 +229,17 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
               <div>
                 <label className="block text-sm font-medium mb-1 dark:text-gray-300">Cidade</label>
                 {isEditing ? (
-                  <Input
-                    name="cidade"
-                    value={(formData as Usuario).cidade}
-                    onChange={handleChange}
-                  />
+                  <Input name="cidade" value={loc.cidade || ""} onChange={handleLocChange} />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).cidade}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{loc.cidade || "-"}</p>
                 )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 dark:text-gray-300">Bairro</label>
                 {isEditing ? (
-                  <Input
-                    name="bairro"
-                    value={(formData as Usuario).bairro}
-                    onChange={handleChange}
-                  />
+                  <Input name="bairro" value={loc.bairro || ""} onChange={handleLocChange} />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).bairro}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{loc.bairro || "-"}</p>
                 )}
               </div>
             </div>
@@ -310,25 +248,17 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
               <div className="col-span-2">
                 <label className="block text-sm font-medium mb-1 dark:text-gray-300">Rua</label>
                 {isEditing ? (
-                  <Input
-                    name="rua"
-                    value={(formData as Usuario).rua}
-                    onChange={handleChange}
-                  />
+                  <Input name="rua" value={loc.rua || ""} onChange={handleLocChange} />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).rua}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{loc.rua || "-"}</p>
                 )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1 dark:text-gray-300">Número</label>
                 {isEditing ? (
-                  <Input
-                    name="numero"
-                    value={(formData as Usuario).numero}
-                    onChange={handleChange}
-                  />
+                  <Input name="numero" value={loc.numero || ""} onChange={handleLocChange} />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).numero}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{loc.numero || "-"}</p>
                 )}
               </div>
             </div>
@@ -336,13 +266,9 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
             <div>
               <label className="block text-sm font-medium mb-1 dark:text-gray-300">Complemento</label>
               {isEditing ? (
-                <Input
-                  name="complemento"
-                  value={(formData as Usuario).complemento || ""}
-                  onChange={handleChange}
-                />
+                <Input name="complemento" value={loc.complemento || ""} onChange={handleLocChange} />
               ) : (
-                <p className="text-gray-700 dark:text-gray-300">{(user as Usuario).complemento || "-"}</p>
+                <p className="text-gray-700 dark:text-gray-300">{loc.complemento || "-"}</p>
               )}
             </div>
           </div>
@@ -368,7 +294,6 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
         </Card>
       )}
 
-      {/* Botão de Logout */}
       <Button
         variant="outline"
         className="w-full text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 dark:border-red-800"

@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { HistoricoPedido, Trabalho } from "../types";
-import { 
-  Star, 
-  Calendar, 
-  Box, 
-  CheckCircle, 
-  TrendingUp, 
-  Filter, 
+import {
+  Star,
+  Calendar,
+  Box,
+  CheckCircle,
+  TrendingUp,
+  Filter,
   ChevronDown,
   Check
 } from "lucide-react";
 
 interface HistoryScreenProps {
   onBack?: () => void;
-  serviceRequests?: (Trabalho & { 
+  serviceRequests?: (Trabalho & {
     nomeUsuario?: string;
     categoria_nome?: string;
   })[];
@@ -29,13 +29,11 @@ interface PedidoComDetalhes extends HistoricoPedido {
 export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenProps) {
   const { user } = useAuth();
   const [pedidos, setPedidos] = useState<PedidoComDetalhes[]>([]);
-  
-  // Estados dos Dropdowns
+
   const [activeDropdown, setActiveDropdown] = useState<"status" | "date" | null>(null);
   const [selectedStatus, setSelectedStatus] = useState("Todos os status");
   const [selectedDate, setSelectedDate] = useState("Mais recentes");
 
-  // Estados de Estatísticas
   const [stats, setStats] = useState({
     total: 0,
     concluidos: 0,
@@ -46,8 +44,10 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
   useEffect(() => {
     if (!user) return;
 
+    // Por enquanto, sem mock: só usa o que vier de verdade por props
+    // (Depois você troca para consumir /usuario/historico no backend.)
     if (user.role === "usuario") {
-      const realRequests = serviceRequests
+      const realRequests: PedidoComDetalhes[] = serviceRequests
         .filter(req => req.id_usuario === user.id)
         .map(req => ({
           id: req.id,
@@ -62,79 +62,24 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
           valor: req.pagamento || 0
         }));
 
-      const mockPedidos: PedidoComDetalhes[] = [
-        {
-          id: "mock1",
-          avaliacao: 5,
-          trabalho_feito: "Manutenção do jardim",
-          data_hora: new Date(Date.now() - 86400000).toISOString(),
-          id_profissional: "prof1",
-          id_usuario: user.id,
-          id_trabalho: "trab1",
-          categoria: "Jardineiro",
-          status: "em_andamento",
-          valor: 200
-        },
-        {
-          id: "mock2",
-          avaliacao: 4.8,
-          trabalho_feito: "Reparo na fiação elétrica",
-          data_hora: new Date(Date.now() - 172800000).toISOString(),
-          id_profissional: "prof2",
-          id_usuario: user.id,
-          id_trabalho: "trab2",
-          categoria: "Eletricista",
-          status: "aceito",
-          valor: 150
-        },
-        {
-          id: "mock3",
-          avaliacao: 5,
-          trabalho_feito: "Limpeza pós-obra",
-          data_hora: new Date(Date.now() - 300000000).toISOString(),
-          id_profissional: "prof3",
-          id_usuario: user.id,
-          id_trabalho: "trab3",
-          categoria: "Limpeza",
-          status: "concluido",
-          valor: 350
-        },
-        {
-          id: "mock4",
-          avaliacao: 0,
-          trabalho_feito: "Pintura da sala",
-          data_hora: new Date().toISOString(),
-          id_profissional: "pendente",
-          id_usuario: user.id,
-          id_trabalho: "trab4",
-          categoria: "Pintor",
-          status: "pendente",
-          valor: 400
-        }
-      ];
+      setPedidos(realRequests);
 
-      const todosPedidos = [...mockPedidos, ...realRequests];
-      setPedidos(todosPedidos);
-
-      const total = todosPedidos.length;
-      const concluidos = todosPedidos.filter(p => p.status === 'concluido').length;
-      const totalGasto = todosPedidos.reduce((acc, curr) => acc + (curr.valor || 0), 0);
-      const media = 4.8; 
+      const total = realRequests.length;
+      const concluidos = realRequests.filter(p => p.status === "concluido").length;
+      const totalGasto = realRequests.reduce((acc, curr) => acc + (curr.valor || 0), 0);
 
       setStats({
         total,
         concluidos,
-        avaliacaoMedia: media,
+        avaliacaoMedia: 0, // sem inventar dado
         totalMonetario: totalGasto
       });
-    } 
+    }
   }, [user, serviceRequests]);
 
-  // --- LÓGICA DE FILTRAGEM ---
   const getFilteredPedidos = () => {
     let filtered = [...pedidos];
 
-    // 1. Filtrar por Status
     if (selectedStatus !== "Todos os status") {
       const statusMap: Record<string, string> = {
         "Aguardando": "pendente",
@@ -144,12 +89,9 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
         "Cancelado": "cancelado"
       };
       const targetStatus = statusMap[selectedStatus];
-      if (targetStatus) {
-        filtered = filtered.filter(p => p.status === targetStatus);
-      }
+      if (targetStatus) filtered = filtered.filter(p => p.status === targetStatus);
     }
 
-    // 2. Ordenar por Data
     filtered.sort((a, b) => {
       const dateA = new Date(a.data_hora).getTime();
       const dateB = new Date(b.data_hora).getTime();
@@ -159,37 +101,48 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
     return filtered;
   };
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-  };
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const today = new Date();
-    const isYesterday = new Date(today.setDate(today.getDate() - 1)).toDateString() === date.toDateString();
-    
+    const isYesterday =
+      new Date(today.setDate(today.getDate() - 1)).toDateString() === date.toDateString();
+
     if (isYesterday) return "Ontem";
     return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
   };
 
   const getStatusColor = (status: string) => {
-    switch(status) {
-      case 'concluido': return 'bg-green-100 text-green-700';
-      case 'em_andamento': return 'bg-purple-100 text-purple-700';
-      case 'aceito': return 'bg-blue-100 text-blue-700';
-      case 'cancelado': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700'; // pendente/aguardando
+    switch (status) {
+      case "concluido":
+        return "bg-green-100 text-green-700";
+      case "em_andamento":
+        return "bg-purple-100 text-purple-700";
+      case "aceito":
+        return "bg-blue-100 text-blue-700";
+      case "cancelado":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
     }
   };
 
   const getStatusLabel = (status: string) => {
-    switch(status) {
-      case 'concluido': return 'Concluído';
-      case 'em_andamento': return 'Em Andamento';
-      case 'aceito': return 'Aceito';
-      case 'pendente': return 'Aberto';
-      case 'cancelado': return 'Cancelado';
-      default: return status;
+    switch (status) {
+      case "concluido":
+        return "Concluído";
+      case "em_andamento":
+        return "Em Andamento";
+      case "aceito":
+        return "Aceito";
+      case "pendente":
+        return "Aberto";
+      case "cancelado":
+        return "Cancelado";
+      default:
+        return status;
     }
   };
 
@@ -202,13 +155,11 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
 
   return (
     <div className="space-y-6 pb-20">
-      {/* Header Text */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Meus Pedidos</h2>
         <p className="text-gray-500 text-sm">Histórico completo dos seus serviços solicitados</p>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl flex flex-col justify-between h-32">
           <div className="flex items-start gap-2 text-blue-600 dark:text-blue-400">
@@ -246,12 +197,9 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
         </div>
       </div>
 
-      {/* Filtros Dropdown */}
       <div className="flex gap-3 relative z-20">
-        
-        {/* Dropdown Status */}
         <div className="flex-1 relative">
-          <button 
+          <button
             onClick={() => setActiveDropdown(activeDropdown === "status" ? null : "status")}
             className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm"
           >
@@ -259,13 +207,14 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
               <Filter className="w-4 h-4 text-gray-400" />
               <span className="truncate">{selectedStatus}</span>
             </div>
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeDropdown === 'status' ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`w-4 h-4 text-gray-400 transition-transform ${activeDropdown === "status" ? "rotate-180" : ""}`}
+            />
           </button>
 
-          {/* Menu Dropdown Status */}
           {activeDropdown === "status" && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 z-50">
-              {statusOptions.map((option) => (
+              {statusOptions.map(option => (
                 <button
                   key={option}
                   onClick={() => {
@@ -282,9 +231,8 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
           )}
         </div>
 
-        {/* Dropdown Data */}
         <div className="flex-1 relative">
-          <button 
+          <button
             onClick={() => setActiveDropdown(activeDropdown === "date" ? null : "date")}
             className="w-full flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm"
           >
@@ -292,13 +240,14 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
               <Calendar className="w-4 h-4 text-gray-400" />
               <span className="truncate">{selectedDate}</span>
             </div>
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${activeDropdown === 'date' ? 'rotate-180' : ''}`} />
+            <ChevronDown
+              className={`w-4 h-4 text-gray-400 transition-transform ${activeDropdown === "date" ? "rotate-180" : ""}`}
+            />
           </button>
 
-          {/* Menu Dropdown Data */}
           {activeDropdown === "date" && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 z-50">
-              {dateOptions.map((option) => (
+              {dateOptions.map(option => (
                 <button
                   key={option}
                   onClick={() => {
@@ -316,40 +265,38 @@ export function HistoryScreen({ onBack, serviceRequests = [] }: HistoryScreenPro
         </div>
       </div>
 
-      {/* Lista de Cards */}
       <div className="space-y-4">
         {pedidosFiltrados.length === 0 ? (
-           <div className="text-center py-10 text-gray-500">
-             Nenhum pedido encontrado com este filtro.
-           </div>
+          <div className="text-center py-10 text-gray-500">
+            <p className="font-medium">Seu histórico aparecerá aqui assim que houver feito pedidos.</p>
+          </div>
         ) : (
-          pedidosFiltrados.map((pedido) => (
-            <div key={pedido.id} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 shadow-sm">
+          pedidosFiltrados.map(pedido => (
+            <div
+              key={pedido.id}
+              className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 shadow-sm"
+            >
               <div className="flex justify-between items-start mb-3">
                 <div className="flex gap-2">
                   <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
                     {pedido.categoria || "Geral"}
                   </span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${getStatusColor(pedido.status || '')}`}>
-                    {pedido.status === 'concluido' && <Box className="w-3 h-3" />}
-                    {getStatusLabel(pedido.status || '')}
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${getStatusColor(pedido.status || "")}`}>
+                    {pedido.status === "concluido" && <Box className="w-3 h-3" />}
+                    {getStatusLabel(pedido.status || "")}
                   </span>
                 </div>
                 <ChevronDown className="w-5 h-5 text-gray-400 cursor-pointer" />
               </div>
 
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-                {pedido.trabalho_feito}
-              </h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{pedido.trabalho_feito}</h3>
 
               <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-4">
                 <div className="flex items-center gap-2 text-gray-500 text-sm">
                   <Calendar className="w-4 h-4" />
                   {formatDate(pedido.data_hora)}
                 </div>
-                <div className="text-green-600 font-bold text-lg">
-                  {formatCurrency(pedido.valor || 0)}
-                </div>
+                <div className="text-green-600 font-bold text-lg">{formatCurrency(pedido.valor || 0)}</div>
               </div>
             </div>
           ))

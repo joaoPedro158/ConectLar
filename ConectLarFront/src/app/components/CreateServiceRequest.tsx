@@ -137,7 +137,7 @@ export function CreateServiceRequest({ onClose, onSubmit, selectedCategory }: Cr
             />
           </div>
 
-          {/* Pagamento e Data */}
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">
@@ -169,7 +169,7 @@ export function CreateServiceRequest({ onClose, onSubmit, selectedCategory }: Cr
             </div>
           </div>
 
-          {/* Endereço */}
+
           <div className="border-t pt-4">
             <h3 className="font-medium mb-3 flex items-center gap-2">
               <MapPin className="w-4 h-4" />

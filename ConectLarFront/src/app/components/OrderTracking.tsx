@@ -186,7 +186,6 @@ export function OrderTracking({ provider, requestData, onBack, onCancel }: Order
           </div>
         </div>
 
-        {/* Cancel Button */}
         {status !== "completed" && status !== "in-progress" && (
           <Button 
             variant="outline" 

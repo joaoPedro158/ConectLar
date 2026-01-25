@@ -14,7 +14,7 @@ import { DisputesScreen } from "./components/DisputesScreen";
 import { ChatList } from "./components/chat/ChatList";
 import { ChatWindow } from "./components/chat/ChatWindow";
 import { SettingsScreen } from "./components/SettingsScreen";
-import { NotificationScreen } from "./components/NotificationScreen";
+import {NotificationScreen} from "./components/NotificationScreen";
 import { Input } from "./components/ui/input";
 import { CreateServiceRequest, ServiceRequestData } from "./components/CreateServiceRequest";
 import { ServiceRequestList } from "./components/ServiceRequestList";
@@ -40,6 +40,7 @@ type Screen = "home" | "requestDetail" | "professionalProfile" | "profile" | "hi
 function AppContent() {
   const { isAuthenticated, user } = useAuth();
   const { unreadCount, addNotification } = useNotifications();
+  console.log("USER JSON:", JSON.stringify(user, null, 2));
   const [authScreen, setAuthScreen] = useState<"login" | "register">("login");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,6 +54,8 @@ function AppContent() {
   const [selectedProfessional, setSelectedProfessional] = useState<string | null>(null);
   const [showProposalModal, setShowProposalModal] = useState(false);
   const [proposalRequestData, setProposalRequestData] = useState<Trabalho | null>(null);
+  const cidade = user?.localizacao?.cidade
+  const estado = user?.localizacao?.estado
   
   // Lista de pedidos
   const [serviceRequests, setServiceRequests] = useState<(Trabalho & { 
@@ -73,8 +76,8 @@ function AppContent() {
     return <RegisterScreen onSwitchToLogin={() => setAuthScreen("login")} />;
   }
 
-  const isCliente = user?.role === "usuario";
-  const isProfissional = user?.role === "profissional";
+ const isCliente = user?.role === "usuario" || user?.role === "USUARIO";
+ const isProfissional = user?.role === "profissional" || user?.role === "PROFISSIONAL";
 
 
   const filteredRequests = serviceRequests.filter(request => {
@@ -216,7 +219,7 @@ function AppContent() {
     toast.success("Proposta enviada com sucesso! O cliente será notificado.");
   };
 
-  // Tela de detalhes do pedido
+
   if (currentScreen === "requestDetail" && selectedRequest) {
     const propostas = allPropostas[selectedRequest.id] || [];
     const userHasSentProposal = isProfissional && user ? propostas.some(p => p.id_profissional === user.id) : false;
@@ -297,9 +300,7 @@ function AppContent() {
                   <MapPin className="w-4 h-4 text-blue-500" />
                   <span className="text-gray-600 dark:text-gray-400">Sua Localização</span>
                   <span className="font-medium dark:text-white">
-                    {user?.cidade && user?.estado 
-                      ? `${user.cidade}, ${user.estado}` 
-                      : "Não definida"}
+                    {cidade && estado ? `${cidade}, ${estado}`: "Não definida"}
                   </span>
                 </div>
 
@@ -397,16 +398,18 @@ function AppContent() {
               <span className="text-xs font-medium">Histórico</span>
             </button>
 
-            <button
-              onClick={() => handleTabChange("chat")}
-              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors relative ${
-                activeTab === "chat" ? "bg-blue-50 dark:bg-blue-900 text-blue-500 dark:text-blue-400" : "text-gray-600 dark:text-gray-400"
-              }`}
-            >
-              <MessageCircle className="w-6 h-6" />
-              <span className="absolute top-1 right-3 w-2 h-2 bg-red-500 rounded-full"></span>
-              <span className="text-xs font-medium">Chat</span>
-            </button>
+           <button
+             onClick={() => handleTabChange("chat")}
+             className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+               activeTab === "chat"
+                 ? "bg-blue-50 dark:bg-blue-900 text-blue-500 dark:text-blue-400"
+                 : "text-gray-600 dark:text-gray-400"
+             }`}
+           >
+             <MessageCircle className="w-6 h-6" />
+             <span className="text-xs font-medium">Chat</span>
+           </button>
+
 
             <button
               onClick={() => handleTabChange("profile")}
