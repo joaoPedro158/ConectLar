@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.dto;
 
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ public record TrabalhoRecord(
         BigDecimal pagamento,
         String descricao,
         StatusTrabalho status,
-        Long idProfissional
+        Long idProfissional,
+        CategoriaEnum categoria
 ) {
 }

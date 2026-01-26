@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,5 +16,6 @@ public interface TrabalhoService {
     void delete(Long id);
     void solicitarTrabalho(Long idTrabalho, Long  idProfissional);
     List<TrabalhoDTO> BuscarProblema(String problema);
+    List<TrabalhoDTO> filtroCategoria(CategoriaEnum categoria);
 
 }

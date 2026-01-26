@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS adm (
     );
 
 -- -----------------------------------------------------
--- 4. Tabela TRABALHO (Refatorada)
+-- 4. Tabela TRABALHO
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS trabalho (
                                         id BIGSERIAL PRIMARY KEY,
@@ -63,14 +63,14 @@ CREATE TABLE IF NOT EXISTS trabalho (
     data_hora_finalizada TIMESTAMP,
 
     status VARCHAR(20) NOT NULL DEFAULT 'ABERTO',
+    categoria VARCHAR(20),
 
--- Quem pediu?
+
     id_usuario BIGINT NOT NULL,
 
-    -- Quem está fazendo? (Pode ser NULL no começo)
     id_profissional BIGINT,
 
-    -- Endereço
+
     rua VARCHAR(150) NOT NULL,
     bairro VARCHAR(100) NOT NULL,
     numero VARCHAR(20) NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS trabalho (
     );
 
 -- -----------------------------------------------------
--- 5. Tabela AVALIACAO (Antiga Historico)
+-- 5. Tabela AVALIACAO
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS avaliacao (
                                          id BIGSERIAL PRIMARY KEY,
@@ -103,28 +103,28 @@ CREATE TABLE IF NOT EXISTS avaliacao (
 -- -----------------------------------------------------
 -- 7. Tabela DISPUTA
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS disputa (
-                                       id BIGSERIAL PRIMARY KEY,
-                                       data_fechamento TIMESTAMP NOT NULL,
-                                       data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                       status VARCHAR(45) NOT NULL,
-    descricao VARCHAR(255) NOT NULL,
-    id_usuario BIGINT NOT NULL,
-    id_profissional BIGINT NOT NULL,
-    id_adm BIGINT NOT NULL,
-
-    CONSTRAINT fk_disputa_usuario
-    FOREIGN KEY (id_usuario)
-    REFERENCES usuario (id),
-
-    CONSTRAINT fk_disputa_profissional
-    FOREIGN KEY (id_profissional)
-    REFERENCES profissional (id),
-
-    CONSTRAINT fk_disputa_adm
-    FOREIGN KEY (id_adm)
-    REFERENCES adm (id)
-    );
+-- CREATE TABLE IF NOT EXISTS disputa (
+--                                        id BIGSERIAL PRIMARY KEY,
+--                                        data_fechamento TIMESTAMP NOT NULL,
+--                                        data_abertura TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--                                        status VARCHAR(45) NOT NULL,
+--     descricao VARCHAR(255) NOT NULL,
+--     id_usuario BIGINT NOT NULL,
+--     id_profissional BIGINT NOT NULL,
+--     id_adm BIGINT NOT NULL,
+--
+--     CONSTRAINT fk_disputa_usuario
+--     FOREIGN KEY (id_usuario)
+--     REFERENCES usuario (id),
+--
+--     CONSTRAINT fk_disputa_profissional
+--     FOREIGN KEY (id_profissional)
+--     REFERENCES profissional (id),
+--
+--     CONSTRAINT fk_disputa_adm
+--     FOREIGN KEY (id_adm)
+--     REFERENCES adm (id)
+--     );
 
 -- -----------------------------------------------------
 -- 6. Tabela TRABALHO_IMAGEM (Para múltiplas fotos)

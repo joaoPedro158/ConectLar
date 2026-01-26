@@ -4,6 +4,7 @@ package br.ifrn.conectlar.Service;
 import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Trabalho;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
@@ -159,5 +160,14 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         return busca.stream().map(mapper::toDTO).toList() ;
     }
 
+<<<<<<< Updated upstream
+=======
+    @Override
+    public List<TrabalhoDTO> filtroCategoria(CategoriaEnum categoria) {
+       List<TrabalhoEntity> trabalhos = trabalhoRepository.findByCategoriaOrderByDataHoraAbertaDesc(categoria);
+        return trabalhos.stream().map(mapper::toDTO).toList();
+    }
+
+>>>>>>> Stashed changes
 
 }
