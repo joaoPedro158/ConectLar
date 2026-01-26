@@ -15,7 +15,11 @@ public interface TrabalhoService {
     TrabalhoDTO update(Long id, TrabalhoRecord trabalho, List<MultipartFile> arquivo);
     void delete(Long id);
     void solicitarTrabalho(Long idTrabalho, Long  idProfissional);
+    void processarResposta(Long idTrabalho, boolean resposta);
+    void cancelarTrabalho(Long idTrabalho, Long  idUsuario);
+    void concluirTrabalho(Long idTrabalho, Long idUsuario);
     List<TrabalhoDTO> BuscarProblema(String problema);
     List<TrabalhoDTO> filtroCategoria(CategoriaEnum categoria);
+
 
 }

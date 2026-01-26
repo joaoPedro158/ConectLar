@@ -2,6 +2,7 @@ package br.ifrn.conectlar.Model.Enum;
 
 public enum StatusTrabalho {
     ABERTO("aberto"),
+    EM_ESPERA("em_espera"),
     EM_ANDAMENTO("em_andamento"),
     CONCLUIDO("concluido"),
     CANCELADO("cancelado");

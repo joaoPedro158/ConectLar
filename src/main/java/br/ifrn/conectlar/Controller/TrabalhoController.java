@@ -68,18 +68,40 @@ public class TrabalhoController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(RotasBases.aceitarCandidato)
+    public  ResponseEntity aceitarCandidato(@PathVariable Long idTrabalho,
+                                            @RequestBody boolean resposta) {
+        trabalhoService.processarResposta(idTrabalho,resposta);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(RotasBases.cancelarTrabalho)
+    public  ResponseEntity cancelarTrabalho(@PathVariable Long idTrabalho,
+                                            @AuthenticationPrincipal UsuarioDetails usuario){
+        Long idUsuario =  usuario.getId();
+        trabalhoService.cancelarTrabalho(idTrabalho, idUsuario);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(RotasBases.concluirTrabalho)
+    public ResponseEntity concluirTrabalho(@PathVariable Long idTrabalho,
+                                           @AuthenticationPrincipal UsuarioDetails usuario){
+        Long idUsuario =  usuario.getId();
+        trabalhoService.concluirTrabalho(idTrabalho, idUsuario);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(RotasBases.Busca)
     public ResponseEntity<List<TrabalhoDTO>> busca(@RequestParam String termo){
         List<TrabalhoDTO> busca = trabalhoService.BuscarProblema(termo);
         return ResponseEntity.ok(busca);
     }
-<<<<<<< Updated upstream
-=======
+
 
     @GetMapping(RotasBases.filtroCategoria)
     public ResponseEntity<List<TrabalhoDTO>> filtroCategoria(@RequestParam CategoriaEnum termo){
        List<TrabalhoDTO> trabalhos = trabalhoService.filtroCategoria(termo);
         return ResponseEntity.ok(trabalhos);
     }
->>>>>>> Stashed changes
+
 }
