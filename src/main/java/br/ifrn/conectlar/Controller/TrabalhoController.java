@@ -2,6 +2,7 @@ package br.ifrn.conectlar.Controller;
 
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
@@ -94,6 +95,13 @@ public class TrabalhoController {
     public ResponseEntity<List<TrabalhoDTO>> busca(@RequestParam String termo){
         List<TrabalhoDTO> busca = trabalhoService.BuscarProblema(termo);
         return ResponseEntity.ok(busca);
+    }
+
+
+    @GetMapping(RotasBases.filtroCategoria)
+    public ResponseEntity<List<TrabalhoDTO>> filtroCategoria(@RequestParam CategoriaEnum termo){
+       List<TrabalhoDTO> trabalhos = trabalhoService.filtroCategoria(termo);
+        return ResponseEntity.ok(trabalhos);
     }
 
 }

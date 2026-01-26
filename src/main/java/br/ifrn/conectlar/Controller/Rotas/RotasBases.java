@@ -22,6 +22,10 @@ public interface RotasBases {
     String concluirTrabalho = "/{idTrabalho}/concluir";
 
     String Busca = "/busca";
+<<<<<<< Updated upstream
+=======
+    String filtroCategoria = "/filtro/categoria";
+>>>>>>> Stashed changes
 
 
     String avaliar = "/avaliar/{idTrabalho}";

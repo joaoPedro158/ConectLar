@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.dto;
 
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class TrabalhoDTO {
     private String descricao;
     private LocalDateTime dataHoraAberta;
     private StatusTrabalho  status;
+    private CategoriaEnum categoria;
 
     // Dados do Usuário
     private Long idUsuario;

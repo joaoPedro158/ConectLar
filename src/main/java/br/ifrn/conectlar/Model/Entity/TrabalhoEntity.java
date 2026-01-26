@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Model.Entity;
 
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Localizacao;
 import jakarta.persistence.*;
@@ -42,6 +43,10 @@ public class TrabalhoEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusTrabalho status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private CategoriaEnum categoria;
 
     //  (Chaves Estrangeiras) ---
     @ElementCollection
