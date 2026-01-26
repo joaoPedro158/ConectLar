@@ -17,6 +17,16 @@ public interface RotasBases {
     String historico = "/historico";
 
     String candidatar = "/{id}/candidatar";
+    String aceitarCandidato= "{idTrabalho}/responder";
+    String cancelarTrabalho = "{idTrabalho}/cancelar";
+    String concluirTrabalho = "/{idTrabalho}/concluir";
 
     String Busca = "/busca";
+<<<<<<< Updated upstream
+=======
+    String filtroCategoria = "/filtro/categoria";
+>>>>>>> Stashed changes
+
+
+    String avaliar = "/avaliar/{idTrabalho}";
 }

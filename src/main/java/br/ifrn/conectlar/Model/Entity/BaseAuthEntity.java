@@ -37,7 +37,7 @@ public abstract class BaseAuthEntity implements UserDetails {
 
         if (this.getRole() == UsuarioRole.ADM) {
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADM"),
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
                     new SimpleGrantedAuthority("ROLE_USUARIO"),
                     new SimpleGrantedAuthority("ROLE_PROFISSIONAL")
             );

@@ -1,11 +1,16 @@
 package br.ifrn.conectlar.Model.dto;
 
-public record LocalizacaoDTO(
-        String rua,
-        String bairro,
-        String numero,
-        String cidade,
-        String cep,
-        String estado,
-        String complemento
-) {}
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
+public class LocalizacaoDTO {
+    private String rua;
+    private String bairro;
+    private String numero;
+    private String cidade;
+    private String cep;
+    private String estado;
+    private String complemento;
+}

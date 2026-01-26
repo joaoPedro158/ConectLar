@@ -64,7 +64,6 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
   };
 
   const handleSave = async () => {
-    // envia pro backend (nome/telefone/localizacao)
     await updateUser({
       nome: formData.nome,
       telefone: formData.telefone,
@@ -94,7 +93,6 @@ export function Profile({ onBack, onLogout }: ProfileProps) {
 
   return (
     <div className="space-y-4">
-      {/* Header do Perfil */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex gap-4 items-center">

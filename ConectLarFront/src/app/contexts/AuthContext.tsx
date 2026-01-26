@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { api } from "../services/api";
-import type { MeResponse, RegisterFormData, UserRole } from "../types/auth";
+import type { MeResponse, RegisterFormData, UserRole } from "../types";
+import { normalizeUserRole } from "../types/auth";
 
 type AuthContextType = {
   user: MeResponse | null;
   isAuthenticated: boolean;
+  isBootstrapping: boolean;
 
   login: (email: string, senha: string) => Promise<void>;
   register: (data: RegisterFormData, role: UserRole, foto?: File | null) => Promise<void>;
@@ -19,13 +21,28 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<MeResponse | null>(null);
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("conectlar_token") : null;
+
+  const [token, setToken] = useState<string | null>(() =>
+    typeof window !== "undefined" ? localStorage.getItem("conectlar_token") : null
+  );
+
+
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
+
   const isAuthenticated = !!token;
 
   const persistUser = (u: MeResponse | null) => {
-    setUser(u);
-    if (u) localStorage.setItem("conectlar_user", JSON.stringify(u));
-    else localStorage.removeItem("conectlar_user");
+    const normalized = u
+      ? ({ ...u, role: normalizeUserRole((u as any).role) } as MeResponse)
+      : null;
+
+    setUser(normalized);
+
+    if (normalized) {
+      localStorage.setItem("conectlar_user", JSON.stringify(normalized));
+    } else {
+      localStorage.removeItem("conectlar_user");
+    }
   };
 
   const extractBackendMessage = (err: any) => {
@@ -54,6 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!t) throw new Error("Token não retornado no login.");
 
       localStorage.setItem("conectlar_token", t);
+      setToken(t);
+
       await refreshMe();
     } catch (err: any) {
       const msg = extractBackendMessage(err) ?? err?.message ?? "Erro ao fazer login";
@@ -65,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const endpoint = role === "profissional" ? "/profissional/form" : "/usuario/form";
 
-      const payload = {
+      const payload: any = {
         nome: data.nome,
         email: data.email,
         senha: data.senha,
@@ -84,17 +103,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
 
       const form = new FormData();
-
-      // ESSENCIAL: manda como application/json
       form.append("dados", new Blob([JSON.stringify(payload)], { type: "application/json" }));
-
-      // arquivo opcional
       if (foto) form.append("arquivo", foto);
 
-      // NÃO setar Content-Type manualmente aqui
       await api.post(endpoint, form);
 
-      // auto-login depois de cadastrar
+
       await login(data.email, data.senha);
     } catch (err: any) {
       const msg = extractBackendMessage(err) ?? err?.message ?? "Erro ao cadastrar";
@@ -104,6 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem("conectlar_token");
+    setToken(null); // ✅ dispara re-render
     persistUser(null);
   };
 
@@ -112,25 +127,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     persistUser(merged);
   };
 
+  // ✅ bootstrap: quando token muda, busca /me (ou limpa)
   useEffect(() => {
-    if (token && !user) {
-      refreshMe().catch(() => logout());
-    } else if (!token) {
-      const cached = localStorage.getItem("conectlar_user");
-      if (cached) {
-        try {
-          setUser(JSON.parse(cached));
-        } catch {
-          localStorage.removeItem("conectlar_user");
+    const run = async () => {
+      try {
+        if (!token) {
+          persistUser(null);
+          return;
         }
+        await refreshMe();
+      } catch {
+        // token inválido => derruba
+        localStorage.removeItem("conectlar_token");
+        setToken(null);
+        persistUser(null);
+      } finally {
+        setIsBootstrapping(false);
       }
-    }
+    };
+
+    setIsBootstrapping(true);
+    run();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   const value = useMemo(
-    () => ({ user, isAuthenticated, login, register, logout, refreshMe, updateUser }),
-    [user, isAuthenticated]
+    () => ({
+      user,
+      isAuthenticated,
+      isBootstrapping,
+      login,
+      register,
+      logout,
+      refreshMe,
+      updateUser,
+    }),
+    [user, isAuthenticated, isBootstrapping]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

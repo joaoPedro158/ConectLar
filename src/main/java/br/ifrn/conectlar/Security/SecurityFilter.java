@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Collections;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -22,19 +23,17 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var token = recuperarToken(request);
 
         if (token != null) {
             var email = tokenService.validarToken(token);
-
             if (email != null) {
                 String roleDoToken = tokenService.obterRole(token);
                 Long id = tokenService.obterId(token);
-
-                var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + roleDoToken));
+                var authorities = Collections.singletonList(
+                        new SimpleGrantedAuthority("ROLE_" + roleDoToken)
+                );
 
                 UsuarioDetails principal = new UsuarioDetails(email, authorities, id, roleDoToken);
 
@@ -42,15 +41,12 @@ public class SecurityFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-
         filterChain.doFilter(request, response);
     }
 
     private String recuperarToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
         if (authHeader == null) return null;
-
-        if (!authHeader.startsWith("Bearer ")) return null;
-        return authHeader.substring(7).trim();
+        return authHeader.replace("Bearer ", "");
     }
 }

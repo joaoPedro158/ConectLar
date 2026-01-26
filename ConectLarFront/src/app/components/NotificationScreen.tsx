@@ -1,4 +1,4 @@
-import { X, Bell, CheckCheck, Trash2, MessageCircle, FileText, UserCheck, UserX, CheckCircle } from "lucide-react";
+import { X, Bell, CheckCheck, Trash2, MessageCircle, FileText, UserCheck, UserX, CheckCircle, XCircle } from "lucide-react";
 import { useNotifications, type NotificationType } from "@/app/contexts/NotificationContext";
 import { Button } from "./ui/button";
 
@@ -14,6 +14,7 @@ const notificationIcons: Record<NotificationType, any> = {
   novo_pedido: FileText,
   mensagem_chat: MessageCircle,
   servico_concluido: CheckCircle,
+  serviço_cancelado: XCircle,
 };
 
 export function NotificationScreen({ onClose, onNotificationClick }: NotificationScreenProps) {
@@ -59,7 +60,11 @@ export function NotificationScreen({ onClose, onNotificationClick }: Notificatio
           ) : (
             <div className="divide-y dark:divide-gray-700">
               {notifications.map((n) => {
-                const Icon = notificationIcons[n.tipo];
+                const Icon = notificationIcons[n.tipo] ?? MessageCircle;
+                if (!Icon) {
+                    console.error("n tem icone", n.tipo, n);
+                    return null;
+                  }
                 return (
                   <button
                     key={n.id}

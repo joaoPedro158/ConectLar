@@ -18,8 +18,5 @@ public interface UsuarioMapper {
     @Mapping(target = "id", ignore = true)
     void updateEntityFromModel(Usuario model, @MappingTarget UsuarioEntity entity);
 
-//    @AfterMapping
-//    default void validade(@MappingTarget Usuario model) {
-//        model.validacao();
-//    }
+
 }

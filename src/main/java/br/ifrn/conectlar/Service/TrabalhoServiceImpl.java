@@ -4,6 +4,7 @@ package br.ifrn.conectlar.Service;
 import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Trabalho;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
@@ -14,6 +15,7 @@ import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -143,8 +145,77 @@ public class TrabalhoServiceImpl implements TrabalhoService {
                 .orElseThrow(() -> new RuntimeException("Profissional nao encontrado"));
 
         trabalho.setProfissional(profissional);
-        trabalho.setStatus(StatusTrabalho.EM_ANDAMENTO);
+        trabalho.setStatus(StatusTrabalho.EM_ESPERA);
 
+        trabalhoRepository.save(trabalho);
+    }
+
+    @Override
+    public void processarResposta(Long idTrabalho, boolean resposta) {
+        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+                .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
+
+        if (resposta) {
+            trabalho.setStatus(StatusTrabalho.EM_ANDAMENTO);
+
+        } else {
+            trabalho.setStatus(StatusTrabalho.ABERTO);
+            trabalho.setProfissional(null);
+        }
+        trabalhoRepository.save(trabalho);
+    }
+
+    @Override
+    public void cancelarTrabalho(Long idTrabalho, Long  idUsuario) {
+        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+                .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
+
+
+        if (!trabalho.getUsuario().getId().equals(idUsuario)) {
+            throw new AccessDeniedException("Você não tem permissão para cancelar este trabalho.");
+        }
+
+        if (trabalho.getStatus() == StatusTrabalho.CONCLUIDO) {
+            throw new IllegalStateException("Não é possível cancelar um trabalho que já foi concluído.");
+        }
+
+        if (trabalho.getStatus() == StatusTrabalho.CANCELADO) {
+            throw new IllegalStateException("Este trabalho já foi cancelado anteriormente.");
+        }
+
+
+
+
+        trabalho.setStatus(StatusTrabalho.CANCELADO);
+
+        trabalhoRepository.save(trabalho);
+    }
+
+    @Override
+    public void concluirTrabalho(Long idTrabalho, Long idUsuario) {
+        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+                .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
+
+        if (!trabalho.getUsuario().getId().equals(idUsuario)) {
+            throw new AccessDeniedException("Apenas o solicitante do serviço pode confirmar a conclusão.");
+        }
+        if (trabalho.getStatus() == StatusTrabalho.ABERTO) {
+            throw new IllegalStateException("Não é possível concluir um trabalho que ainda não tem profissional vinculado.");
+        }
+
+        if (trabalho.getStatus() == StatusTrabalho.CANCELADO) {
+            throw new IllegalStateException("Este trabalho foi cancelado e não pode ser concluído.");
+        }
+
+        if (trabalho.getStatus() == StatusTrabalho.CONCLUIDO) {
+            throw new IllegalStateException("O trabalho já foi marcado como concluído anteriormente.");
+        }
+
+        if (trabalho.getProfissional() == null) {
+            throw new IllegalStateException("Erro inconsistente: Trabalho em andamento sem profissional vinculado.");
+        }
+
+        trabalho.setStatus(StatusTrabalho.CONCLUIDO);
         trabalhoRepository.save(trabalho);
     }
 
@@ -157,6 +228,13 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         List<TrabalhoEntity> busca = trabalhoRepository.findByProblemaContainingIgnoreCaseAndStatusOrderByDataHoraAbertaDesc(problema, StatusTrabalho.ABERTO);
 
         return busca.stream().map(mapper::toDTO).toList() ;
+    }
+
+
+    @Override
+    public List<TrabalhoDTO> filtroCategoria(CategoriaEnum categoria) {
+       List<TrabalhoEntity> trabalhos = trabalhoRepository.findByCategoriaOrderByDataHoraAbertaDesc(categoria);
+        return trabalhos.stream().map(mapper::toDTO).toList();
     }
 
 
