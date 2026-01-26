@@ -1,122 +1,173 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { User, UserRole } from "../types";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { api } from "../services/api";
+import type { MeResponse, RegisterFormData, UserRole } from "../types";
+import { normalizeUserRole } from "../types/auth";
 
-interface AuthContextType {
-  user: User | null;
+type AuthContextType = {
+  user: MeResponse | null;
   isAuthenticated: boolean;
+  isBootstrapping: boolean;
+
   login: (email: string, senha: string) => Promise<void>;
-  register: (data: any, role: UserRole) => Promise<void>;
+  register: (data: RegisterFormData, role: UserRole, foto?: File | null) => Promise<void>;
+
   logout: () => void;
-  updateUser: (data: Partial<User>) => void;
-}
+  refreshMe: () => Promise<void>;
+  updateUser: (payload: Partial<MeResponse>) => void;
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<MeResponse | null>(null);
 
-  // Carregar usuário do localStorage ao iniciar
-  useEffect(() => {
-    const savedUser = localStorage.getItem("conectlar_user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
 
-  const login = async (email: string, senha: string) => {
-    try {
-      // TODO: Substituir por chamada real ao backend
-      // const response = await fetch('SEU_BACKEND_URL/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, senha })
-      // });
-      // const data = await response.json();
-      // setUser(data.user); // O backend já retorna o tipo correto do usuário
+  const [token, setToken] = useState<string | null>(() =>
+    typeof window !== "undefined" ? localStorage.getItem("conectlar_token") : null
+  );
 
-      // Mock temporário - Simula busca no banco de dados
-      // Verifica se o usuário já está registrado no localStorage
-      const registeredUsers = JSON.parse(localStorage.getItem("conectlar_registered_users") || "[]");
-      const foundUser = registeredUsers.find((u: any) => u.email === email && u.senha === senha);
 
-      if (!foundUser) {
-        throw new Error("Email ou senha incorretos");
-      }
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
 
-      // Remove a senha antes de salvar no estado
-      const { senha: _, ...userWithoutPassword } = foundUser;
-      
-      setUser(userWithoutPassword);
-      localStorage.setItem("conectlar_user", JSON.stringify(userWithoutPassword));
-    } catch (error: any) {
-      console.error("Erro ao fazer login:", error);
-      throw error;
+  const isAuthenticated = !!token;
+
+  const persistUser = (u: MeResponse | null) => {
+    const normalized = u
+      ? ({ ...u, role: normalizeUserRole((u as any).role) } as MeResponse)
+      : null;
+
+    setUser(normalized);
+
+    if (normalized) {
+      localStorage.setItem("conectlar_user", JSON.stringify(normalized));
+    } else {
+      localStorage.removeItem("conectlar_user");
     }
   };
 
-  const register = async (data: any, role: UserRole) => {
+  const extractBackendMessage = (err: any) => {
+    const data = err?.response?.data;
+    if (!data) return null;
+    if (typeof data === "string") return data;
+    if (data.message) return data.message;
+    if (data.error) return data.error;
+
+    if (data.trace && typeof data.trace === "string") {
+      const m = data.trace.match(/IllegalArgumentException:\s*(.+?)\\n/);
+      if (m?.[1]) return m[1];
+    }
+    return null;
+  };
+
+  const refreshMe = async () => {
+    const res = await api.get<MeResponse>("/auth/me");
+    persistUser(res.data);
+  };
+
+  const login = async (email: string, senha: string) => {
     try {
-      // TODO: Substituir por chamada real ao backend
-      // const response = await fetch('SEU_BACKEND_URL/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ ...data, role })
-      // });
-      // const result = await response.json();
+      const res = await api.post("/auth/login", { login: email, senha });
+      const t = res.data?.token;
+      if (!t) throw new Error("Token não retornado no login.");
 
-      // Mock temporário
-      const newUser: User = {
-        id: Date.now().toString(),
-        ...data,
-        role: role
-      } as User;
+      localStorage.setItem("conectlar_token", t);
+      setToken(t);
 
-      setUser(newUser);
-      localStorage.setItem("conectlar_user", JSON.stringify(newUser));
+      await refreshMe();
+    } catch (err: any) {
+      const msg = extractBackendMessage(err) ?? err?.message ?? "Erro ao fazer login";
+      throw new Error(msg);
+    }
+  };
 
-      // Adiciona o novo usuário à lista de usuários registrados
-      const registeredUsers = JSON.parse(localStorage.getItem("conectlar_registered_users") || "[]");
-      registeredUsers.push(newUser);
-      localStorage.setItem("conectlar_registered_users", JSON.stringify(registeredUsers));
-    } catch (error) {
-      console.error("Erro ao registrar:", error);
-      throw error;
+  const register = async (data: RegisterFormData, role: UserRole, foto?: File | null) => {
+    try {
+      const endpoint = role === "profissional" ? "/profissional/form" : "/usuario/form";
+
+      const payload: any = {
+        nome: data.nome,
+        email: data.email,
+        senha: data.senha,
+        telefone: data.telefone,
+        role: role.toUpperCase(),
+        ...(role === "profissional" ? { categoria: data.categoria, cnpj: data.cnpj } : {}),
+        localizacao: {
+          rua: data.rua,
+          bairro: data.bairro,
+          numero: (data.numero ?? "").trim(),
+          cidade: data.cidade,
+          cep: data.cep,
+          estado: data.estado,
+          complemento: data.complemento ?? "",
+        },
+      };
+
+      const form = new FormData();
+      form.append("dados", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+      if (foto) form.append("arquivo", foto);
+
+      await api.post(endpoint, form);
+
+
+      await login(data.email, data.senha);
+    } catch (err: any) {
+      const msg = extractBackendMessage(err) ?? err?.message ?? "Erro ao cadastrar";
+      throw new Error(msg);
     }
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("conectlar_user");
+    localStorage.removeItem("conectlar_token");
+    setToken(null); // ✅ dispara re-render
+    persistUser(null);
   };
 
-  const updateUser = (data: Partial<User>) => {
-    if (!user) return;
-    
-    const updatedUser = { ...user, ...data };
-    setUser(updatedUser);
-    localStorage.setItem("conectlar_user", JSON.stringify(updatedUser));
+  const updateUser = (payload: Partial<MeResponse>) => {
+    const merged = { ...(user || {}), ...payload } as MeResponse;
+    persistUser(merged);
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: !!user,
-        login,
-        register,
-        logout,
-        updateUser
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  // ✅ bootstrap: quando token muda, busca /me (ou limpa)
+  useEffect(() => {
+    const run = async () => {
+      try {
+        if (!token) {
+          persistUser(null);
+          return;
+        }
+        await refreshMe();
+      } catch {
+        // token inválido => derruba
+        localStorage.removeItem("conectlar_token");
+        setToken(null);
+        persistUser(null);
+      } finally {
+        setIsBootstrapping(false);
+      }
+    };
+
+    setIsBootstrapping(true);
+    run();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated,
+      isBootstrapping,
+      login,
+      register,
+      logout,
+      refreshMe,
+      updateUser,
+    }),
+    [user, isAuthenticated, isBootstrapping]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth deve ser usado dentro de AuthProvider");
-  }
-  return context;
+  return useContext(AuthContext);
 }

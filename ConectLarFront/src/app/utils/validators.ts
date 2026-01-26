@@ -1,23 +1,19 @@
-/**
- * Valida um CNPJ brasileiro
- * @param cnpj - CNPJ com ou sem máscara
- * @returns true se o CNPJ é válido, false caso contrário
- */
+
+ //@param cnpj - CNPJ com ou sem máscara
+ //@returns true se o CNPJ é válido, false caso contrário
+
 export function validarCNPJ(cnpj: string): boolean {
-  // Remove caracteres não numéricos
   const cnpjLimpo = cnpj.replace(/[^\d]/g, '');
 
-  // Verifica se tem 14 dígitos
+
   if (cnpjLimpo.length !== 14) {
     return false;
   }
 
-  // Verifica se todos os dígitos são iguais (ex: 11111111111111)
   if (/^(\d)\1+$/.test(cnpjLimpo)) {
     return false;
   }
 
-  // Validação do primeiro dígito verificador
   let tamanho = cnpjLimpo.length - 2;
   let numeros = cnpjLimpo.substring(0, tamanho);
   const digitos = cnpjLimpo.substring(tamanho);
@@ -36,7 +32,6 @@ export function validarCNPJ(cnpj: string): boolean {
     return false;
   }
 
-  // Validação do segundo dígito verificador
   tamanho = tamanho + 1;
   numeros = cnpjLimpo.substring(0, tamanho);
   soma = 0;
@@ -57,11 +52,18 @@ export function validarCNPJ(cnpj: string): boolean {
   return true;
 }
 
-/**
- * Formata um CNPJ adicionando a máscara
- * @param cnpj - CNPJ sem máscara
- * @returns CNPJ formatado (00.000.000/0000-00)
- */
+export function formatarTelefone(valor: string) {
+  const d = (valor ?? "").replace(/\D/g, "").slice(0, 11);
+
+  if (d.length === 0) return "";
+  if (d.length <= 2) return `(${d}`;
+  if (d.length <= 7) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
+  //@param cnpj - CNPJ sem máscara
+  //@returns
+
 export function formatarCNPJ(cnpj: string): string {
   const cnpjLimpo = cnpj.replace(/[^\d]/g, '');
   

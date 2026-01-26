@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -14,6 +14,7 @@ export function LoginScreen({ onSwitchToRegister }: LoginScreenProps) {
   const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -24,7 +25,7 @@ export function LoginScreen({ onSwitchToRegister }: LoginScreenProps) {
     try {
       await login(email, senha);
     } catch (err: any) {
-      setError(err.message || "Erro ao fazer login. Verifique suas credenciais.");
+      setError(err?.message || "Erro ao fazer login. Verifique suas credenciais.");
     } finally {
       setLoading(false);
     }
@@ -41,7 +42,6 @@ export function LoginScreen({ onSwitchToRegister }: LoginScreenProps) {
           <p className="text-gray-600">Faça login para continuar</p>
         </div>
 
-        {/* Formulário */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
