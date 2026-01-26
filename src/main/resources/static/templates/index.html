@@ -4,23 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ConectLar - Entrar</title>
-  <link rel="stylesheet" href="/css/estilos.css">
+  <link rel="stylesheet" href="/css/resetar.css">
+  <link rel="stylesheet" href="/css/layoutzao.css">
+  <link rel="stylesheet" href="/css/componentes.css">
+  <link rel="stylesheet" href="/css/cartoes.css">
+  <link rel="stylesheet" href="/css/modais.css">
+  <link rel="stylesheet" href="/css/utilidades.css">
 </head>
 <body>
+<div class="bolha bolha-1"></div>
+<div class="bolha bolha-2"></div>
+
 <div class="telona-cheia">
   <div class="caixona-central">
-    <h1 class="titulo-bonitao">ConectLar</h1>
+    <img src="/assets/conectlar-Je_1k_H1.png" alt="ConectLar" class="imagem-logo">
 
     <div id="secaoTipo" class="secao-botoes-tipo escondido">
       <button class="botaozinho-tipo selecionado" data-tipo="CLIENTE" onclick="mudarTipo(this)">Sou Cliente</button>
       <button class="botaozinho-tipo" data-tipo="PROFISSIONAL" onclick="mudarTipo(this)">Sou Profissional</button>
     </div>
 
-    <form id="formAutenticacao" class="formulario-esperto">
+    <form id="formAutenticacao" class="form-da-vida">
       <div id="camposCadastro" class="escondido" style="display: flex; flex-direction: column; gap: 1rem;">
         <input type="text" name="nome" class="campinho-texto" placeholder="Seu Nome Completo">
         <input type="text" name="telefone" class="campinho-texto" placeholder="(00) 00000-0000">
-        <!-- Endereço: novos campos adicionados -->
+
         <input type="text" name="rua" class="campinho-texto" placeholder="Rua">
         <input type="text" name="bairro" class="campinho-texto" placeholder="Bairro" required>
         <input type="text" name="numero" class="campinho-texto" placeholder="Número">
@@ -44,6 +52,7 @@
   </div>
 </div>
 
-<script src="/js/logica.js"></script>
+<script src="/js/formulario.js"></script>
+<script src="/js/utilidades.js"></script>
 </body>
 </html>

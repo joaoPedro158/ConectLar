@@ -1,0 +1,113 @@
+/* Logo do sistema */
+.imagem-logo {
+    display: block;
+    margin: 0 auto 32px auto;
+    max-width: 240px;
+    width: 70%;
+    height: auto;
+}
+
+/* Formulário principal */
+.form-da-vida {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Campo de texto padrão */
+.campinho-texto {
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    color: #ffffff;
+    padding: 14px;
+    border-radius: 6px;
+    outline: none;
+    font-size: 16px;
+    transition: 0.3s;
+}
+.campinho-texto::placeholder {
+    color: #888888;
+}
+.campinho-texto:focus {
+    background: #252525;
+    border-color: #00e0ff;
+    box-shadow: 0 0 0 2px rgba(0, 224, 255, 0.2);
+}
+
+/* Botão principal azul */
+.botaozao-roxo {
+    background: #00e0ff;
+    color: #000000;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.2s;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0, 224, 255, 0.2);
+}
+.botaozao-roxo:hover {
+    background: #33ebff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 224, 255, 0.4);
+}
+
+/* Link de texto para alternar login/cadastro */
+.link-texto {
+    color: #00e0ff;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+.link-texto:hover {
+    text-decoration: underline;
+    opacity: 1;
+}
+
+/* Botões para escolher tipo de usuário */
+.secao-botoes-tipo {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.botaozinho-tipo {
+    flex: 1;
+    padding: 10px;
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    color: #888888;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+.botaozinho-tipo:hover {
+    background: #2a2a2a;
+    color: #ffffff;
+}
+.botaozinho-tipo.selecionado {
+    background: #00e0ff;
+    color: #000000;
+    border-color: #00e0ff;
+    font-weight: bold;
+}
+
+.botao-sair {
+    background: transparent;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.botao-sair:hover {
+    background: rgba(255, 77, 77, 0.1);
+}
