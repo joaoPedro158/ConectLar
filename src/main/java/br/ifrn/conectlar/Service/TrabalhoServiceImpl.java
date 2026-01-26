@@ -1,9 +1,9 @@
 package br.ifrn.conectlar.Service;
 
 
-import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Trabalho;
@@ -224,7 +224,6 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         if (problema == null || problema.trim().isEmpty() ) {
             return getAll();
         }
-
         List<TrabalhoEntity> busca = trabalhoRepository.findByProblemaContainingIgnoreCaseAndStatusOrderByDataHoraAbertaDesc(problema, StatusTrabalho.ABERTO);
 
         return busca.stream().map(mapper::toDTO).toList() ;

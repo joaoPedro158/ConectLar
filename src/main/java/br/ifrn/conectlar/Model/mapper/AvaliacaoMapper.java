@@ -1,7 +1,7 @@
 package br.ifrn.conectlar.Model.mapper;
 
 import br.ifrn.conectlar.Model.Avaliacao;
-import br.ifrn.conectlar.Model.Entity.AvaliacaoEntity;
+import br.ifrn.conectlar.Repository.Entity.AvaliacaoEntity;
 import br.ifrn.conectlar.Model.dto.AvaliacaoDTO;
 import br.ifrn.conectlar.Model.dto.AvaliacaoRecord;
 import org.mapstruct.Mapper;

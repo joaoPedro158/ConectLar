@@ -1,19 +1,18 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 

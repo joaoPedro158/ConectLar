@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Model.mapper;
 
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Trabalho;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;

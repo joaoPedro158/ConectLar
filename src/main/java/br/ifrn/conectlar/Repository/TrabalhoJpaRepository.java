@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Repository;
 
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import org.springframework.data.jpa.repository.JpaRepository;

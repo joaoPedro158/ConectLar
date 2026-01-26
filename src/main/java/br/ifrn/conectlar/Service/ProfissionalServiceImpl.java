@@ -1,7 +1,7 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;

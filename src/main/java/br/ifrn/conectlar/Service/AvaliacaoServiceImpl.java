@@ -1,9 +1,8 @@
 package br.ifrn.conectlar.Service;
 
 import br.ifrn.conectlar.Model.Avaliacao;
-import br.ifrn.conectlar.Model.Entity.AvaliacaoEntity;
-import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.AvaliacaoEntity;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.dto.AvaliacaoDTO;
 import br.ifrn.conectlar.Model.dto.AvaliacaoRecord;
 import br.ifrn.conectlar.Model.mapper.AvaliacaoMapper;
@@ -14,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
