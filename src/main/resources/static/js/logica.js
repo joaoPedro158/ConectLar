@@ -76,13 +76,29 @@ async function mandarProServidor(endpoint, metodo, corpo = null, temArquivo = fa
 
     try {
         const resposta = await fetch(`${URL_API}${endpoint}`, opcoes);
-        if (!resposta.ok) throw new Error('Deu ruim na requisição: ' + resposta.status);
-
         const texto = await resposta.text();
-        return texto ? JSON.parse(texto) : {};
+        const json = (() => {
+            try { return texto ? JSON.parse(texto) : null; } catch(e) { return null; }
+        })();
+
+        if (!resposta.ok) {
+            // Prioriza mensagens de erro vindas do servidor (objeto JSON ou campo 'error')
+            if (json) {
+                // Se for objeto de campos de validação, formata legível
+                if (typeof json === 'object' && !Array.isArray(json)) {
+                    const partes = Object.entries(json).map(([k,v]) => `${k}: ${v}`).join('\n');
+                    throw new Error(partes || JSON.stringify(json));
+                }
+                throw new Error(JSON.stringify(json));
+            }
+            throw new Error('Deu ruim na requisição: ' + resposta.status);
+        }
+
+        return json || {};
     } catch (erro) {
         console.error(erro);
-        alert('Erro de conexão. O servidor tá ligado?');
+        // Mostra mensagem de erro mais específica quando disponível
+        alert(erro.message || 'Erro de conexão. O servidor tá ligado?');
         throw erro;
     }
 }
@@ -104,11 +120,14 @@ if (formAuth) {
 
             try {
                 const resp = await mandarProServidor('/auth/login', 'POST', payload);
+                // resp expected: { token: '...'}
                 localStorage.setItem('token_conectlar', resp.token);
 
                 window.location.href = 'painel-cliente.html';
             } catch (e) {
-                alert('Login falhou. Senha errada?');
+                // e.message já contém a mensagem detalhada se o servidor retornou uma
+                // Mostra mensagem amigável
+                alert(e.message || 'Login falhou. Senha errada?');
             }
 
         } else {
@@ -120,11 +139,16 @@ if (formAuth) {
                 nome: dados.get('nome'),
                 telefone: dados.get('telefone'),
                 localizacao: {
+                    rua: dados.get('rua') || "Rua padrão",
+                    bairro: dados.get('bairro') || "",
+                    numero: dados.get('numero') || "0",
                     cidade: dados.get('cidade') || "Não informada",
-                    rua: "Rua padrão",
-                    numero: "0"
+                    cep: dados.get('cep') || "",
+                    estado: dados.get('estado') || "",
+                    complemento: dados.get('complemento') || ""
                 },
-                role: tipoUsuarioCadastro
+                // O backend espera os valores do enum: 'USUARIO' ou 'PROFISSIONAL'
+                role: (tipoUsuarioCadastro === 'CLIENTE') ? 'USUARIO' : 'PROFISSIONAL'
             };
 
             const formDataApi = new FormData();
@@ -275,3 +299,130 @@ async function candidatarVaga(idTrabalho, botao) {
         alert('Erro ao se candidatar.');
     }
 }
+
+// --- Funções completas para cobrir os endpoints do backend ---
+
+// USUÁRIO
+async function usuarioCriar(formData) {
+    return await mandarProServidor('/usuario/form', 'POST', formData, true);
+}
+
+async function usuarioAtualizar(formData) {
+    // O backend espera PUT /usuario/update com multipart
+    return await mandarProServidor('/usuario/update', 'PUT', formData, true);
+}
+
+async function usuarioListar() {
+    return await mandarProServidor('/usuario/list', 'GET');
+}
+
+async function usuarioDeletar(id){
+    return await mandarProServidor(`/usuario/delete/${id}`, 'DELETE');
+}
+
+async function usuarioHistorico(){
+    return await mandarProServidor('/usuario/historico', 'GET');
+}
+
+// PROFISSIONAL
+async function profissionalCriar(formData){
+    return await mandarProServidor('/profissional/form', 'POST', formData, true);
+}
+
+async function profissionalListar(){
+    return await mandarProServidor('/profissional/list', 'GET');
+}
+
+async function profissionalDeletar(id){
+    return await mandarProServidor(`/profissional/delete/${id}`, 'DELETE');
+}
+
+async function profissionalAtualizar(formData){
+    return await mandarProServidor('/profissional/update', 'PUT', formData, true);
+}
+
+async function profissionalHistorico(){
+    return await mandarProServidor('/profissional/historico', 'GET');
+}
+
+// TRABALHO
+async function trabalhoCriar(formData){
+    return await mandarProServidor('/trabalho/form', 'POST', formData, true);
+}
+
+async function trabalhoListar(){
+    return await mandarProServidor('/trabalho/list', 'GET');
+}
+
+async function trabalhoBuscarPorId(id){
+    return await mandarProServidor(`/trabalho/${id}`, 'GET');
+}
+
+async function trabalhoAtualizar(id, formData){
+    return await mandarProServidor(`/trabalho/update/${id}`, 'PUT', formData, true);
+}
+
+async function trabalhoDeletar(id){
+    return await mandarProServidor(`/trabalho/delete/${id}`, 'DELETE');
+}
+
+async function trabalhoCandidatar(id){
+    return await mandarProServidor(`/trabalho/${id}/candidatar`, 'POST');
+}
+
+async function trabalhoResponder(idTrabalho, resposta){
+    return await mandarProServidor(`/trabalho/${idTrabalho}/responder`, 'POST', resposta);
+}
+
+async function trabalhoCancelar(idTrabalho){
+    return await mandarProServidor(`/trabalho/${idTrabalho}/cancelar`, 'POST');
+}
+
+async function trabalhoConcluir(idTrabalho){
+    return await mandarProServidor(`/trabalho/${idTrabalho}/concluir`, 'POST');
+}
+
+async function trabalhoBuscar(termo){
+    return await mandarProServidor(`/trabalho/busca?termo=${encodeURIComponent(termo)}`, 'GET');
+}
+
+async function trabalhoFiltrarCategoria(categoria){
+    return await mandarProServidor(`/trabalho/filtro/categoria?termo=${encodeURIComponent(categoria)}`, 'GET');
+}
+
+// AVALIAÇÃO
+async function avaliar(idTrabalho, nota, comentario){
+    return await mandarProServidor(`/avaliacao/avaliar/${idTrabalho}`, 'POST', {nota, comentario});
+}
+
+// ADM
+async function admListar(){
+    return await mandarProServidor('/adm/list', 'GET');
+}
+
+async function admCriar(payload){
+    return await mandarProServidor('/adm/form', 'POST', payload);
+}
+
+async function admBuscarPorId(id){
+    return await mandarProServidor(`/adm/${id}`, 'GET');
+}
+
+async function admAtualizar(id, payload){
+    // o backend tem mapeamento PUT /adm/update (possível discrepância com path var), tentamos enviar para /adm/update/{id}
+    return await mandarProServidor(`/adm/update/${id}`, 'PUT', payload);
+}
+
+async function admDeletar(id){
+    return await mandarProServidor(`/adm/delete/${id}`, 'DELETE');
+}
+
+// Export/attach functions to window for debug/console usage
+window.api = {
+    usuarioCriar, usuarioAtualizar, usuarioListar, usuarioDeletar, usuarioHistorico,
+    profissionalCriar, profissionalListar, profissionalDeletar, profissionalAtualizar, profissionalHistorico,
+    trabalhoCriar, trabalhoListar, trabalhoBuscarPorId, trabalhoAtualizar, trabalhoDeletar, trabalhoCandidatar,
+    trabalhoResponder, trabalhoCancelar, trabalhoConcluir, trabalhoBuscar, trabalhoFiltrarCategoria,
+    avaliar,
+    admListar, admCriar, admBuscarPorId, admAtualizar, admDeletar
+};

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel ADM - ConectLar</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+<div class="cabecalho-top">
+    <span class="nome-sistema">ConectLar <small>ADM</small></span>
+    <div>
+        <button class="botao-sair" onclick="window.location.href='perfil.html'">Perfil</button>
+        <button class="botao-sair" onclick="fazerLogout()">Sair</button>
+    </div>
+</div>
+
+<div class="area-conteudo">
+    <h2>Administração</h2>
+
+    <section style="margin-top: 20px;">
+        <h3>Listar Usuários</h3>
+        <div id="listaUsuariosAdm">Carregando...</div>
+    </section>
+
+    <section style="margin-top: 20px;">
+        <h3>Cadastrar ADM</h3>
+        <form id="formAdmCadastro" class="formulario-esperto">
+            <input type="email" id="admEmail" class="campinho-texto" placeholder="Email">
+            <input type="password" id="admSenha" class="campinho-texto" placeholder="Senha">
+            <button type="submit" class="botaozao-roxo">Criar ADM</button>
+        </form>
+    </section>
+</div>
+
+<script src="/js/logica.js"></script>
+<script src="/js/adm.js"></script>
+</body>
+</html>
