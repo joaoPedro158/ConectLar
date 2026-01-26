@@ -24,7 +24,14 @@ public class Profissional extends Usuario {
     public void validacao() {
 
         super.validacao();
+        if (this.categoria == null) {
+            throw new IllegalArgumentException("A categoria do profissional é obrigatória.");
+        }
 
+
+        if (this.getRole() != UsuarioRole.PROFISSIONAL) {
+            throw new IllegalArgumentException("Erro de consistência: Um objeto 'Profissional' deve possuir exclusivamente a role 'PROFISSIONAL'.");
+        }
 
 
 

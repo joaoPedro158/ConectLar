@@ -193,30 +193,13 @@ public class TrabalhoServiceImpl implements TrabalhoService {
 
     @Override
     public void concluirTrabalho(Long idTrabalho, Long idUsuario) {
-        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+        TrabalhoEntity trabalhoEntity = trabalhoRepository.findById(idTrabalho)
                 .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
+        Trabalho trabalhoModel = mapper.toModel(trabalhoEntity);
+        trabalhoModel.concluir(idUsuario);
+        mapper.updateEntityFromModel(trabalhoModel, trabalhoEntity);
 
-        if (!trabalho.getUsuario().getId().equals(idUsuario)) {
-            throw new AccessDeniedException("Apenas o solicitante do serviço pode confirmar a conclusão.");
-        }
-        if (trabalho.getStatus() == StatusTrabalho.ABERTO) {
-            throw new IllegalStateException("Não é possível concluir um trabalho que ainda não tem profissional vinculado.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CANCELADO) {
-            throw new IllegalStateException("Este trabalho foi cancelado e não pode ser concluído.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CONCLUIDO) {
-            throw new IllegalStateException("O trabalho já foi marcado como concluído anteriormente.");
-        }
-
-        if (trabalho.getProfissional() == null) {
-            throw new IllegalStateException("Erro inconsistente: Trabalho em andamento sem profissional vinculado.");
-        }
-
-        trabalho.setStatus(StatusTrabalho.CONCLUIDO);
-        trabalhoRepository.save(trabalho);
+        trabalhoRepository.save(trabalhoEntity);
     }
 
     @Override

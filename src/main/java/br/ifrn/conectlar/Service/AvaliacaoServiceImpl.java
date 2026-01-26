@@ -24,17 +24,16 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
     private final AvaliacaoJparepository avaliacaoJparepository;
     @Override
     public AvaliacaoDTO avaliar(AvaliacaoRecord avaliacaoRecord, Long idTrabalho) {
-        Avaliacao avaliacaoModel = avaliacaoMapper.toModel(avaliacaoRecord);
-
-        AvaliacaoEntity entityToSave = avaliacaoMapper.toEntity(avaliacaoModel);
-        TrabalhoEntity trabalho = trabalhoJpaRepository.findById(idTrabalho)
-                .orElseThrow(() -> new EntityNotFoundException("Trabalho não encontrado com o ID: " + idTrabalho));
-
         if (avaliacaoJparepository.existsByTrabalhoId(idTrabalho)) {
             throw new IllegalArgumentException("Este trabalho já foi avaliado anteriormente.");
         }
 
-        entityToSave.setTrabalho(trabalho);
+        TrabalhoEntity trabalho = trabalhoJpaRepository.findById(idTrabalho)
+                .orElseThrow(() -> new EntityNotFoundException("Trabalho não encontrado com o ID: " + idTrabalho));
+
+        Avaliacao avaliacaoModel = avaliacaoMapper.toModel(avaliacaoRecord, trabalho);
+        AvaliacaoEntity entityToSave = avaliacaoMapper.toEntity(avaliacaoModel);
+
         entityToSave.setDataAvaliacao(LocalDateTime.now());
 
         AvaliacaoEntity saveEntity = avaliacaoJparepository.save(entityToSave);
