@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Oportunidades - ConectLar</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+<div class="cabecalho-top">
+    <span class="nome-sistema">ConectLar <small>Profissional</small></span>
+    <button class="botao-sair" onclick="fazerLogout()">Sair</button>
+</div>
+
+<div class="telona-cheia" style="justify-content: flex-start;">
+    <div class="area-conteudo">
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="text" id="campoBusca" class="campinho-texto" placeholder="Buscar serviços..." style="flex: 1;">
+            <button class="botaozao-roxo" onclick="buscarVagas()">Buscar</button>
+        </div>
+
+        <div id="listaOportunidades" class="lista-trabalhos">
+            <p style="text-align: center; color: #a8a8b3;">Buscando vagas...</p>
+        </div>
+    </div>
+</div>
+
+<script src="/js/logica.js"></script>
+<script>
+    // Carrega as vagas ao abrir
+    carregarFeedGeral();
+</script>
+</body>
+</html>
