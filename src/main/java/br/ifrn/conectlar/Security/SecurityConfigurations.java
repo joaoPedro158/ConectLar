@@ -30,7 +30,11 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/favicon.ico", "/css/**", "/js/**").permitAll()
+                        // Libera todos os ficheiros estáticos comuns
+                        .requestMatchers("/*.html", "/images/**", "/css/**", "/js/**").permitAll()
+
+                        // Se quiser liberar ficheiros específicos pelo nome
+                        .requestMatchers("/index.html", "/login.html", "/cadastro.html").permitAll()
 
                         // qualquer usuario tem permissão
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
