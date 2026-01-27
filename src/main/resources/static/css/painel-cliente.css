@@ -334,3 +334,46 @@ body {
     background: #121212;
     box-shadow: 0 0 15px rgba(0, 224, 255, 0.2);
 }
+.cabecalho-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #121214;
+    border-bottom: 1px solid #29292e;
+}
+
+.logo-img {
+    height: 40px;
+}
+
+.teste {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.teste button {
+    background: none;
+    border: none;
+    color: #a8a8b3;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.teste button:hover {
+    color: #00e0ff;
+}
+
+.btn-sair {
+    background-color: #ff4b4b !important;
+    color: white !important;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.btn-sair:hover {
+    background-color: #c83737 !important;
+}

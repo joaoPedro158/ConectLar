@@ -1,11 +1,11 @@
-
 const URL_API = 'http://localhost:8181';
+const rotasPublicas = ['/auth/login', '/usuario/cadastrar', '/profissional/cadastrar', '/profissional/form', '/usuario/form'];
 
-async function mandarProServidor(endpoint, metodo, corpo = null, temArquivo = false) {
+async function enviarRequisicao(endpoint, metodo, corpo = null, isMultipart = false) {
     const token = localStorage.getItem('token_conectlar');
     const headers = {};
 
-    if (token) {
+    if (token && !rotasPublicas.includes(endpoint)) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
@@ -15,7 +15,7 @@ async function mandarProServidor(endpoint, metodo, corpo = null, temArquivo = fa
     };
 
     if (corpo) {
-        if (temArquivo) {
+        if (isMultipart) {
             opcoes.body = corpo;
         } else {
             headers['Content-Type'] = 'application/json';
@@ -26,39 +26,37 @@ async function mandarProServidor(endpoint, metodo, corpo = null, temArquivo = fa
     try {
         const resposta = await fetch(`${URL_API}${endpoint}`, opcoes);
 
-        let json = null;
+        if (resposta.status === 401 || resposta.status === 403) {
+            if (!rotasPublicas.includes(endpoint)) {
+                fazerLogout();
+                throw new Error('Sessão expirada ou acesso negado.');
+            }
+            if (resposta.status === 403) {
+                console.error('Erro 403 na rota:', endpoint);
+            }
+        }
+
         const texto = await resposta.text();
-        if (texto) {
-            try { json = JSON.parse(texto); } catch(e) {}
-        }
-
         if (!resposta.ok) {
-            if (json && json.message) throw new Error(json.message);
-            throw new Error('Erro na requisição: ' + resposta.status);
+            throw new Error(texto || 'Erro na requisição');
         }
 
-        return json || {};
+        return texto ? JSON.parse(texto) : {};
     } catch (erro) {
-        console.error(erro);
-        alert(erro.message || 'Erro de conexão.');
+        console.error('Erro Fetch:', erro);
         throw erro;
     }
 }
 
 function fazerLogout() {
-    localStorage.removeItem('token_conectlar');
-    localStorage.removeItem('usuario_nome');
-    localStorage.removeItem('tipo_usuario');
-    localStorage.removeItem('usuario_imagem');
-    window.location.href = 'index.html';
+    localStorage.clear();
+    if (!window.location.pathname.endsWith('index.html') && window.location.pathname !== '/') {
+        window.location.href = 'index.html';
+    }
 }
 
-function abrirModal() {
-    const modal = document.getElementById('modalNovoPedido');
-    if(modal) modal.classList.remove('escondido');
-}
-
-function fecharModal() {
-    const modal = document.getElementById('modalNovoPedido');
-    if(modal) modal.classList.add('escondido');
+function verificarAutenticacao() {
+    if (!localStorage.getItem('token_conectlar')) {
+        window.location.href = 'index.html';
+    }
 }
