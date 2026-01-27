@@ -14,5 +14,6 @@ public class UsuarioDTO {
     private String email;
     private String telefone;
     private LocalizacaoDTO localizacao;
+    private String fotoPerfil;
     private UsuarioRole role;
 }

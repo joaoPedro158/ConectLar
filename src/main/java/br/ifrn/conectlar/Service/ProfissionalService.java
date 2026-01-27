@@ -15,4 +15,5 @@ public interface ProfissionalService {
    void deleteProfissional(long id);
    ProfissionalDTO updateProfissional(Long id, ProfissionalRecord profissionalRecord,  MultipartFile arquivo);
    List<TrabalhoDTO> historico(Long id);
+   ProfissionalDTO getProfissional(Long id);
 }
