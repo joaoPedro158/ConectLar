@@ -122,7 +122,6 @@ if (formAuth) {
     });
 }
 
-// NOVO TRABALHO (CORRIGIDO)
 const formTrabalho = document.getElementById('formNovoTrabalho');
 if (formTrabalho) {
     formTrabalho.addEventListener('submit', async (e) => {
@@ -134,11 +133,11 @@ if (formTrabalho) {
         btn.disabled = true;
 
         const dtoTrabalho = {
-            // CORREÇÃO: Java espera 'problema', não 'titulo'
+
             problema: document.getElementById('tituloServico').value,
             descricao: document.getElementById('descServico').value,
 
-            // CORREÇÃO: Java espera 'pagamento' e é obrigatório
+
             pagamento: parseFloat(document.getElementById('pagamentoServico').value),
 
             categoria: document.getElementById('categoriaServico').value,

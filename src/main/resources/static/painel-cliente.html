@@ -4,58 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Cliente - ConectLar</title>
-    <link rel="stylesheet" href="/css/painel-cliente.css">
+    <link rel="stylesheet" href="css/painel-cliente.css">
 </head>
 <body>
 
 <header class="cabecalho-top">
     <div class="logo-area">
-        <img src="/assets/conectlar-Je_1k_H1.png" alt="Logo ConectLar" class="logo-img">
-        <span class="logo-texto">ConectLar</span>
+        <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
     </div>
-
-    <div class="menu-usuario">
-        <button class="botao-sair" onclick="fazerLogout()">Sair do Sistema</button>
+    <div class="teste">
+        <button>Home</button>
+        <button>Histórico</button>
+        <button>Perfil</button>
+        <button class="botao-sino">&#128276;</button>
     </div>
 </header>
 
-<div class="container-principal">
+<main class="container-principal">
+    <section class="painel-conteudo">
 
-    <aside class="painel-lateral">
-        <div class="info-usuario">
-            <div class="avatar-grande">
-                <img src="/assets/avatar-padrao.png" alt="Avatar" id="imgAvatarLateral" class="img-avatar">
+        <div class="container-busca">
+            <form class="form-busca">
+                <span class="icon-busca">&#128269;</span> <input type="text" placeholder="Buscar serviços ou categorias..." class="input-busca">
+            </form>
+        </div>
+        
+        <div class="secao-categorias">
+            <h1 class="titulo-sessao">Categorias</h1>
+            <div class="grid-categorias">
+                <button class="card-cat encanador">
+                    <div class="icon-circle">💧</div>
+                    <span>Encanador</span>
+                </button>
+                <button class="card-cat eletricista">
+                    <div class="icon-circle">⚡</div>
+                    <span>Eletricista</span>
+                </button>
+                <button class="card-cat limpeza">
+                    <div class="icon-circle">✨</div>
+                    <span>Limpeza</span>
+                </button>
+                <button class="card-cat pintor">
+                    <div class="icon-circle">🖌️</div>
+                    <span>Pintor</span>
+                </button>
+                <button class="card-cat marceneiro">
+                    <div class="icon-circle">🔨</div>
+                    <span>Marceneiro</span>
+                </button>
+                <button class="card-cat jardineiro">
+                    <div class="icon-circle">🌳</div>
+                    <span>Jardineiro</span>
+                </button>
+                <button class="card-cat mecanico">
+                    <div class="icon-circle">🚗</div>
+                    <span>Mecânico</span>
+                </button>
+                <button class="card-cat geral">
+                    <div class="icon-circle">🛠️</div>
+                    <span>Geral</span>
+                </button>
             </div>
-            <h3 class="nome-usuario" id="nomeUsuarioDisplay">Carregando...</h3>
-            <p class="tipo-conta">Cliente</p>
         </div>
 
-        <div class="status-container">
-            <p class="titulo-status">Meus Gastos</p>
-            <h2 style="color: #fff;">R$ 0,00</h2>
-            <button class="botao-outline" style="margin-top: 10px; width: 100%;">Ver Extrato</button>
-        </div>
-    </aside>
-
-    <main class="area-conteudo">
-
-        <section class="cabecalho-secao">
-            <div class="textos-secao">
-                <h2 class="titulo-painel">Meus Projetos</h2>
-                <p class="subtitulo-painel">Gerencie seus pedidos em aberto ou finalizados.</p>
+        <hr class="divisor"> 
+        
+        <div class="secao-servicos">
+            <h1 class="titulo-sessao">Serviços</h1>
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h2>Nenhum serviço disponível</h2>
+                <p>Você ainda não publicou nenhum serviço. Clique no botão + para começar!</p>
             </div>
-
-            <button class="botao-criar-projeto" onclick="abrirModal()">
-                <span class="icone-mais">+</span> Publicar Projeto
-            </button>
-        </section>
-
-        <div id="listaMeusPedidos" class="lista-pedidos">
-            <p class="mensagem-vazia">Buscando seus dados...</p>
         </div>
+        <button class="fab-botao" onclick="abrirModal()">+</button>
+    </section>
+</main>
 
-    </main>
-</div>
+
+
 
 <div id="modalNovoPedido" class="modal-backdrop escondido">
     <div class="modal-content">
@@ -143,6 +170,7 @@
         </form>
     </div>
 </div>
+
 
 <script src="/js/utilidades.js"></script>
 <script src="/js/cliente.js"></script>

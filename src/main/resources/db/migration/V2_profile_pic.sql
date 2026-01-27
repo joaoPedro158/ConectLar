@@ -1,0 +1,7 @@
+ALTER TABLE usuario
+    ADD COLUMN IF NOT EXISTS foto_perfil TEXT;
+
+ALTER TABLE profissional
+    ADD COLUMN IF NOT EXISTS foto_perfil TEXT;
+ALTER TABLE adm
+    ADD COLUMN IF NOT EXISTS foto_perfil TEXT;

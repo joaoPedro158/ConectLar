@@ -11,10 +11,20 @@
     <link rel="stylesheet" href="/css/utilidades.css">
 </head>
 <body>
-<div class="cabecalho-top">
+<header class="cabecalho-top">
     <span class="nome-sistema">ConectLar <small>Cliente</small></span>
-    <button class="botao-sair" onclick="fazerLogout()">Sair</button>
-</div>
+
+    <div class="perfil-topo">
+        <div class="avatar-topo" onclick="toggleMenuPerfil()"></div>
+
+        <div class="menu-perfil escondido" id="menuPerfil">
+            <button onclick="irParaHistorico()">Home</button>
+            <button onclick="irParaHistorico()">Historico</button>
+
+        </div>
+    </div>
+</header>
+
 
 <div class="telona-cheia" style="justify-content: flex-start;">
     <div class="area-conteudo">
