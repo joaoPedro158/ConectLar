@@ -4,7 +4,7 @@ public interface RotasBases {
 
     String Delete = "/delete/{id}";
 
-    String Cadastra = "/form";
+    String Cadastra = "/cadastrar";
 
     String Lista = "/list";
 

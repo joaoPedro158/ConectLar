@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Cliente - ConectLar</title>
+    <link rel="stylesheet" href="/css/painel-cliente.css">
+</head>
+<body>
+
+<header class="cabecalho-top">
+    <div class="logo-area">
+        <img src="/assets/conectlar-Je_1k_H1.png" alt="Logo ConectLar" class="logo-img">
+        <span class="logo-texto">ConectLar</span>
+    </div>
+
+    <div class="menu-usuario">
+        <button class="botao-sair" id="btnSair">Sair do Sistema</button>
+    </div>
+</header>
+
+<div class="container-principal">
+
+    <aside class="painel-lateral">
+        <div class="info-usuario">
+            <div class="avatar-grande">
+                <img src="/assets/avatar-padrao.png" alt="Avatar" class="img-avatar">
+            </div>
+            <h3 class="nome-usuario" id="nomeUsuarioDisplay">Carregando...</h3>
+            <p class="tipo-conta">Cliente</p>
+        </div>
+
+        <div class="status-container">
+            <p class="titulo-status">Status da Conta</p>
+            <span class="status-badge status-concluido">Ativa</span>
+        </div>
+    </aside>
+
+    <main class="area-conteudo">
+
+        <section class="cabecalho-secao">
+            <div class="textos-secao">
+                <h2 class="titulo-painel">Meus Projetos</h2>
+                <p class="subtitulo-painel">Gerencie seus pedidos de serviço aqui.</p>
+            </div>
+
+            <button class="botao-criar-projeto" onclick="abrirModal()">
+                <span class="icone-mais">+</span> Novo Projeto
+            </button>
+        </section>
+
+        <div id="listaMeusPedidos" class="lista-pedidos">
+            <p class="mensagem-vazia">Buscando seus dados...</p>
+        </div>
+
+    </main>
+</div>
+
+<div id="modalNovoPedido" class="modal-backdrop escondido">
+    <div class="modal-content">
+        <header class="modal-header">
+            <h3>Publicar Novo Serviço</h3>
+            <button class="botao-fechar-modal" onclick="fecharModal()">&times;</button>
+        </header>
+
+        <form id="formNovoTrabalho">
+            <div class="form-grupo">
+                <label for="tituloServico">Título do Pedido</label>
+                <input type="text" id="tituloServico" class="input-dark" placeholder="Ex: Vazamento na cozinha" required>
+            </div>
+
+            <div class="form-grupo">
+                <label for="categoriaServico">Categoria</label>
+                <select id="categoriaServico" class="input-dark" required>
+                    <option value="">Selecione...</option>
+                    <option value="ENCANADOR">Encanador</option>
+                    <option value="ELETRICISTA">Eletricista</option>
+                    <option value="PINTOR">Pintor</option>
+                    <option value="LIMPEZA">Limpeza</option>
+                    <option value="MARCENEIRO">Marceneiro</option>
+                    <option value="GERAL">Serviços Gerais</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-grupo">
+                    <label for="cidadeServico">Cidade</label>
+                    <input type="text" id="cidadeServico" class="input-dark" placeholder="Ex: Natal" required>
+                </div>
+                <div class="form-grupo grupo-uf">
+                    <label for="estadoServico">UF</label>
+                    <input type="text" id="estadoServico" class="input-dark" maxlength="2" placeholder="RN" required>
+                </div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="descServico">Descrição Detalhada</label>
+                <textarea id="descServico" class="input-dark" rows="4" placeholder="Explique o problema detalhadamente..." required></textarea>
+            </div>
+
+            <div class="form-grupo">
+                <label for="fotoServico">Foto (Opcional)</label>
+                <input type="file" id="fotoServico" class="input-dark" accept="image/*">
+            </div>
+
+            <button type="submit" class="botao-criar-projeto botao-full">
+                Publicar Agora
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/painel-cliente.js"></script>
+</body>
+</html>
