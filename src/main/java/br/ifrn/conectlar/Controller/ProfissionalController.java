@@ -59,11 +59,4 @@ public class ProfissionalController {
         List<TrabalhoDTO> historico = profissionalService.historico(profissionalId);
         return ResponseEntity.ok(historico);
     }
-
-    @GetMapping(RotasBases.meudados)
-    public ResponseEntity getMeusDados(@AuthenticationPrincipal UsuarioDetails user) {
-        Long profissionaoId = user.getId();
-        ProfissionalDTO profissional = profissionalService.getProfissional(profissionaoId);
-        return ResponseEntity.ok(profissional);
-    }
 }

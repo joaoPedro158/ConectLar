@@ -1,7 +1,8 @@
 package br.ifrn.conectlar.Repository;
 
-import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -14,7 +15,6 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Long>
     Optional<UsuarioEntity> findByEmailAndIdNot(String email, Long id);
     Optional<UsuarioEntity> findById(Long id);
     Optional<UsuarioEntity> findByTelefoneAndIdNot(String telefone, Long id);
-
 
 
 }

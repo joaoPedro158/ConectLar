@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Repository.Entity;
+package br.ifrn.conectlar.Model.Entity;
 
 
 import br.ifrn.conectlar.Model.Localizacao;

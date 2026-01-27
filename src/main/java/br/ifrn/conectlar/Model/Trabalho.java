@@ -4,7 +4,6 @@ import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.security.access.AccessDeniedException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -41,54 +40,27 @@ public class Trabalho {
     }
 
     public void validacao() {
+
         if (this.problema == null || this.problema.trim().length() < 5) {
             throw new IllegalArgumentException("O título do problema deve ter pelo menos 5 caracteres.");
         }
+
         if (this.descricao == null || this.descricao.trim().length() < 10) {
-            throw new IllegalArgumentException("A descrição deve ser detalhada.");
+            throw new IllegalArgumentException("A descrição deve ser detalhada (mínimo de 10 caracteres) para ajudar o profissional.");
         }
-        if (this.pagamento == null || this.pagamento.compareTo(BigDecimal.ZERO) <= 0) {
+
+        if (this.localizacao == null) {
+            throw new IllegalArgumentException("A localização do trabalho é obrigatória.");
+        }
+
+        if (this.pagamento == null) {
+            throw new IllegalArgumentException("O valor do pagamento é obrigatório.");
+        }
+
+        if (this.pagamento.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("O valor do pagamento deve ser maior que zero.");
         }
-    }
-
-    public void concluir(Long idUsuarioSolicitante) {
 
 
-        if (!this.idUsuario.equals(idUsuarioSolicitante)) {
-            throw new AccessDeniedException("Apenas o solicitante do serviço pode confirmar a conclusão.");
-        }
-
-        if (this.status == StatusTrabalho.ABERTO) {
-            throw new IllegalStateException("Não é possível concluir um trabalho que ainda não tem profissional vinculado.");
-        }
-        if (this.status == StatusTrabalho.CANCELADO) {
-            throw new IllegalStateException("Este trabalho foi cancelado e não pode ser concluído.");
-        }
-        if (this.status == StatusTrabalho.CONCLUIDO) {
-            throw new IllegalStateException("O trabalho já foi marcado como concluído anteriormente.");
-        }
-        if (this.idProfissional == null) {
-            throw new IllegalStateException("Erro inconsistente: Trabalho em andamento sem profissional vinculado.");
-        }
-
-        this.status = StatusTrabalho.CONCLUIDO;
-    }
-
-    public void cancelarTrabalho(Long idUsuario) {
-        if (!this.idUsuario.equals(idUsuario)) {
-            throw new AccessDeniedException("Você não tem permissão para cancelar este trabalho.");
-        }
-
-        if (this.status == StatusTrabalho.CONCLUIDO) {
-            throw new IllegalStateException("Não é possível cancelar um trabalho que já foi concluído.");
-        }
-
-
-        if (this.status == StatusTrabalho.CANCELADO) {
-            throw new IllegalStateException("Este trabalho já foi cancelado anteriormente.");
-        }
-        this.status = StatusTrabalho.CANCELADO;
     }
 }
-

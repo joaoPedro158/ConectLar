@@ -23,10 +23,9 @@ public interface RotasBases {
 
     String Busca = "/busca";
 
+
     String filtroCategoria = "/filtro/categoria";
 
-    String  gastoTotal = "/gastoTotal";
-    String meudados = "/meusdados";
 
     String avaliar = "/avaliar/{idTrabalho}";
 }

@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Model.mapper;
 
-import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Trabalho;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
@@ -13,10 +13,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface TrabalhoMapper {
     Trabalho toModel(TrabalhoRecord record);
-
-    @Mapping(source = "usuario.id", target = "idUsuario")
-    @Mapping(source = "profissional.id", target = "idProfissional")
-    Trabalho toModel(TrabalhoEntity  entity);
 
     @Mapping(source = "usuario.id", target = "idUsuario")
     @Mapping(source = "usuario.nome", target = "nomeUsuario")

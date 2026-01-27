@@ -4,5 +4,7 @@ import java.time.LocalDateTime;
 
 public record AvaliacaoRecord(
         int nota,
-        String comentario
+        String comentario,
+        LocalDateTime dataAvaliacao,
+        Long idTrabalho
 ) {}

@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Repository;
 
-import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +14,6 @@ public interface TrabalhoJpaRepository extends JpaRepository<TrabalhoEntity, Lon
   List<TrabalhoEntity> findByStatusOrderByDataHoraAbertaDesc(StatusTrabalho status);
   List<TrabalhoEntity> findByProfissionalIdOrderByDataHoraAbertaDesc(Long id);
   List<TrabalhoEntity> findByCategoriaOrderByDataHoraAbertaDesc(CategoriaEnum categoria);
-  List<TrabalhoEntity> findAllByUsuarioIdAndStatus(Long id, StatusTrabalho status);
 
   Optional<TrabalhoEntity> findById(Long id);
 

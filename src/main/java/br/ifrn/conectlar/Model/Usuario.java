@@ -18,23 +18,22 @@ public class Usuario {
     private String senha;
     private String telefone;
     private Localizacao localizacao;
-    private String fotoPerfil;
     private UsuarioRole role;
 
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    // Formato estrito: (99) 99999-9999
     private static final Pattern PHONE_PATTERN = Pattern.compile("^\\(\\d{2}\\)\\s\\d{5}-\\d{4}$");
     private static final int MIN_PASSWORD_LENGTH = 8;
 
 
-    protected Usuario(Long id, String nome, String email, String senha,String telefone,Localizacao localizacao, String fotoPerfil,UsuarioRole role) {
+    protected Usuario(Long id, String nome, String email, String senha,String telefone,Localizacao localizacao,UsuarioRole role) {
         this.id = id;
         this.nome = nome;
        this.email = email;
        this.senha = senha;
        this.telefone = telefone;
        this.localizacao = localizacao;
-       this.fotoPerfil = fotoPerfil;
        this.role = role;
 
 

@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Repository;
 
-import br.ifrn.conectlar.Repository.Entity.AdmEntity;
+import br.ifrn.conectlar.Model.Entity.AdmEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

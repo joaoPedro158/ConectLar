@@ -1,7 +1,7 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
-import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
+import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
@@ -122,13 +122,6 @@ public class ProfissionalServiceImpl implements ProfissionalService {
     public List<TrabalhoDTO> historico(Long id) {
         List<TrabalhoEntity> historico = trabalhoRepository.findByProfissionalIdOrderByDataHoraAbertaDesc(id);
         return historico.stream().map(trabalhoMapper::toDTO).toList();
-    }
-
-    @Override
-    public ProfissionalDTO getProfissional(Long id) {
-        ProfissionalEntity profissional = profissionalRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("profissional nao encontrado"));
-        return mapper.toDTO(profissional);
     }
 
 }
