@@ -7,9 +7,6 @@ async function enviarRequisicao(endpoint, metodo, corpo = null, isMultipart = fa
 
     if (token && !rotasPublicas.includes(endpoint)) {
         headers['Authorization'] = `Bearer ${token}`;
-        console.log('Enviando requisição para:', endpoint, 'com token:', token ? 'SIM' : 'NÃO');
-    } else {
-        console.log('Enviando requisição para:', endpoint, 'sem token (rota pública ou sem token)');
     }
 
     const opcoes = {
@@ -62,20 +59,4 @@ function verificarAutenticacao() {
     if (!localStorage.getItem('token_conectlar')) {
         window.location.href = 'index.html';
     }
-}
-
-async function buscarMeuPerfil() {
-    const role = localStorage.getItem('usuario_role');
-    let endpoint;
-    
-    if (role === 'PROFISSIONAL') {
-        endpoint = '/profissional/list';
-    } else {
-        endpoint = '/usuario/list';
-    }
-    
-    const usuarios = await enviarRequisicao(endpoint, 'GET');
-    const tokenPayload = JSON.parse(atob(localStorage.getItem('token_conectlar').split('.')[1]));
-    
-    return usuarios.find(u => u.email === tokenPayload.sub) || null;
 }

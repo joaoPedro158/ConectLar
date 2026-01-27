@@ -19,12 +19,6 @@ function configurarBotoes() {
             selecionarTipo(btn);
         });
     });
-
-    const telefoneInput = document.querySelector('input[name="telefone"]');
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', aplicarMascaraTelefone);
-        telefoneInput.addEventListener('keydown', limitarCaracteresTelefone);
-    }
 }
 
 function selecionarTipo(elemento) {
@@ -42,55 +36,12 @@ function selecionarTipo(elemento) {
     }
 }
 
-function aplicarMascaraTelefone(event) {
-    let valor = event.target.value.replace(/\D/g, '');
-    
-    if (valor.length > 11) {
-        valor = valor.substring(0, 11);
-    }
-    
-    if (valor.length > 0) {
-        if (valor.length <= 2) {
-            valor = `(${valor}`;
-        } else if (valor.length <= 7) {
-            valor = `(${valor.substring(0, 2)}) ${valor.substring(2)}`;
-        } else {
-            valor = `(${valor.substring(0, 2)}) ${valor.substring(2, 7)}-${valor.substring(7)}`;
-        }
-    }
-    
-    event.target.value = valor;
-}
-
-function limitarCaracteresTelefone(event) {
-    const valor = event.target.value.replace(/\D/g, '');
-    if (valor.length >= 11 && event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'Tab') {
-        event.preventDefault();
-    }
-}
-
-function previewFoto(input) {
-    const preview = document.getElementById('fotoPreview');
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-        };
-        reader.readAsDataURL(input.files[0]);
-    } else {
-        preview.style.display = 'none';
-    }
-}
-
 function alternarModo() {
     modoLogin = !modoLogin;
     const containerCadastro = document.getElementById('camposCadastro');
     const secaoTipo = document.getElementById('secaoTipo');
     const btnAcao = document.getElementById('btnAcao');
     const linkTroca = document.getElementById('linkTroca');
-    const fotoPreview = document.getElementById('fotoPreview');
-    const arquivoFoto = document.getElementById('arquivoFoto');
 
     if (modoLogin) {
         containerCadastro.style.display = 'none';
@@ -98,13 +49,6 @@ function alternarModo() {
         btnAcao.innerText = 'Entrar no Sistema';
         linkTroca.innerText = 'Não tem conta? Crie agora!';
         document.querySelectorAll('#camposCadastro input, #camposCadastro select').forEach(i => i.disabled = true);
-        
-        // Limpar preview da foto
-        if (fotoPreview) {
-            fotoPreview.style.display = 'none';
-            fotoPreview.src = '/assets/avatar-padrao.png';
-        }
-        if (arquivoFoto) arquivoFoto.value = '';
     } else {
         containerCadastro.style.display = 'flex';
         secaoTipo.style.display = 'flex';
@@ -147,13 +91,10 @@ async function realizarLogin(form) {
 
     if (resposta.token) {
         localStorage.setItem('token_conectlar', resposta.token);
-        
-        const usuarioPayload = JSON.parse(atob(resposta.token.split('.')[1]));
-        localStorage.setItem('usuario_nome', usuarioPayload.nome || 'Usuário');
-        localStorage.setItem('usuario_role', usuarioPayload.role || 'USUARIO');
+        localStorage.setItem('usuario_nome', resposta.nome || 'Usuário');
 
-        if (usuarioPayload.role === 'ADMIN') window.location.href = 'adm.html';
-        else if (usuarioPayload.role === 'PROFISSIONAL') window.location.href = 'feed-trabalhador.html';
+        if (resposta.role === 'ADMIN') window.location.href = 'adm.html';
+        else if (resposta.role === 'PROFISSIONAL') window.location.href = 'feed-trabalhador.html';
         else window.location.href = 'painel-cliente.html';
     } else {
         throw new Error('Login falhou.');
@@ -198,8 +139,8 @@ async function realizarCadastro(form) {
 
     const rota = tipoCadastro === 'CLIENTE' ? '/usuario/form' : '/profissional/form';
 
-    const resposta = await enviarRequisicao(rota, 'POST', formData, true);
+    await enviarRequisicao(rota, 'POST', formData, true);
 
     alert('Cadastro realizado! Faça login.');
-    alternarModo();
+    location.reload();
 }
