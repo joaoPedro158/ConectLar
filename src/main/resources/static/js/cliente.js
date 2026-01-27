@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     carregarMeusPedidos();
     configurarPerfil();
@@ -16,7 +15,7 @@ function configurarPerfil() {
     if (imagem && imagem !== 'null' && imagem !== 'undefined') {
         const elAvatar = document.getElementById('imgAvatarLateral');
         if (elAvatar) {
-
+            // Usa URL_API definida em utilidades.js
             elAvatar.src = `${URL_API}/uploads/${imagem}`;
         }
     }
@@ -40,7 +39,14 @@ async function carregarMeusPedidos() {
         container.innerHTML = '';
 
         pedidos.forEach(p => {
-            const classeStatus = p.status === 'PENDENTE' ? 'status-pendente' : 'status-concluido';
+            // Verifica status ABERTO para pintar de amarelo
+            let classeStatus = 'status-concluido';
+            if (p.status === 'ABERTO' || p.status === 'EM_ESPERA' || p.status === 'PENDENTE') {
+                classeStatus = 'status-pendente';
+            } else if (p.status === 'CANCELADO') {
+                classeStatus = 'status-cancelado'; // Se tiver CSS pra isso, senão fica sem cor ou padrão
+            }
+
             const cidade = p.localizacao ? `${p.localizacao.cidade}-${p.localizacao.estado}` : 'Remoto';
 
             const html = `

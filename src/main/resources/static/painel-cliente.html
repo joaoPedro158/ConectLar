@@ -66,38 +66,70 @@
 
         <form id="formNovoTrabalho">
             <div class="form-grupo">
-                <label>Título do Projeto</label>
-                <input type="text" id="tituloServico" class="input-dark" placeholder="Ex: Preciso de um encanador urgente" required>
-            </div>
-            <div class="form-grupo">
-                <label>Categoria</label>
-                <select id="categoriaServico" class="input-dark" required>
-                    <option value="">Selecione...</option>
-                    <option value="ENCANADOR">Encanamento</option>
-                    <option value="ELETRICISTA">Elétrica</option>
-                    <option value="PINTOR">Pintura</option>
-                    <option value="LIMPEZA">Limpeza</option>
-                    <option value="MARCENEIRO">Marcenaria</option>
-                    <option value="JARDINEIRO">Jardinagem</option>
-                    <option value="MECANICO">Mecânica</option>
-                    <option value="GERAL">Outros</option>
-                </select>
+                <label>Título do Problema</label>
+                <input type="text" id="tituloServico" class="input-dark" placeholder="Ex: Vazamento na cozinha" required>
             </div>
 
             <div class="form-row">
                 <div class="form-grupo">
+                    <label>Categoria</label>
+                    <select id="categoriaServico" class="input-dark" required>
+                        <option value="">Selecione...</option>
+                        <option value="ENCANADOR">Encanamento</option>
+                        <option value="ELETRICISTA">Elétrica</option>
+                        <option value="PINTOR">Pintura</option>
+                        <option value="LIMPEZA">Limpeza</option>
+                        <option value="MARCENEIRO">Marcenaria</option>
+                        <option value="JARDINEIRO">Jardinagem</option>
+                        <option value="MECANICO">Mecânica</option>
+                        <option value="GERAL">Outros</option>
+                    </select>
+                </div>
+                <div class="form-grupo">
+                    <label>Valor Orçamento (R$)</label>
+                    <input type="number" id="pagamentoServico" class="input-dark" placeholder="100.00" min="1" step="0.01" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-grupo">
+                    <label>CEP</label>
+                    <input type="text" id="cepServico" class="input-dark" placeholder="00000-000" required>
+                </div>
+                <div class="form-grupo">
                     <label>Cidade</label>
                     <input type="text" id="cidadeServico" class="input-dark" required>
                 </div>
-                <div class="form-grupo grupo-uf">
+                <div class="form-grupo grupo-uf" style="width: 80px;">
                     <label>UF</label>
                     <input type="text" id="estadoServico" class="input-dark" required>
                 </div>
             </div>
 
             <div class="form-grupo">
+                <label>Rua</label>
+                <input type="text" id="ruaServico" class="input-dark" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-grupo">
+                    <label>Bairro</label>
+                    <input type="text" id="bairroServico" class="input-dark" required>
+                </div>
+                <div class="form-grupo">
+                    <label>Número</label>
+                    <input type="text" id="numeroServico" class="input-dark" required>
+                </div>
+            </div>
+
+            <div class="form-grupo">
+                <label>Complemento</label>
+                <input type="text" id="complementoServico" class="input-dark">
+            </div>
+
+            <div class="form-grupo">
                 <label>Descrição Detalhada</label>
-                <textarea id="descServico" class="input-dark" rows="5" placeholder="Descreva o que você precisa..." required></textarea>
+                <textarea id="descServico" class="input-dark" rows="4" placeholder="Descreva o problema..." required></textarea>
             </div>
 
             <div class="form-grupo">

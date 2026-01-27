@@ -1,4 +1,3 @@
-
 let modoAtual = 'LOGIN';
 let tipoUsuarioCadastro = 'CLIENTE';
 
@@ -49,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gerenciarCamposCadastro(false);
 });
 
+// LOGIN E CADASTRO
 const formAuth = document.getElementById('formAutenticacao');
 if (formAuth) {
     formAuth.addEventListener('submit', async (e) => {
@@ -122,6 +122,7 @@ if (formAuth) {
     });
 }
 
+// NOVO TRABALHO (CORRIGIDO)
 const formTrabalho = document.getElementById('formNovoTrabalho');
 if (formTrabalho) {
     formTrabalho.addEventListener('submit', async (e) => {
@@ -133,13 +134,23 @@ if (formTrabalho) {
         btn.disabled = true;
 
         const dtoTrabalho = {
-            titulo: document.getElementById('tituloServico').value,
+            // CORREÇÃO: Java espera 'problema', não 'titulo'
+            problema: document.getElementById('tituloServico').value,
             descricao: document.getElementById('descServico').value,
+
+            // CORREÇÃO: Java espera 'pagamento' e é obrigatório
+            pagamento: parseFloat(document.getElementById('pagamentoServico').value),
+
             categoria: document.getElementById('categoriaServico').value,
-            status: "PENDENTE",
+            status: "ABERTO",
             localizacao: {
+                cep: document.getElementById('cepServico').value,
+                rua: document.getElementById('ruaServico').value,
+                bairro: document.getElementById('bairroServico').value,
+                numero: document.getElementById('numeroServico').value,
                 cidade: document.getElementById('cidadeServico').value,
-                estado: document.getElementById('estadoServico').value
+                estado: document.getElementById('estadoServico').value,
+                complemento: document.getElementById('complementoServico').value || ""
             }
         };
 
