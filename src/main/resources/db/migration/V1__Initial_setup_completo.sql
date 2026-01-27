@@ -4,6 +4,7 @@
 CREATE TABLE IF NOT EXISTS usuario (
                                        id BIGSERIAL PRIMARY KEY,
                                        nome VARCHAR(150) NOT NULL,
+    foto_perfil VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     telefone VARCHAR(50) NOT NULL UNIQUE,
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS usuario (
 CREATE TABLE IF NOT EXISTS profissional (
                                             id BIGSERIAL PRIMARY KEY,
                                             nome VARCHAR(150) NOT NULL,
+    foto_perfil VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     categoria VARCHAR(250) NOT NULL,

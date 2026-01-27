@@ -13,6 +13,7 @@ public class ProfissionalDTO {
     private String nome;
     private String email;
     private LocalizacaoDTO localizacao;
+    private String fotoPerfil;
     private String telefone;
     private CategoriaEnum categoria;
     private UsuarioRole role;

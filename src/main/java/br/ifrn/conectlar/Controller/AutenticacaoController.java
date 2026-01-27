@@ -2,8 +2,7 @@ package br.ifrn.conectlar.Controller;
 
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
-import br.ifrn.conectlar.Model.Entity.BaseAuthEntity;
-import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
+import br.ifrn.conectlar.Repository.Entity.BaseAuthEntity;
 import br.ifrn.conectlar.Model.dto.AutenticacaoRecord;
 import br.ifrn.conectlar.Model.dto.LoginResponseRecord;
 import br.ifrn.conectlar.Service.TokenService;

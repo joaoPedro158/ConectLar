@@ -1,7 +1,6 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.BaseAuthEntity;
-import br.ifrn.conectlar.Model.Entity.BaseUsuarioEntity;
+import br.ifrn.conectlar.Repository.Entity.BaseAuthEntity;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;

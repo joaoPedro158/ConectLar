@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Model.Entity;
+package br.ifrn.conectlar.Repository.Entity;
 
 
 import jakarta.persistence.*;

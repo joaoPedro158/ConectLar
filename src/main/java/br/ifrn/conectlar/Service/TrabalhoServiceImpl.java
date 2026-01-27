@@ -1,9 +1,9 @@
 package br.ifrn.conectlar.Service;
 
 
-import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Trabalho;
@@ -93,22 +93,16 @@ public class TrabalhoServiceImpl implements TrabalhoService {
             Trabalho TrabalhoModel = mapper.toModel(trabalho);
             mapper.updateEntityFromModel(TrabalhoModel, entityToUpdate);
         }
-        // 3. LÓGICA DE ATUALIZAÇÃO DAS FOTOS 🖼️
         try {
-            // Verifica se chegou uma lista e se ela tem itens
+
             if (arquivos != null && !arquivos.isEmpty()) {
-                // Garante que a lista da entidade não está nula (evita NullPointerException)
                 if (entityToUpdate.getImagens() == null) {
                     entityToUpdate.setImagens(new ArrayList<>());
                 }
 
                 for (MultipartFile arquivo : arquivos) {
-                    // Só processa se o arquivo tiver conteúdo
                     if (!arquivo.isEmpty()) {
-                        // Salva no disco/bucket
                         String nomeArquivo = salvaArquivoService.salvaImagem(arquivo);
-
-                        // ADICIONA na lista existente (JPA vai inserir na tabela auxiliar automaticamente)
                         entityToUpdate.getImagens().add(nomeArquivo);
                     }
                 }
@@ -170,53 +164,22 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
                 .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
 
-
-        if (!trabalho.getUsuario().getId().equals(idUsuario)) {
-            throw new AccessDeniedException("Você não tem permissão para cancelar este trabalho.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CONCLUIDO) {
-            throw new IllegalStateException("Não é possível cancelar um trabalho que já foi concluído.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CANCELADO) {
-            throw new IllegalStateException("Este trabalho já foi cancelado anteriormente.");
-        }
-
-
-
-
-        trabalho.setStatus(StatusTrabalho.CANCELADO);
+        Trabalho trabalhoModel = mapper.toModel(trabalho);
+        trabalhoModel.cancelarTrabalho(idUsuario);
+        mapper.updateEntityFromModel(trabalhoModel, trabalho);
 
         trabalhoRepository.save(trabalho);
     }
 
     @Override
     public void concluirTrabalho(Long idTrabalho, Long idUsuario) {
-        TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
+        TrabalhoEntity trabalhoEntity = trabalhoRepository.findById(idTrabalho)
                 .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
+        Trabalho trabalhoModel = mapper.toModel(trabalhoEntity);
+        trabalhoModel.concluir(idUsuario);
+        mapper.updateEntityFromModel(trabalhoModel, trabalhoEntity);
 
-        if (!trabalho.getUsuario().getId().equals(idUsuario)) {
-            throw new AccessDeniedException("Apenas o solicitante do serviço pode confirmar a conclusão.");
-        }
-        if (trabalho.getStatus() == StatusTrabalho.ABERTO) {
-            throw new IllegalStateException("Não é possível concluir um trabalho que ainda não tem profissional vinculado.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CANCELADO) {
-            throw new IllegalStateException("Este trabalho foi cancelado e não pode ser concluído.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CONCLUIDO) {
-            throw new IllegalStateException("O trabalho já foi marcado como concluído anteriormente.");
-        }
-
-        if (trabalho.getProfissional() == null) {
-            throw new IllegalStateException("Erro inconsistente: Trabalho em andamento sem profissional vinculado.");
-        }
-
-        trabalho.setStatus(StatusTrabalho.CONCLUIDO);
-        trabalhoRepository.save(trabalho);
+        trabalhoRepository.save(trabalhoEntity);
     }
 
     @Override
@@ -224,7 +187,6 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         if (problema == null || problema.trim().isEmpty() ) {
             return getAll();
         }
-
         List<TrabalhoEntity> busca = trabalhoRepository.findByProblemaContainingIgnoreCaseAndStatusOrderByDataHoraAbertaDesc(problema, StatusTrabalho.ABERTO);
 
         return busca.stream().map(mapper::toDTO).toList() ;

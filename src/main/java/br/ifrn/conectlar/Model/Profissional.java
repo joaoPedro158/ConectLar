@@ -12,8 +12,8 @@ public class Profissional extends Usuario {
     private CategoriaEnum categoria;
 
 
-    protected Profissional(Long id, String nome, String email, String senha, String telefone, Localizacao localizacao, CategoriaEnum categoria, UsuarioRole role) {
-        super(id, nome, email, senha, telefone, localizacao,role);
+    protected Profissional(Long id, String nome, String email, String senha, String telefone, Localizacao localizacao,String fotoPerfil, CategoriaEnum categoria, UsuarioRole role) {
+        super(id, nome, email, senha, telefone, localizacao,fotoPerfil,role);
 
         this.categoria = categoria;
 
@@ -24,7 +24,14 @@ public class Profissional extends Usuario {
     public void validacao() {
 
         super.validacao();
+        if (this.categoria == null) {
+            throw new IllegalArgumentException("A categoria do profissional é obrigatória.");
+        }
 
+
+        if (this.getRole() != UsuarioRole.PROFISSIONAL) {
+            throw new IllegalArgumentException("Erro de consistência: Um objeto 'Profissional' deve possuir exclusivamente a role 'PROFISSIONAL'.");
+        }
 
 
 
