@@ -93,22 +93,16 @@ public class TrabalhoServiceImpl implements TrabalhoService {
             Trabalho TrabalhoModel = mapper.toModel(trabalho);
             mapper.updateEntityFromModel(TrabalhoModel, entityToUpdate);
         }
-        // 3. LÓGICA DE ATUALIZAÇÃO DAS FOTOS 🖼️
         try {
-            // Verifica se chegou uma lista e se ela tem itens
+
             if (arquivos != null && !arquivos.isEmpty()) {
-                // Garante que a lista da entidade não está nula (evita NullPointerException)
                 if (entityToUpdate.getImagens() == null) {
                     entityToUpdate.setImagens(new ArrayList<>());
                 }
 
                 for (MultipartFile arquivo : arquivos) {
-                    // Só processa se o arquivo tiver conteúdo
                     if (!arquivo.isEmpty()) {
-                        // Salva no disco/bucket
                         String nomeArquivo = salvaArquivoService.salvaImagem(arquivo);
-
-                        // ADICIONA na lista existente (JPA vai inserir na tabela auxiliar automaticamente)
                         entityToUpdate.getImagens().add(nomeArquivo);
                     }
                 }
@@ -170,23 +164,9 @@ public class TrabalhoServiceImpl implements TrabalhoService {
         TrabalhoEntity trabalho = trabalhoRepository.findById(idTrabalho)
                 .orElseThrow(() -> new RuntimeException("Trabalho nao encontrado"));
 
-
-        if (!trabalho.getUsuario().getId().equals(idUsuario)) {
-            throw new AccessDeniedException("Você não tem permissão para cancelar este trabalho.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CONCLUIDO) {
-            throw new IllegalStateException("Não é possível cancelar um trabalho que já foi concluído.");
-        }
-
-        if (trabalho.getStatus() == StatusTrabalho.CANCELADO) {
-            throw new IllegalStateException("Este trabalho já foi cancelado anteriormente.");
-        }
-
-
-
-
-        trabalho.setStatus(StatusTrabalho.CANCELADO);
+        Trabalho trabalhoModel = mapper.toModel(trabalho);
+        trabalhoModel.cancelarTrabalho(idUsuario);
+        mapper.updateEntityFromModel(trabalhoModel, trabalho);
 
         trabalhoRepository.save(trabalho);
     }

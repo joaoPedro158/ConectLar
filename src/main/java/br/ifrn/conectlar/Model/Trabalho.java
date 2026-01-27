@@ -54,12 +54,11 @@ public class Trabalho {
 
     public void concluir(Long idUsuarioSolicitante) {
 
-        // Regra de Segurança/Propriedade
+
         if (!this.idUsuario.equals(idUsuarioSolicitante)) {
             throw new AccessDeniedException("Apenas o solicitante do serviço pode confirmar a conclusão.");
         }
 
-        // Regras de Estado (Máquina de Estados)
         if (this.status == StatusTrabalho.ABERTO) {
             throw new IllegalStateException("Não é possível concluir um trabalho que ainda não tem profissional vinculado.");
         }
@@ -74,6 +73,22 @@ public class Trabalho {
         }
 
         this.status = StatusTrabalho.CONCLUIDO;
+    }
+
+    public void cancelarTrabalho(Long idUsuario) {
+        if (!this.idUsuario.equals(idUsuario)) {
+            throw new AccessDeniedException("Você não tem permissão para cancelar este trabalho.");
+        }
+
+        if (this.status == StatusTrabalho.CONCLUIDO) {
+            throw new IllegalStateException("Não é possível cancelar um trabalho que já foi concluído.");
+        }
+
+
+        if (this.status == StatusTrabalho.CANCELADO) {
+            throw new IllegalStateException("Este trabalho já foi cancelado anteriormente.");
+        }
+        this.status = StatusTrabalho.CANCELADO;
     }
 }
 

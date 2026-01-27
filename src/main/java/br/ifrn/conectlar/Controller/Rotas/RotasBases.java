@@ -22,10 +22,9 @@ public interface RotasBases {
     String concluirTrabalho = "/{idTrabalho}/concluir";
 
     String Busca = "/busca";
-
     String filtroCategoria = "/filtro/categoria";
 
-
+    String  gastoTotal = "/gastoTotal";
 
     String avaliar = "/avaliar/{idTrabalho}";
 }

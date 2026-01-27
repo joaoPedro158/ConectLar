@@ -16,4 +16,5 @@ public interface UsuarioJpaRepository extends JpaRepository<UsuarioEntity, Long>
     Optional<UsuarioEntity> findByTelefoneAndIdNot(String telefone, Long id);
 
 
+
 }
