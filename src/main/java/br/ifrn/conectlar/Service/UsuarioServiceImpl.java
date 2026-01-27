@@ -144,5 +144,12 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    @Override
+    public UsuarioDTO getUsuario(Long id) {
+        UsuarioEntity usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("usuario nao encontrado"));
+        return mapper.toDTO(usuario);
+    }
+
 
 }

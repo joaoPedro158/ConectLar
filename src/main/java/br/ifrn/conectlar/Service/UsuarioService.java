@@ -19,4 +19,5 @@ public interface UsuarioService {
     UsuarioDTO updateUsuario(Long id, UsuarioRecord usuario, MultipartFile fotoPerfil);
     List<TrabalhoDTO> historico(Long id);
     BigDecimal getGastoTotal(Long id);
+    UsuarioDTO getUsuario(Long id);
 }

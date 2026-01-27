@@ -124,4 +124,11 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         return historico.stream().map(trabalhoMapper::toDTO).toList();
     }
 
+    @Override
+    public ProfissionalDTO getProfissional(Long id) {
+        ProfissionalEntity profissional = profissionalRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("profissional nao encontrado"));
+        return mapper.toDTO(profissional);
+    }
+
 }

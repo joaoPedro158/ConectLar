@@ -1,0 +1,9 @@
+/* Estilos para página de administração */
+body {
+    background: #f8f8ff;
+}
+.adm-header {
+    font-size: 1.8rem;
+    color: #6c63ff;
+    margin-bottom: 24px;
+}
