@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico - ConectLar Cliente</title>
+    <link rel="stylesheet" href="/css/painel-cliente.css">
+    <link rel="stylesheet" href="/css/navegacao.css">
+</head>
+<body>
+
+<header class="cabecalho-top">
+    <div class="logo-area">
+        <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+    </div>
+    <div class="navegacao">
+        <button onclick="window.location.href='painel-cliente.html'">Home</button>
+        <button class="active">Histórico</button>
+        <button onclick="window.location.href='perfil.html'">Perfil</button>
+        <button class="botao-sino" onclick="window.location.href='notificacoes.html'">&#128276;</button>
+    </div>
+</header>
+
+<main class="container-principal">
+    <section class="painel-conteudo">
+        <div class="container-busca">
+            <form class="form-busca">
+                <span class="icon-busca">&#128269;</span> 
+                <input type="text" id="campoBuscaHistorico" placeholder="Buscar no histórico..." class="input-busca">
+                <button type="button" class="btn-pesquisar" onclick="buscarNoHistorico()">Buscar</button>
+            </form>
+        </div>
+
+        <div class="secao-historico">
+            <h1 class="titulo-sessao">Meu Histórico de Serviços</h1>
+            
+            <div class="filtros-historico">
+                <button class="filtro-btn active" onclick="filtrarStatus('todos')">Todos</button>
+                <button class="filtro-btn" onclick="filtrarStatus('ABERTO')">Abertos</button>
+                <button class="filtro-btn" onclick="filtrarStatus('ANDAMENTO')">Em Andamento</button>
+                <button class="filtro-btn" onclick="filtrarStatus('CONCLUIDO')">Concluídos</button>
+                <button class="filtro-btn" onclick="filtrarStatus('CANCELADO')">Cancelados</button>
+            </div>
+            
+            <div id="listaHistorico" class="lista-historico">
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h2>Carregando histórico...</h2>
+                    <p>Aguarde um momento enquanto carregamos seus serviços.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Modal de Detalhes do Serviço -->
+<div id="modalDetalhesHistorico" class="modal-backdrop escondido">
+    <div class="modal-content">
+        <header class="modal-header">
+            <h3>Detalhes do Serviço</h3>
+            <button class="botao-fechar-modal" onclick="fecharModalDetalhesHistorico()">&times;</button>
+        </header>
+
+        <div class="modal-corpo">
+            <div class="detalhe-grupo">
+                <label>Título</label>
+                <input type="text" id="hist-titulo" readonly>
+            </div>
+            
+            <div class="form-row">
+                <div class="detalhe-grupo">
+                    <label>Categoria</label>
+                    <input type="text" id="hist-categoria" readonly>
+                </div>
+                <div class="detalhe-grupo">
+                    <label>Valor</label>
+                    <input type="text" id="hist-valor" readonly>
+                </div>
+                <div class="detalhe-grupo">
+                    <label>Status</label>
+                    <input type="text" id="hist-status" readonly>
+                </div>
+            </div>
+
+            <div class="detalhe-grupo">
+                <label>Descrição</label>
+                <textarea id="hist-descricao" readonly></textarea>
+            </div>
+
+            <div class="detalhe-grupo">
+                <label>Localização</label>
+                <input type="text" id="hist-localizacao" readonly>
+            </div>
+
+            <div class="detalhe-grupo" id="profissional-info" style="display: none;">
+                <label>Profissional Responsável</label>
+                <div class="profissional-card">
+                    <div class="profissional-dados">
+                        <strong id="prof-nome"></strong>
+                        <span id="prof-email"></span>
+                        <span id="prof-categoria"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-acoes">
+                <button class="btn-avaliar" id="btn-avaliar-servico" onclick="abrirModalAvaliacao()" style="display: none;">
+                    ⭐ Avaliar Serviço
+                </button>
+                <button class="btn-cancelar" id="btn-cancelar-servico" onclick="cancelarServico()" style="display: none;">
+                    ❌ Cancelar Serviço
+                </button>
+                <button class="btn-concluir" id="btn-concluir-servico" onclick="concluirServico()" style="display: none;">
+                    ✅ Concluir Serviço
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/utilidades.js"></script>
+<script src="/js/painel-cliente.js"></script>
+<script src="/js/avaliacoes.js"></script>
+<script src="/js/historico-cliente.js"></script>
+
+</body>
+</html>

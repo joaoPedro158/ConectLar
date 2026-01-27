@@ -1,0 +1,44 @@
+/* Estilos para elementos sem classe específica */
+
+.hidden {
+    display: none !important;
+}
+
+.foto-preview-container img {
+    display: none;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 10px auto;
+    border: 2px solid #00e0ff;
+}
+
+.foto-preview-container img[src] {
+    display: block;
+}
+
+.campo-upload span {
+    color: #a8a8b3;
+    font-size: 0.9rem;
+}
+
+#arquivoFoto {
+    margin-top: 10px;
+}
+
+.link-texto {
+    cursor: pointer;
+    text-align: center;
+    margin-top: 15px;
+}
+
+#camposCadastro {
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#areaCategoria {
+    flex-direction: column;
+    gap: 0.5rem;
+}

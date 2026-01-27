@@ -40,8 +40,10 @@ async function listarMeusPedidos() {
     if (!container) return;
 
     try {
+        console.log('Buscando pedidos do usuário...');
         const pedidos = await enviarRequisicao('/usuario/historico', 'GET');
-        container.innerHTML = ''; // Limpa lista
+        console.log('Pedidos recebidos:', pedidos);
+        container.innerHTML = '';
 
         if (!pedidos || pedidos.length === 0) {
             container.innerHTML = '<p class="aviso-vazio">Você ainda não solicitou nenhum serviço.</p>';
@@ -50,9 +52,8 @@ async function listarMeusPedidos() {
 
         pedidos.forEach(p => {
             const div = document.createElement('div');
-            div.className = 'card-pedido'; // Garanta que essa classe existe no CSS
+            div.className = 'card-pedido';
 
-            // Tratamento de segurança para campos nulos
             const cidade = p.localizacao ? p.localizacao.cidade : 'Local n/a';
             const status = p.status || 'ABERTO';
 
@@ -69,6 +70,7 @@ async function listarMeusPedidos() {
             container.appendChild(div);
         });
     } catch (e) {
+        console.error('Erro ao listar pedidos:', e);
         container.innerHTML = '<p class="erro">Erro ao carregar seus pedidos.</p>';
     }
 }
@@ -106,12 +108,15 @@ async function criarTrabalho(e) {
     }
 
     try {
-        await enviarRequisicao('/trabalho/cadastrar', 'POST', formData, true);
+        console.log('Enviando trabalho:', dadosTrabalho);
+        await enviarRequisicao('/trabalho/form', 'POST', formData, true);
+        console.log('Trabalho criado com sucesso!');
         alert('Projeto publicado com sucesso!');
         window.fecharModal();
         e.target.reset();
-        listarMeusPedidos(); // Recarrega a lista
+        listarMeusPedidos();
     } catch (erro) {
+        console.error('Erro ao criar trabalho:', erro);
         alert('Erro ao publicar serviço.');
     } finally {
         btn.disabled = false;

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Cliente - ConectLar</title>
-    <link rel="stylesheet" href="css/painel-cliente.css">
+    <link rel="stylesheet" href="/css/painel-cliente.css">
+    <link rel="stylesheet" href="/css/navegacao.css">
 </head>
 <body>
 
@@ -12,11 +13,11 @@
     <div class="logo-area">
         <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
     </div>
-    <div class="teste">
-        <button>Home</button>
-        <button>Histórico</button>
-        <button>Perfil</button>
-        <button class="botao-sino">&#128276;</button>
+    <div class="navegacao">
+        <button onclick="window.location.href='painel-cliente.html'">Home</button>
+        <button onclick="window.location.href='historico-cliente.html'">Histórico</button>
+        <button onclick="window.location.href='perfil.html'">Perfil</button>
+        <button class="botao-sino" onclick="window.location.href='notificacoes.html'">&#128276;</button>
     </div>
 </header>
 

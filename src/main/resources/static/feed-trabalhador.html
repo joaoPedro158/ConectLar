@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oportunidades - ConectLar Profissional</title>
     <link rel="stylesheet" href="/css/feed-trabalhador.css">
+    <link rel="stylesheet" href="/css/navegacao.css">
 </head>
 <body>
 
@@ -13,11 +14,11 @@
         <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
         <span class="badge-pro">Profissional</span>
     </div>
-    <div class="menu-pro">
-        <button>Home</button>
-        <button>Histórico</button>
-        <button>Perfil</button>
-        <button class="botao-sino">&#128276;</button>
+    <div class="navegacao">
+        <button onclick="window.location.href='feed-trabalhador.html'">Home</button>
+        <button onclick="window.location.href='historico-profissional.html'">Histórico</button>
+        <button onclick="window.location.href='perfil.html'">Perfil</button>
+        <button class="botao-sino" onclick="window.location.href='notificacoes.html'">&#128276;</button>
     </div>
 </header>
 
@@ -44,6 +45,84 @@
         </div>
     </section>
 </main>
+
+<!-- Modal de Detalhes do Serviço -->
+<div id="modalDetalhesServico" class="modal-overlay">
+    <div class="modal-conteudo">
+        <div class="modal-cabecalho">
+            <h2>Detalhes do Serviço</h2>
+            <button class="modal-fechar" onclick="fecharModalDetalhes()">&times;</button>
+        </div>
+        
+        <div class="modal-corpo">
+            <div class="detalhe-grupo">
+                <label>Título do Problema</label>
+                <input type="text" id="detalhe-titulo" readonly>
+            </div>
+            
+            <div class="detalhe-grupo">
+                <label>Categoria</label>
+                <input type="text" id="detalhe-categoria" readonly>
+            </div>
+            
+            <div class="detalhe-grupo">
+                <label>Valor Orçamento (R$)</label>
+                <input type="text" id="detalhe-valor" readonly>
+            </div>
+            
+            <div class="detalhe-endereco">
+                <h3>Localização</h3>
+                <div class="endereco-grid">
+                    <div class="detalhe-grupo">
+                        <label>CEP</label>
+                        <input type="text" id="detalhe-cep" readonly>
+                    </div>
+                    <div class="detalhe-grupo">
+                        <label>Cidade</label>
+                        <input type="text" id="detalhe-cidade" readonly>
+                    </div>
+                    <div class="detalhe-grupo">
+                        <label>UF</label>
+                        <input type="text" id="detalhe-estado" readonly>
+                    </div>
+                </div>
+                <div class="endereco-grid">
+                    <div class="detalhe-grupo">
+                        <label>Rua</label>
+                        <input type="text" id="detalhe-rua" readonly>
+                    </div>
+                    <div class="detalhe-grupo">
+                        <label>Bairro</label>
+                        <input type="text" id="detalhe-bairro" readonly>
+                    </div>
+                    <div class="detalhe-grupo">
+                        <label>Número</label>
+                        <input type="text" id="detalhe-numero" readonly>
+                    </div>
+                </div>
+                <div class="detalhe-grupo">
+                    <label>Complemento</label>
+                    <input type="text" id="detalhe-complemento" readonly>
+                </div>
+            </div>
+            
+            <div class="detalhe-grupo">
+                <label>Descrição Detalhada</label>
+                <textarea id="detalhe-descricao" readonly></textarea>
+            </div>
+            
+            <div class="detalhe-grupo">
+                <label>Status</label>
+                <input type="text" id="detalhe-status" readonly>
+            </div>
+        </div>
+        
+        <div class="modal-rodape">
+            <button class="btn-fechar" onclick="fecharModalDetalhes()">Fechar</button>
+            <button class="btn-aceitar-modal" id="btn-aceitar-modal">✅ Aceitar Serviço</button>
+        </div>
+    </div>
+</div>
 
 <script src="/js/profissional.js"></script>
 <script src="/js/utilidades.js"></script>

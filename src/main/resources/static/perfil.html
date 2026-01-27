@@ -2,21 +2,163 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - ConectLar</title>
-    <link rel="stylesheet" href="/css/perfil.css">
+    <link rel="stylesheet" href="/css/painel-cliente.css">
+    <link rel="stylesheet" href="/css/navegacao.css">
 </head>
 <body>
-<div class="cabecalho-top">
-    <span class="nome-sistema">ConectLar <small>Perfil</small></span>
-    <button class="botao-sair" onclick="fazerLogout()">Sair</button>
-</div>
 
-<div class="area-conteudo">
-    <h2>Meu Perfil</h2>
-    <div id="meuPerfil">Carregando...</div>
-</div>
+<header class="cabecalho-top">
+    <div class="logo-area">
+        <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+    </div>
+    <div class="navegacao">
+        <button onclick="voltarHome()">Home</button>
+        <button onclick="window.location.href='historico-cliente.html'">Histórico</button>
+        <button class="active">Perfil</button>
+        <button class="botao-sino" onclick="window.location.href='notificacoes.html'">&#128276;</button>
+    </div>
+</header>
+
+<main class="container-principal">
+    <section class="painel-conteudo">
+        <div class="secao-perfil">
+            <h1 class="titulo-sessao">Meu Perfil</h1>
+            
+            <div class="perfil-container">
+                <div class="perfil-header">
+                    <div class="foto-perfil">
+                        <img id="fotoUsuario" src="/assets/avatar-padrao.png" alt="Foto de Perfil" onerror="this.src='/assets/avatar-padrao.png'">
+                        <button class="btn-trocar-foto" onclick="document.getElementById('inputFoto').click()">
+                            📷 Trocar Foto
+                        </button>
+                        <input type="file" id="inputFoto" accept="image/*" style="display: none;" onchange="atualizarFoto(this)">
+                    </div>
+                    
+                    <div class="info-principal">
+                        <h2 id="nomeUsuario">Carregando...</h2>
+                        <p id="emailUsuario">carregando@email.com</p>
+                        <span id="roleUsuario" class="role-badge">USUARIO</span>
+                    </div>
+                </div>
+
+                <div class="perfil-tabs">
+                    <button class="tab-btn active" onclick="mostrarTab('dados')">📝 Meus Dados</button>
+                    <button class="tab-btn" onclick="mostrarTab('endereco')">📍 Endereço</button>
+                    <button class="tab-btn" onclick="mostrarTab('senha')">🔐 Senha</button>
+                </div>
+
+                <div class="perfil-conteudo">
+                    <!-- Tab Dados Pessoais -->
+                    <div id="tab-dados" class="tab-content active">
+                        <form id="formDadosPessoais" class="form-perfil">
+                            <div class="form-grupo">
+                                <label>Nome Completo</label>
+                                <input type="text" id="inputNome" class="input-dark" required>
+                            </div>
+                            
+                            <div class="form-grupo">
+                                <label>Email</label>
+                                <input type="email" id="inputEmail" class="input-dark" readonly>
+                            </div>
+                            
+                            <div class="form-grupo">
+                                <label>Telefone</label>
+                                <input type="text" id="inputTelefone" class="input-dark" placeholder="(00) 00000-0000">
+                            </div>
+                            
+                            <div class="form-grupo" id="grupoCategoria" style="display: none;">
+                                <label>Categoria Profissional</label>
+                                <select id="inputCategoria" class="input-dark">
+                                    <option value="GERAL">Geral / Outros</option>
+                                    <option value="ENCANADOR">Encanador</option>
+                                    <option value="ELETRICISTA">Eletricista</option>
+                                    <option value="LIMPEZA">Limpeza</option>
+                                    <option value="PINTOR">Pintor</option>
+                                    <option value="MARCENEIRO">Marceneiro</option>
+                                    <option value="JARDINEIRO">Jardineiro</option>
+                                    <option value="MECANICO">Mecânico</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn-salvar">💾 Salvar Dados</button>
+                        </form>
+                    </div>
+
+                    <!-- Tab Endereço -->
+                    <div id="tab-endereco" class="tab-content">
+                        <form id="formEndereco" class="form-perfil">
+                            <div class="form-row">
+                                <div class="form-grupo">
+                                    <label>CEP</label>
+                                    <input type="text" id="inputCep" class="input-dark" placeholder="00000-000">
+                                </div>
+                                <div class="form-grupo">
+                                    <label>Cidade</label>
+                                    <input type="text" id="inputCidade" class="input-dark">
+                                </div>
+                                <div class="form-grupo grupo-uf" style="width: 80px;">
+                                    <label>UF</label>
+                                    <input type="text" id="inputEstado" class="input-dark" maxlength="2">
+                                </div>
+                            </div>
+                            
+                            <div class="form-grupo">
+                                <label>Rua</label>
+                                <input type="text" id="inputRua" class="input-dark">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-grupo">
+                                    <label>Bairro</label>
+                                    <input type="text" id="inputBairro" class="input-dark">
+                                </div>
+                                <div class="form-grupo">
+                                    <label>Número</label>
+                                    <input type="text" id="inputNumero" class="input-dark">
+                                </div>
+                            </div>
+                            
+                            <div class="form-grupo">
+                                <label>Complemento</label>
+                                <input type="text" id="inputComplemento" class="input-dark">
+                            </div>
+                            
+                            <button type="submit" class="btn-salvar">💾 Salvar Endereço</button>
+                        </form>
+                    </div>
+
+                    <!-- Tab Senha -->
+                    <div id="tab-senha" class="tab-content">
+                        <form id="formSenha" class="form-perfil">
+                            <div class="form-grupo">
+                                <label>Senha Atual</label>
+                                <input type="password" id="inputSenhaAtual" class="input-dark" required>
+                            </div>
+                            
+                            <div class="form-grupo">
+                                <label>Nova Senha</label>
+                                <input type="password" id="inputNovaSenha" class="input-dark" minlength="6" required>
+                            </div>
+                            
+                            <div class="form-grupo">
+                                <label>Confirmar Nova Senha</label>
+                                <input type="password" id="inputConfirmarSenha" class="input-dark" minlength="6" required>
+                            </div>
+                            
+                            <button type="submit" class="btn-salvar">🔐 Alterar Senha</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 
 <script src="/js/utilidades.js"></script>
 <script src="/js/perfil.js"></script>
+<script src="/js/perfil-separado.js"></script>
+
 </body>
 </html>
