@@ -13,7 +13,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface TrabalhoMapper {
     Trabalho toModel(TrabalhoRecord record);
-    
+
     @Mapping(source = "usuario.id", target = "idUsuario")
     @Mapping(source = "profissional.id", target = "idProfissional")
     Trabalho toModel(TrabalhoEntity  entity);

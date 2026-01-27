@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -64,6 +65,13 @@ public class UsuarioController {
         Long usuarioId = user.getId();
         List<TrabalhoDTO> historico = usuarioService.historico(usuarioId);
         return ResponseEntity.ok(historico);
+    }
+
+    @GetMapping(RotasBases.gastoTotal)
+    public ResponseEntity getGastoTotal(@AuthenticationPrincipal UsuarioDetails user){
+        Long usuarioId = user.getId();
+        BigDecimal total = usuarioService.getGastoTotal(usuarioId);
+        return ResponseEntity.ok(total);
     }
 
 }

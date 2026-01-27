@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -131,4 +133,16 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<TrabalhoEntity> historico = trabalhoRepository.findByUsuarioIdOrderByDataHoraAbertaDesc(id);
         return historico.stream().map(trabalhoMapper::toDTO).toList();
     }
+
+    @Override
+    public BigDecimal getGastoTotal(Long idUsuario) {
+        List<TrabalhoEntity> trabalhos =  trabalhoRepository.findAllByUsuarioIdAndStatus(idUsuario, StatusTrabalho.CONCLUIDO);
+
+        return trabalhos.stream()
+                .map(TrabalhoEntity::getPagamento)       // Pega os valores
+                .filter(valor -> valor != null)      // Remove nulos para não quebrar
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+
 }
