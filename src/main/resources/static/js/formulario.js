@@ -1,30 +1,41 @@
-// funções de autenticação, alternância de modo e cadastro
-const URL_API = 'http://localhost:8182';
+
 let modoAtual = 'LOGIN';
 let tipoUsuarioCadastro = 'CLIENTE';
+
+function gerenciarCamposCadastro(ativo) {
+    const divCampos = document.getElementById('camposCadastro');
+    if (!divCampos) return;
+
+    const inputs = divCampos.querySelectorAll('input, select, textarea');
+
+    if (ativo) {
+        divCampos.classList.remove('escondido');
+        inputs.forEach(input => input.disabled = false);
+    } else {
+        divCampos.classList.add('escondido');
+        inputs.forEach(input => input.disabled = true);
+    }
+}
 
 function alternarModo() {
     const btn = document.getElementById('btnAcao');
     const link = document.getElementById('linkTroca');
-    const camposExtras = document.getElementById('camposCadastro');
     const secaoTipo = document.getElementById('secaoTipo');
-
-    if (!localStorage.getItem('token_conectlar')) {
-        window.location.href = 'index.html';
-    }
 
     if (modoAtual === 'LOGIN') {
         modoAtual = 'CADASTRO';
         btn.innerText = 'Cadastrar-se';
         link.innerText = 'Já tem conta? Entrar.';
-        camposExtras.classList.remove('escondido');
-        secaoTipo.classList.remove('escondido');
+
+        if (secaoTipo) secaoTipo.classList.remove('escondido');
+        gerenciarCamposCadastro(true);
     } else {
         modoAtual = 'LOGIN';
         btn.innerText = 'Entrar no Sistema';
         link.innerText = 'Não tem conta? Crie agora!';
-        camposExtras.classList.add('escondido');
-        secaoTipo.classList.add('escondido');
+
+        if (secaoTipo) secaoTipo.classList.add('escondido');
+        gerenciarCamposCadastro(false);
     }
 }
 
@@ -34,98 +45,126 @@ function mudarTipo(botao) {
     tipoUsuarioCadastro = botao.getAttribute('data-tipo');
 }
 
-function fazerLogout() {
-    localStorage.removeItem('token_conectlar');
-    localStorage.removeItem('tipo_usuario');
-    window.location.href = 'index.html';
-}
-
-async function mandarProServidor(endpoint, metodo, corpo = null, temArquivo = false) {
-    const token = localStorage.getItem('token_conectlar');
-    const headers = {};
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-    }
-    const opcoes = { method: metodo, headers: headers };
-    if (corpo) {
-        if (temArquivo) {
-            opcoes.body = corpo;
-        } else {
-            headers['Content-Type'] = 'application/json';
-            opcoes.body = JSON.stringify(corpo);
-        }
-    }
-    try {
-        const resposta = await fetch(`${URL_API}${endpoint}`, opcoes);
-        const texto = await resposta.text();
-        const json = (() => { try { return texto ? JSON.parse(texto) : null; } catch(e) { return null; } })();
-        if (!resposta.ok) {
-            if (json) {
-                if (typeof json === 'object' && !Array.isArray(json)) {
-                    const partes = Object.entries(json).map(([k,v]) => `${k}: ${v}`).join('\n');
-                    throw new Error(partes || JSON.stringify(json));
-                }
-                throw new Error(JSON.stringify(json));
-            }
-            throw new Error('Deu ruim na requisição: ' + resposta.status);
-        }
-        return json || {};
-    } catch (erro) {
-        console.error(erro);
-        alert(erro.message || 'Erro de conexão. O servidor tá ligado?');
-        throw erro;
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    gerenciarCamposCadastro(false);
+});
 
 const formAuth = document.getElementById('formAutenticacao');
 if (formAuth) {
     formAuth.addEventListener('submit', async (e) => {
         e.preventDefault();
         const dados = new FormData(formAuth);
-        if (modoAtual === 'LOGIN') {
-            const payload = {
-                login: dados.get('login'),
-                senha: dados.get('senha')
-            };
-            try {
+        const btn = document.getElementById('btnAcao');
+        const textoOriginal = btn.innerText;
+        btn.innerText = 'Processando...';
+        btn.disabled = true;
+
+        try {
+            if (modoAtual === 'LOGIN') {
+                const payload = {
+                    login: dados.get('login'),
+                    senha: dados.get('senha')
+                };
+
                 const resp = await mandarProServidor('/auth/login', 'POST', payload);
+
                 localStorage.setItem('token_conectlar', resp.token);
-                window.location.href = 'painel-cliente.html';
-            } catch (e) {
-                alert(e.message || 'Login falhou. Senha errada?');
-            }
-        } else {
-            const jsonDados = {
-                email: dados.get('login') || `sem-email-${Date.now()}@local.test`,
-                senha: dados.get('senha'),
-                nome: dados.get('nome'),
-                telefone: dados.get('telefone'),
-                localizacao: {
-                    rua: dados.get('rua') || "Rua padrão",
-                    bairro: dados.get('bairro') || "",
-                    numero: dados.get('numero') || "0",
-                    cidade: dados.get('cidade') || "Não informada",
-                    cep: dados.get('cep') || "",
-                    estado: dados.get('estado') || "",
-                    complemento: dados.get('complemento') || ""
-                },
-                role: (tipoUsuarioCadastro === 'CLIENTE') ? 'USUARIO' : 'PROFISSIONAL'
-            };
-            const formDataApi = new FormData();
-            const blobJson = new Blob([JSON.stringify(jsonDados)], { type: 'application/json' });
-            formDataApi.append('dados', blobJson);
-            const arquivoInput = document.getElementById('arquivoFoto');
-            if (arquivoInput && arquivoInput.files[0]) {
-                formDataApi.append('arquivo', arquivoInput.files[0]);
-            }
-            const rota = tipoUsuarioCadastro === 'CLIENTE' ? '/usuario/form' : '/profissional/form';
-            try {
+                localStorage.setItem('usuario_nome', resp.nome || 'Usuário');
+                localStorage.setItem('usuario_imagem', resp.imagem || '');
+
+                if (resp.role === 'ADMIN') {
+                    window.location.href = 'painel-adm.html';
+                } else if (resp.role === 'PROFISSIONAL') {
+                    window.location.href = 'painel-profissional.html';
+                } else {
+                    window.location.href = 'painel-cliente.html';
+                }
+
+            } else {
+                const jsonDados = {
+                    email: dados.get('login'),
+                    senha: dados.get('senha'),
+                    nome: dados.get('nome'),
+                    telefone: dados.get('telefone'),
+                    localizacao: {
+                        rua: dados.get('rua'),
+                        bairro: dados.get('bairro'),
+                        numero: dados.get('numero'),
+                        cidade: dados.get('cidade'),
+                        cep: dados.get('cep'),
+                        estado: dados.get('estado'),
+                        complemento: dados.get('complemento')
+                    },
+                    role: (tipoUsuarioCadastro === 'CLIENTE') ? 'USUARIO' : 'PROFISSIONAL'
+                };
+
+                const formDataApi = new FormData();
+                const blobJson = new Blob([JSON.stringify(jsonDados)], { type: 'application/json' });
+                formDataApi.append('dados', blobJson);
+
+                const arquivoInput = document.getElementById('arquivoFoto');
+                if (arquivoInput && arquivoInput.files[0]) {
+                    formDataApi.append('arquivo', arquivoInput.files[0]);
+                }
+
+                const rota = tipoUsuarioCadastro === 'CLIENTE' ? '/usuario/form' : '/profissional/form';
+
                 await mandarProServidor(rota, 'POST', formDataApi, true);
-                alert('Conta criada com sucesso! Agora faz o login aí.');
+                alert('Conta criada com sucesso! Faça login.');
                 alternarModo();
-            } catch (e) {
-                alert('Erro ao cadastrar. Tente novamente.');
             }
+        } catch (erro) {
+            alert(erro.message || 'Erro na operação.');
+        } finally {
+            btn.innerText = textoOriginal;
+            btn.disabled = false;
+        }
+    });
+}
+
+const formTrabalho = document.getElementById('formNovoTrabalho');
+if (formTrabalho) {
+    formTrabalho.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = formTrabalho.querySelector('button[type="submit"]');
+        const textoOriginal = btn.innerText;
+        btn.innerText = 'Publicando...';
+        btn.disabled = true;
+
+        const dtoTrabalho = {
+            titulo: document.getElementById('tituloServico').value,
+            descricao: document.getElementById('descServico').value,
+            categoria: document.getElementById('categoriaServico').value,
+            status: "PENDENTE",
+            localizacao: {
+                cidade: document.getElementById('cidadeServico').value,
+                estado: document.getElementById('estadoServico').value
+            }
+        };
+
+        const formData = new FormData();
+        const blobJson = new Blob([JSON.stringify(dtoTrabalho)], { type: 'application/json' });
+        formData.append('dados', blobJson);
+
+        const arquivo = document.getElementById('fotoServico').files[0];
+        if (arquivo) {
+            formData.append('imagen', arquivo);
+        }
+
+        try {
+            await mandarProServidor('/trabalho/form', 'POST', formData, true);
+            alert('Projeto publicado com sucesso!');
+            fecharModal();
+            formTrabalho.reset();
+            if (typeof carregarMeusPedidos === 'function') {
+                carregarMeusPedidos();
+            }
+        } catch (erro) {
+            alert('Erro ao publicar: ' + erro.message);
+        } finally {
+            btn.innerText = textoOriginal;
+            btn.disabled = false;
         }
     });
 }
