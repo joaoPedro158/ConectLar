@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Painel - ConectLar</title>
+    <link rel="stylesheet" href="/css/resetar.css">
+    <link rel="stylesheet" href="/css/layoutzao.css">
+    <link rel="stylesheet" href="/css/componentes.css">
+    <link rel="stylesheet" href="/css/cartoes.css">
+    <link rel="stylesheet" href="/css/modais.css">
+    <link rel="stylesheet" href="/css/utilidades.css">
+</head>
+<body>
+<header class="cabecalho-top">
+    <span class="nome-sistema">ConectLar <small>Cliente</small></span>
+
+    <div class="perfil-topo">
+        <div class="avatar-topo" onclick="toggleMenuPerfil()"></div>
+
+        <div class="menu-perfil escondido" id="menuPerfil">
+            <button onclick="irParaHistorico()">Home</button>
+            <button onclick="irParaHistorico()">Historico</button>
+
+        </div>
+    </div>
+</header>
+
+
+<div class="telona-cheia" style="justify-content: flex-start;">
+    <div class="area-conteudo">
+        <h2 style="margin-bottom: 20px;">Meus Pedidos</h2>
+
+        <div id="listaMeusPedidos" class="lista-trabalhos">
+            <p style="text-align: center; color: #a8a8b3;">Carregando seus pedidos...</p>
+        </div>
+    </div>
+</div>
+
+<button class="botao-flutuante-mais" onclick="abrirModal()">+</button>
+
+<div id="modalNovoPedido" class="fundo-escuro-modal escondido">
+    <div class="janelinha-modal">
+        <button class="botao-fechar" onclick="fecharModal()">X</button>
+        <h3 class="titulo-bonitao">Novo Serviço</h3>
+
+        <form id="formNovoTrabalho" class="form-da-vida">
+            <input type="text" id="tituloServico" class="campinho-texto" placeholder="Título (ex: Pia vazando)" required>
+
+            <select id="categoriaServico" class="campinho-texto" required>
+                <option value="">Selecione a Categoria</option>
+                <option value="ENCANAMENTO">Encanamento</option>
+                <option value="ELETRICA">Elétrica</option>
+                <option value="PINTURA">Pintura</option>
+                <option value="LIMPEZA">Limpeza</option>
+                <option value="MARCENARIA">Marcenaria</option>
+            </select>
+
+            <input type="text" id="localServico" class="campinho-texto" placeholder="Bairro/Cidade" required>
+
+            <textarea id="descServico" class="campinho-texto" rows="3" placeholder="Descreva o problema..." required></textarea>
+
+            <label class="campo-upload">
+                <span style="color: #a8a8b3;">Foto do Problema (Opcional)</span>
+                <input type="file" id="fotoServico" style="margin-top: 10px;">
+            </label>
+
+            <button type="submit" class="botaozao-roxo">Publicar Pedido</button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/formulario.js"></script>
+<script src="/js/cliente.js"></script>
+<script src="/js/utilidades.js"></script>
+<script>
+    carregarMeusPedidos();
+</script>
+</body>
+</html>
