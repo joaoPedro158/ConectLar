@@ -1,6 +1,10 @@
 // Funções do feed do profissional
 async function carregarFeedGeral() {
     try {
+
+        if (!localStorage.getItem('token_conectlar')) {
+            window.location.href = 'index.html';
+        }
         const divLista = document.getElementById('listaOportunidades');
         const lista = await mandarProServidor('/trabalho/list', 'GET');
         divLista.innerHTML = '';

@@ -1,0 +1,10 @@
+/* Estilos para feed do trabalhador */
+body {
+    background: #fffbe6;
+}
+.card-trabalho {
+    border: 1px solid #f1c40f;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}

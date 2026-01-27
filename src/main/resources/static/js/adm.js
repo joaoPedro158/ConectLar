@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+-document.addEventListener('DOMContentLoaded', () => {
     async function carregarUsuariosAdm(){
         try{
             const usuarios = await listarUsuarios();
