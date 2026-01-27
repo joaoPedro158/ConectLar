@@ -2,117 +2,68 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Cliente - ConectLar</title>
-    <link rel="stylesheet" href="/css/painel-cliente.css">
+    <title>Meu Painel - ConectLar</title>
+    <link rel="stylesheet" href="/css/resetar.css">
+    <link rel="stylesheet" href="/css/layoutzao.css">
+    <link rel="stylesheet" href="/css/componentes.css">
+    <link rel="stylesheet" href="/css/cartoes.css">
+    <link rel="stylesheet" href="/css/modais.css">
+    <link rel="stylesheet" href="/css/utilidades.css">
 </head>
 <body>
-
-<header class="cabecalho-top">
-    <div class="logo-area">
-        <img src="/assets/conectlar-Je_1k_H1.png" alt="Logo ConectLar" class="logo-img" style="width: 180px; height: auto;">
-
-    </div>
-
-    <div class="menu-usuario">
-        <button class="botao-sair" onclick="fazerLogout()">Sair do Sistema</button>
-    </div>
-</header>
-
-<div class="container-principal">
-
-    <aside class="painel-lateral">
-        <div class="info-usuario">
-            <div class="avatar-grande">
-                <img src="/assets/avatar-padrao.png" alt="Avatar" class="img-avatar">
-            </div>
-            <h3 class="nome-usuario" id="nomeUsuarioDisplay">Carregando...</h3>
-            <p class="tipo-conta">Cliente</p>
-        </div>
-
-        <div class="status-container">
-            <p class="titulo-status">Status da Conta</p>
-            <span class="status-badge status-concluido">Ativa</span>
-        </div>
-    </aside>
-
-    <main class="area-conteudo">
-
-        <section class="cabecalho-secao">
-            <div class="textos-secao">
-                <h2 class="titulo-painel">Meus Projetos</h2>
-                <p class="subtitulo-painel">Gerencie seus pedidos de serviço aqui.</p>
-            </div>
-
-            <button class="botao-criar-projeto" onclick="abrirModal()">
-                <span class="icone-mais">+</span> Novo Projeto
-            </button>
-        </section>
-
-        <div id="listaMeusPedidos" class="lista-pedidos">
-            <p class="mensagem-vazia">Buscando seus dados...</p>
-        </div>
-
-    </main>
+<div class="cabecalho-top">
+    <span class="nome-sistema">ConectLar <small>Cliente</small></span>
+    <button class="botao-sair" onclick="fazerLogout()">Sair</button>
 </div>
 
-<div id="modalNovoPedido" class="modal-backdrop escondido">
-    <div class="modal-content">
-        <header class="modal-header">
-            <h3>Publicar Novo Serviço</h3>
-            <button class="botao-fechar-modal" onclick="fecharModal()">&times;</button>
-        </header>
+<div class="telona-cheia" style="justify-content: flex-start;">
+    <div class="area-conteudo">
+        <h2 style="margin-bottom: 20px;">Meus Pedidos</h2>
 
-        <form id="formNovoTrabalho">
-            <div class="form-grupo">
-                <label for="tituloServico">Título do Pedido</label>
-                <input type="text" id="tituloServico" class="input-dark" placeholder="Ex: Vazamento na cozinha" required>
-            </div>
+        <div id="listaMeusPedidos" class="lista-trabalhos">
+            <p style="text-align: center; color: #a8a8b3;">Carregando seus pedidos...</p>
+        </div>
+    </div>
+</div>
 
-            <div class="form-grupo">
-                <label for="categoriaServico">Categoria</label>
-                <select id="categoriaServico" class="input-dark" required>
-                    <option value="">Selecione...</option>
-                    <option value="ENCANAMENTO">Encanamento</option>
-                    <option value="ELETRICA">Elétrica</option>
-                    <option value="PINTURA">Pintura</option>
-                    <option value="LIMPEZA">Limpeza</option>
-                    <option value="MARCENARIA">Marcenaria</option>
-                    <option value="JARDINAGEM">Jardinagem</option>
-                    <option value="OUTROS">Outros</option>
-                </select>
-            </div>
+<button class="botao-flutuante-mais" onclick="abrirModal()">+</button>
 
-            <div class="form-row">
-                <div class="form-grupo">
-                    <label for="cidadeServico">Cidade</label>
-                    <input type="text" id="cidadeServico" class="input-dark" required>
-                </div>
-                <div class="form-grupo grupo-uf">
-                    <label for="estadoServico">UF</label>
-                    <input type="text" id="estadoServico" class="input-dark" required>
-                </div>
-            </div>
+<div id="modalNovoPedido" class="fundo-escuro-modal escondido">
+    <div class="janelinha-modal">
+        <button class="botao-fechar" onclick="fecharModal()">X</button>
+        <h3 class="titulo-bonitao">Novo Serviço</h3>
 
-            <div class="form-grupo">
-                <label for="descServico">Descrição Detalhada</label>
-                <textarea id="descServico" class="input-dark" rows="4" placeholder="Explique o problema..." required></textarea>
-            </div>
+        <form id="formNovoTrabalho" class="form-da-vida">
+            <input type="text" id="tituloServico" class="campinho-texto" placeholder="Título (ex: Pia vazando)" required>
 
-            <div class="form-grupo">
-                <label for="fotoServico">Foto (Opcional)</label>
-                <input type="file" id="fotoServico" class="input-dark" accept="image/*">
-            </div>
+            <select id="categoriaServico" class="campinho-texto" required>
+                <option value="">Selecione a Categoria</option>
+                <option value="ENCANAMENTO">Encanamento</option>
+                <option value="ELETRICA">Elétrica</option>
+                <option value="PINTURA">Pintura</option>
+                <option value="LIMPEZA">Limpeza</option>
+                <option value="MARCENARIA">Marcenaria</option>
+            </select>
 
-            <button type="submit" class="botao-criar-projeto botao-full">
-                Publicar Agora
-            </button>
+            <input type="text" id="localServico" class="campinho-texto" placeholder="Bairro/Cidade" required>
+
+            <textarea id="descServico" class="campinho-texto" rows="3" placeholder="Descreva o problema..." required></textarea>
+
+            <label class="campo-upload">
+                <span style="color: #a8a8b3;">Foto do Problema (Opcional)</span>
+                <input type="file" id="fotoServico" style="margin-top: 10px;">
+            </label>
+
+            <button type="submit" class="botaozao-roxo">Publicar Pedido</button>
         </form>
     </div>
 </div>
 
 <script src="/js/formulario.js"></script>
-<script src="/js/utilidades.js"></script>
 <script src="/js/cliente.js"></script>
+<script src="/js/utilidades.js"></script>
+<script>
+    carregarMeusPedidos();
+</script>
 </body>
 </html>
