@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oportunidades - ConectLar Profissional</title>
+    <link rel="stylesheet" href="/css/feed-trabalhador.css">
+</head>
+<body>
+
+<header class="cabecalho-top">
+    <div class="logo-area">
+        <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+        <span class="badge-pro">Profissional</span>
+    </div>
+    <div class="menu-pro">
+        <button>Home</button>
+        <button>Histórico</button>
+        <button>Perfil</button>
+        <button class="botao-sino">&#128276;</button>
+    </div>
+</header>
+
+<main class="container-principal">
+    <section class="painel-conteudo">
+        <div class="container-busca">
+            <div class="form-busca">
+                <span class="icon-busca">&#128269;</span>
+                <input type="text" id="campoBusca" placeholder="O que você está procurando hoje?" class="input-busca">
+                <button class="btn-pesquisar" onclick="buscarVagas()">Buscar</button>
+            </div>
+        </div>
+
+        <div class="secao-feed">
+            <h1 class="titulo-sessao">Oportunidades Disponíveis</h1>
+            
+            <div id="listaOportunidades" class="lista-trabalhos">
+                <div class="empty-state">
+                    <div class="empty-icon">🔎</div>
+                    <h2>Buscando as melhores vagas...</h2>
+                    <p>Aguarde um momento enquanto carregamos novos serviços para você.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="/js/profissional.js"></script>
+<script src="/js/utilidades.js"></script>
+<script>
+    carregarFeedGeral();
+</script>
+</body>
+</html>

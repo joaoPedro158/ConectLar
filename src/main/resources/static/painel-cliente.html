@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Cliente - ConectLar</title>
+    <link rel="stylesheet" href="css/painel-cliente.css">
+</head>
+<body>
+
+<header class="cabecalho-top">
+    <div class="logo-area">
+        <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+    </div>
+    <div class="teste">
+        <button>Home</button>
+        <button>Histórico</button>
+        <button>Perfil</button>
+        <button class="botao-sino">&#128276;</button>
+    </div>
+</header>
+
+<main class="container-principal">
+    <section class="painel-conteudo">
+
+        <div class="container-busca">
+            <form class="form-busca">
+                <span class="icon-busca">&#128269;</span> <input type="text" placeholder="Buscar serviços ou categorias..." class="input-busca">
+            </form>
+        </div>
+        
+        <div class="secao-categorias">
+            <h1 class="titulo-sessao">Categorias</h1>
+            <div class="grid-categorias">
+                <button class="card-cat encanador">
+                    <div class="icon-circle">💧</div>
+                    <span>Encanador</span>
+                </button>
+                <button class="card-cat eletricista">
+                    <div class="icon-circle">⚡</div>
+                    <span>Eletricista</span>
+                </button>
+                <button class="card-cat limpeza">
+                    <div class="icon-circle">✨</div>
+                    <span>Limpeza</span>
+                </button>
+                <button class="card-cat pintor">
+                    <div class="icon-circle">🖌️</div>
+                    <span>Pintor</span>
+                </button>
+                <button class="card-cat marceneiro">
+                    <div class="icon-circle">🔨</div>
+                    <span>Marceneiro</span>
+                </button>
+                <button class="card-cat jardineiro">
+                    <div class="icon-circle">🌳</div>
+                    <span>Jardineiro</span>
+                </button>
+                <button class="card-cat mecanico">
+                    <div class="icon-circle">🚗</div>
+                    <span>Mecânico</span>
+                </button>
+                <button class="card-cat geral">
+                    <div class="icon-circle">🛠️</div>
+                    <span>Geral</span>
+                </button>
+            </div>
+        </div>
+
+        <hr class="divisor"> 
+        
+        <div class="secao-servicos">
+            <h1 class="titulo-sessao">Serviços</h1>
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h2>Nenhum serviço disponível</h2>
+                <p>Você ainda não publicou nenhum serviço. Clique no botão + para começar!</p>
+            </div>
+        </div>
+        <button class="fab-botao" onclick="abrirModal()">+</button>
+    </section>
+</main>
+
+
+
+
+<div id="modalNovoPedido" class="modal-backdrop escondido">
+    <div class="modal-content">
+        <header class="modal-header">
+            <h3>Publicar Novo Serviço</h3>
+            <button class="botao-fechar-modal" onclick="fecharModal()">&times;</button>
+        </header>
+
+        <form id="formNovoTrabalho">
+            <div class="form-grupo">
+                <label>Título do Problema</label>
+                <input type="text" id="tituloServico" class="input-dark" placeholder="Ex: Vazamento na cozinha" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-grupo">
+                    <label>Categoria</label>
+                    <select id="categoriaServico" class="input-dark" required>
+                        <option value="">Selecione...</option>
+                        <option value="ENCANADOR">Encanamento</option>
+                        <option value="ELETRICISTA">Elétrica</option>
+                        <option value="PINTOR">Pintura</option>
+                        <option value="LIMPEZA">Limpeza</option>
+                        <option value="MARCENEIRO">Marcenaria</option>
+                        <option value="JARDINEIRO">Jardinagem</option>
+                        <option value="MECANICO">Mecânica</option>
+                        <option value="GERAL">Outros</option>
+                    </select>
+                </div>
+                <div class="form-grupo">
+                    <label>Valor Orçamento (R$)</label>
+                    <input type="number" id="pagamentoServico" class="input-dark" placeholder="100.00" min="1" step="0.01" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-grupo">
+                    <label>CEP</label>
+                    <input type="text" id="cepServico" class="input-dark" placeholder="00000-000" required>
+                </div>
+                <div class="form-grupo">
+                    <label>Cidade</label>
+                    <input type="text" id="cidadeServico" class="input-dark" required>
+                </div>
+                <div class="form-grupo grupo-uf" style="width: 80px;">
+                    <label>UF</label>
+                    <input type="text" id="estadoServico" class="input-dark" required>
+                </div>
+            </div>
+
+            <div class="form-grupo">
+                <label>Rua</label>
+                <input type="text" id="ruaServico" class="input-dark" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-grupo">
+                    <label>Bairro</label>
+                    <input type="text" id="bairroServico" class="input-dark" required>
+                </div>
+                <div class="form-grupo">
+                    <label>Número</label>
+                    <input type="text" id="numeroServico" class="input-dark" required>
+                </div>
+            </div>
+
+            <div class="form-grupo">
+                <label>Complemento</label>
+                <input type="text" id="complementoServico" class="input-dark">
+            </div>
+
+            <div class="form-grupo">
+                <label>Descrição Detalhada</label>
+                <textarea id="descServico" class="input-dark" rows="4" placeholder="Descreva o problema..." required></textarea>
+            </div>
+
+            <div class="form-grupo">
+                <label>Anexar Foto (Opcional)</label>
+                <input type="file" id="fotoServico" class="input-dark" accept="image/*">
+            </div>
+
+            <button type="submit" class="botao-criar-projeto botao-full">
+                Publicar Agora
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<script src="/js/utilidades.js"></script>
+<<<<<<< HEAD
+<script src="/js/painel-cliente.js"></script>
+
+=======
+<script src="/js/cliente.js"></script>
+<script src="/js/formulario.js"></script>
+>>>>>>> carlos
+</body>
+</html>
