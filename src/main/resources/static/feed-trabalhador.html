@@ -2,33 +2,53 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Oportunidades - ConectLar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oportunidades - ConectLar Profissional</title>
     <link rel="stylesheet" href="/css/feed-trabalhador.css">
 </head>
 <body>
-<div class="cabecalho-top">
-    <span class="nome-sistema">ConectLar <small>Profissional</small></span>
-    <button class="botao-sair" onclick="fazerLogout()">Sair</button>
-</div>
 
-<div class="telona-cheia" style="justify-content: flex-start;">
-    <div class="area-conteudo">
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <input type="text" id="campoBusca" class="campinho-texto" placeholder="Buscar serviços..." style="flex: 1;">
-            <button class="botaozao-roxo" onclick="buscarVagas()">Buscar</button>
-        </div>
-
-        <div id="listaOportunidades" class="lista-trabalhos">
-            <p style="text-align: center; color: #a8a8b3;">Buscando vagas...</p>
-        </div>
+<header class="cabecalho-top">
+    <div class="logo-area">
+        <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+        <span class="badge-pro">Profissional</span>
     </div>
-</div>
+    <div class="menu-pro">
+        <button>Home</button>
+        <button>Histórico</button>
+        <button>Perfil</button>
+        <button class="botao-sino">&#128276;</button>
+    </div>
+</header>
+
+<main class="container-principal">
+    <section class="painel-conteudo">
+        <div class="container-busca">
+            <div class="form-busca">
+                <span class="icon-busca">&#128269;</span>
+                <input type="text" id="campoBusca" placeholder="O que você está procurando hoje?" class="input-busca">
+                <button class="btn-pesquisar" onclick="buscarVagas()">Buscar</button>
+            </div>
+        </div>
+
+        <div class="secao-feed">
+            <h1 class="titulo-sessao">Oportunidades Disponíveis</h1>
+            
+            <div id="listaOportunidades" class="lista-trabalhos">
+                <div class="empty-state">
+                    <div class="empty-icon">🔎</div>
+                    <h2>Buscando as melhores vagas...</h2>
+                    <p>Aguarde um momento enquanto carregamos novos serviços para você.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 
 <script src="/js/formulario.js"></script>
 <script src="/js/profissional.js"></script>
 <script src="/js/utilidades.js"></script>
 <script>
-    // Carrega as vagas ao abrir
     carregarFeedGeral();
 </script>
 </body>
