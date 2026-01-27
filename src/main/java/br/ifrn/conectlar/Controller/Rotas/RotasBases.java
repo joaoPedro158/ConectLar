@@ -17,14 +17,14 @@ public interface RotasBases {
     String historico = "/historico";
 
     String candidatar = "/{id}/candidatar";
-    String aceitarCandidato= "{idTrabalho}/responder";
-    String cancelarTrabalho = "{idTrabalho}/cancelar";
+    String aceitarCandidato= "/{idTrabalho}/responder"; // <--- Adiciona a barra
+    String cancelarTrabalho = "/{idTrabalho}/cancelar"; // <--- Adiciona a barra
     String concluirTrabalho = "/{idTrabalho}/concluir";
 
     String Busca = "/busca";
 
-    String filtroCategoria = "/filtro/categoria";
 
+    String filtroCategoria = "/filtro/categoria";
 
 
     String avaliar = "/avaliar/{idTrabalho}";

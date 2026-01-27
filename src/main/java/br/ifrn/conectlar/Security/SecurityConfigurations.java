@@ -35,7 +35,7 @@ public class SecurityConfigurations {
 
                         // Se quiser liberar ficheiros específicos pelo nome
                         .requestMatchers("/index.html", "/login.html", "/cadastro.html").permitAll()
-
+                        .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/favicon.ico", "/css/**", "/js/**").permitAll()
                         // qualquer usuario tem permissão
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, RotasPrincipais.RootUsuario + RotasBases.Cadastra).permitAll()
