@@ -16,7 +16,6 @@
         <button onclick="window.location.href='painel-cliente.html'">Home</button>
         <button onclick="window.location.href='historico_cliente.html'">Histórico <span id="contadorHistorico" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">0</span></button>
         <button onclick="window.location.href='perfil_cliente.html'">Perfil</button>
-        <button onclick="window.location.href='historico_cliente.html'">Gasto total <span id="contadorGastoTotal" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">R$ 0,00</span></button>
         <button id="btnSair" class="botao-sair" onclick="logout()">Sair</button>
     </div>
 </header>
@@ -38,35 +37,35 @@
         <div class="secao-categorias">
             <h1 class="titulo-sessao">Categorias</h1>
             <div class="grid-categorias">
-                <button class="card-cat encanador">
+                <button class="card-cat encanador" data-categoria="ENCANADOR">
                     <div class="icon-circle">💧</div>
                     <span>Encanador</span>
                 </button>
-                <button class="card-cat eletricista">
+                <button class="card-cat eletricista" data-categoria="ELETRICISTA">
                     <div class="icon-circle">⚡</div>
                     <span>Eletricista</span>
                 </button>
-                <button class="card-cat limpeza">
+                <button class="card-cat limpeza" data-categoria="LIMPEZA">
                     <div class="icon-circle">✨</div>
                     <span>Limpeza</span>
                 </button>
-                <button class="card-cat pintor">
+                <button class="card-cat pintor" data-categoria="PINTOR">
                     <div class="icon-circle">🖌️</div>
                     <span>Pintor</span>
                 </button>
-                <button class="card-cat marceneiro">
+                <button class="card-cat marceneiro" data-categoria="MARCENEIRO">
                     <div class="icon-circle">🔨</div>
                     <span>Marceneiro</span>
                 </button>
-                <button class="card-cat jardineiro">
+                <button class="card-cat jardineiro" data-categoria="JARDINEIRO">
                     <div class="icon-circle">🌳</div>
                     <span>Jardineiro</span>
                 </button>
-                <button class="card-cat mecanico">
+                <button class="card-cat mecanico" data-categoria="MECANICO">
                     <div class="icon-circle">🚗</div>
                     <span>Mecânico</span>
                 </button>
-                <button class="card-cat geral">
+                <button class="card-cat geral" data-categoria="GERAL">
                     <div class="icon-circle">🛠️</div>
                     <span>Geral</span>
                 </button>

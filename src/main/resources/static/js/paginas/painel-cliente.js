@@ -141,93 +141,17 @@ async function carregarContadores() {
 }
 
 async function carregarPedidos() {
-    let lista = document.getElementById('listaMeusPedidos');
-    if (!lista) {
-        const secao = document.querySelector('.secao-servicos');
-        if (secao) {
-            const vazio = secao.querySelector('.empty-state');
-            if (vazio) vazio.remove();
-
-            lista = document.createElement('div');
-            lista.id = 'listaMeusPedidos';
-            lista.className = 'lista-pedidos';
-            secao.appendChild(lista);
-        }
-    }
-
-    if (!lista) return;
-
     try {
+        // Busca o histórico padrão
         const servicos = await requisicao('/usuario/historico', 'GET');
 
-        if (!servicos || servicos.length === 0) {
-            lista.innerHTML = '<p class="mensagem-vazia">Você ainda não publicou nenhum serviço.</p>';
-            return;
-        }
+        // Usa a função nova para desenhar
+        renderizarListaTrabalhos(servicos);
 
-        lista.innerHTML = '';
-
-        servicos.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'card-pedido';
-
-            const cidade = p.localizacao ? p.localizacao.cidade : (p.cidade || 'Local não inf.');
-            const estado = p.localizacao ? p.localizacao.estado : (p.estado || 'RN');
-            const statusFormatado = (p.status || 'ABERTO').replace('_', ' ');
-
-            let botoesAcao = '';
-            
-            if (p.status === 'EM_ESPERA') {
-                botoesAcao = `
-                    <div class="botoes-card">
-                        <button class="botao-aceitar" onclick="responderSolicitacao(${p.id}, true)">Aceitar</button>
-                        <button class="botao-recusar" onclick="responderSolicitacao(${p.id}, false)">Recusar</button>
-                    </div>
-                `;
-            } else if (p.status === 'EM_ANDAMENTO') {
-                botoesAcao = `
-                    <div class="botoes-card">
-                        <button class="botao-finalizar" onclick="finalizarTrabalho(${p.id})">Finalizar</button>
-                        <button class="botao-cancelar" onclick="cancelarTrabalho(${p.id})">Cancelar</button>
-                    </div>
-                `;
-            }
-
-            card.innerHTML = `
-                <div class="info-card">
-                    <h3>${p.problema || 'Sem título'}</h3>
-                    <div class="detalhes-card">
-                        <span>📍 ${cidade} - ${estado}</span>
-                        <span style="color: #00e0ff;">🔧 ${p.categoria || 'Geral'}</span>
-                        <span>💰 R$ ${p.pagamento || '0,00'}</span>
-                    </div>
-                    ${p.profissionalNome ? `<div class="profissional-nome">Profissional: ${p.profissionalNome}</div>` : ''}
-                </div>
-                <span class="status-badge" style="border-color: #00e0ff; color: #00e0ff;">
-                    ${statusFormatado}
-                </span>
-            `;
-
-            const botoesContainer = document.createElement('div');
-            botoesContainer.className = 'botoes-container';
-            botoesContainer.innerHTML = botoesAcao;
-
-            const cardWrapper = document.createElement('div');
-            cardWrapper.className = 'card-wrapper';
-            cardWrapper.appendChild(card);
-            cardWrapper.appendChild(botoesContainer);
-
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', (e) => {
-                if (!e.target.closest('.botoes-container')) {
-                    abrirModalDetalhes(p);
-                }
-            });
-            lista.appendChild(cardWrapper);
-        });
     } catch (error) {
         console.error('Erro ao carregar:', error);
-        lista.innerHTML = '<p style="color:red">Erro de conexão ao buscar pedidos.</p>';
+        const lista = document.getElementById('listaMeusPedidos');
+        if(lista) lista.innerHTML = '<p style="color:red">Erro de conexão ao buscar pedidos.</p>';
     }
 }
 
@@ -351,4 +275,115 @@ function abrirModal() {
 
 function fecharModal() {
     document.getElementById('modalNovoPedido').classList.add('escondido');
+}
+
+// Função auxiliar para desenhar os cards na tela (usada tanto pelo Histórico quanto pelo Filtro)
+function renderizarListaTrabalhos(listaDeTrabalhos) {
+    let lista = document.getElementById('listaMeusPedidos');
+
+    // Se a lista não existir, tenta criar ou buscar
+    if (!lista) {
+        const secao = document.querySelector('.secao-servicos');
+        if (secao) {
+            // Limpa mensagens de vazio antigas
+            const vazio = secao.querySelector('.empty-state');
+            if (vazio) vazio.remove();
+
+            lista = document.createElement('div');
+            lista.id = 'listaMeusPedidos';
+            lista.className = 'lista-pedidos';
+            secao.appendChild(lista);
+        } else {
+            return; // Não tem onde desenhar
+        }
+    }
+
+    lista.innerHTML = ''; // Limpa a lista atual
+
+    if (!listaDeTrabalhos || listaDeTrabalhos.length === 0) {
+        lista.innerHTML = '<p class="mensagem-vazia">Nenhum trabalho encontrado.</p>';
+        return;
+    }
+
+    listaDeTrabalhos.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card-pedido';
+
+        // Tratamento de nulos
+        const cidade = p.localizacao ? p.localizacao.cidade : (p.cidade || 'Local não inf.');
+        const estado = p.localizacao ? p.localizacao.estado : (p.estado || 'RN');
+        const statusFormatado = (p.status || 'ABERTO').replace('_', ' ');
+        const valorFormatado = p.pagamento ? p.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
+
+        // Lógica de botões (Mantive a original)
+        let botoesAcao = '';
+        if (p.status === 'EM_ESPERA') {
+            botoesAcao = `
+                <div class="botoes-card">
+                    <button class="botao-aceitar" onclick="responderSolicitacao(${p.id}, true)">Aceitar</button>
+                    <button class="botao-recusar" onclick="responderSolicitacao(${p.id}, false)">Recusar</button>
+                </div>`;
+        } else if (p.status === 'EM_ANDAMENTO') {
+            botoesAcao = `
+                <div class="botoes-card">
+                    <button class="botao-finalizar" onclick="finalizarTrabalho(${p.id})">Finalizar</button>
+                    <button class="botao-cancelar" onclick="cancelarTrabalho(${p.id})">Cancelar</button>
+                </div>`;
+        }
+
+        // HTML do Card
+        card.innerHTML = `
+            <div class="info-card">
+                <h3>${p.problema || 'Sem título'}</h3>
+                <div class="detalhes-card">
+                    <span>📍 ${cidade} - ${estado}</span>
+                    <span style="color: #00e0ff;">🔧 ${p.categoria || 'Geral'}</span>
+                    <span>💰 ${valorFormatado}</span>
+                </div>
+                ${p.profissionalNome ? `<div class="profissional-nome">Profissional: ${p.profissionalNome}</div>` : ''}
+            </div>
+            <span class="status-badge" style="border-color: #00e0ff; color: #00e0ff;">
+                ${statusFormatado}
+            </span>
+        `;
+
+        const botoesContainer = document.createElement('div');
+        botoesContainer.className = 'botoes-container';
+        botoesContainer.innerHTML = botoesAcao;
+
+        const cardWrapper = document.createElement('div');
+        cardWrapper.className = 'card-wrapper';
+        cardWrapper.appendChild(card);
+        cardWrapper.appendChild(botoesContainer);
+
+        // Evento de clique no card (exceto botões)
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.botoes-container')) {
+                abrirModalDetalhes(p);
+            }
+        });
+
+        lista.appendChild(cardWrapper);
+    });
+}
+
+async function filtrarPorCategoria(categoria) {
+    const lista = document.getElementById('listaMeusPedidos');
+    if(lista) lista.innerHTML = '<p>Carregando...</p>';
+
+    try {
+        // Faz a requisição na URL nova que você passou
+        // IMPORTANTE: encodeURIComponent garante que caracteres especiais não quebrem a URL
+        const resultado = await requisicao(`/trabalho/filtro/categoria?termo=${encodeURIComponent(categoria)}`, 'GET');
+
+        console.log(`Resultados para ${categoria}:`, resultado);
+
+        // Reutiliza a função de desenho!
+        renderizarListaTrabalhos(resultado);
+
+    } catch (erro) {
+        console.error("Erro ao filtrar:", erro);
+        if(lista) lista.innerHTML = '<p>Erro ao buscar categoria.</p>';
+    }
 }
