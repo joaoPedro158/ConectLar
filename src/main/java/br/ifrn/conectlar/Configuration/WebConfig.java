@@ -1,9 +1,7 @@
 package br.ifrn.conectlar.Configuration;
 
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -22,6 +20,5 @@ public class WebConfig implements WebMvcConfigurer {
 
         // rota limpa para o painel do profissional
         registry.addViewController("/app/profissional").setViewName("forward:/feed-trabalhador.html");
-
     }
 }

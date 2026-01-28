@@ -12,11 +12,10 @@
             <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
         </div>
         <div class="teste">
-
-            <button onclick="window.location.href='/painel-cliente.html'">Home</button>
-            <button>Histórico</button>
-            <button class="botao-sino">&#128276;</button>
-
+            <button onclick="window.location.href='painel-cliente.html'">Home</button>
+            <button onclick="window.location.href='historico_cliente.html'">Histórico</button>
+            <button onclick="window.location.href='perfil_cliente.html'">Perfil</button>
+            <button onclick="logout()" class="botao-sair">Sair</button>
         </div>
     </header>
 
@@ -50,18 +49,14 @@
             </div>
             </section>
             <section class="area-historico">
-
-            <div id="lista-pedidos" class="lista-pedidos"></div>
-
+            <div id="listaHistorico" class="lista-pedidos"></div>
             </section>
         </div>
 
 </main>
 
 
-
-    <script src="/js/utilidades.js"></script>
-    <script src="/js/historico.js"></script>
-
+    <script src="/js/api.js"></script>
+    <script src="/js/paginas/historico-cliente.js"></script>
 </body>
 </html>
