@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     verificarAutenticacao();
     carregarUsuario();
     carregarContadorHistorico();
+    carregarLucroTotal();
     carregarNotificacoes();
     carregarTrabalhos();
 
@@ -39,31 +40,57 @@ window.buscarVagas = async function() {
 
         filtrados.forEach(trabalho => {
             const card = document.createElement('div');
-            card.className = 'card-trabalho';
+            card.className = 'card-pedido';
             card.style.cursor = 'pointer';
             card.onclick = () => abrirModalDetalhesTrabalho(trabalho);
 
             const cidade = trabalho.localizacao ? trabalho.localizacao.cidade : 'Não informada';
             const estado = trabalho.localizacao ? trabalho.localizacao.estado : 'RN';
+            const corStatus = getStatusColor(trabalho.status);
+            const textoStatus = getStatusText(trabalho.status);
+
+            let botoesAcao = '';
+            
+            if (trabalho.status === 'ABERTO') {
+                botoesAcao = `
+                    <div class="botoes-card">
+                        <button class="botao-aceitar" onclick="candidatar(${trabalho.id})">Candidatar</button>
+                    </div>
+                `;
+            } else if (trabalho.status === 'EM_ESPERA' && trabalho.profissionalId == idUsuarioLogado) {
+                botoesAcao = `
+                    <div class="botoes-card">
+                        <button class="botao-cancelar" onclick="cancelarCandidatura(${trabalho.id})">Cancelar Candidatura</button>
+                    </div>
+                `;
+            } else if (trabalho.status === 'EM_ANDAMENTO' && trabalho.profissionalId == idUsuarioLogado) {
+                botoesAcao = `
+                    <div class="botoes-card">
+                        <button class="botao-cancelar" onclick="cancelarTrabalho(${trabalho.id})">Cancelar Trabalho</button>
+                    </div>
+                `;
+            } else if (trabalho.status === 'CONCLUIDO' && trabalho.profissionalId == idUsuarioLogado) {
+                botoesAcao = `
+                    <div class="valor-recebido">
+                        <span style="color: #4caf50; font-weight: 700;">💰 Valor recebido: R$ ${trabalho.pagamento || '0'}</span>
+                    </div>
+                `;
+            }
 
             card.innerHTML = `
-                <div class="info-trabalho">
+                <div class="info-card">
                     <h3>${trabalho.problema || 'Sem título'}</h3>
-                    <p class="descricao">${trabalho.descricao || 'Sem descrição'}</p>
-                    <div class="detalhes">
+                    <div class="detalhes-card">
                         <span>📍 ${cidade} - ${estado}</span>
-                        <span>🔧 ${trabalho.categoria || 'Geral'}</span>
-                        <span>💰 R$ ${trabalho.pagamento || '0,00'}</span>
+                        <span style="color: #00e0ff;">🔧 ${trabalho.categoria || 'Geral'}</span>
+                        <span>💰 R$ ${trabalho.pagamento || '0'}</span>
                     </div>
+                    ${trabalho.clienteNome ? `<div class="cliente-nome">Cliente: ${trabalho.clienteNome}</div>` : ''}
                 </div>
-                <div class="acoes">
-                    <button class="btn-solicitar" onclick="event.stopPropagation(); candidatar(${trabalho.id}, this)">
-                        Candidatar-se
-                    </button>
-                    <button class="btn-cancelar" onclick="event.stopPropagation(); cancelarCandidatura(${trabalho.id}, this)">
-                        Cancelar
-                    </button>
-                </div>
+                <span class="status-badge" style="border-color: ${corStatus}; color: ${corStatus};">
+                    ${textoStatus}
+                </span>
+                ${botoesAcao}
             `;
 
             container.appendChild(card);
@@ -74,27 +101,39 @@ window.buscarVagas = async function() {
     }
 };
 
-window.cancelarCandidatura = async function(idTrabalho, botao) {
-    if (botao.disabled) return;
-
-    botao.disabled = true;
-    botao.innerText = 'Cancelando...';
-
+window.cancelarTrabalho = async function(idTrabalho) {
+    if (!confirm('Tem certeza que deseja cancelar este trabalho?')) return;
     try {
         await requisicao(`/trabalho/${idTrabalho}/cancelar`, 'POST');
-        botao.innerText = 'Cancelado!';
-        botao.style.background = '#666';
+        alert('Trabalho cancelado.');
+        carregarTrabalhos();
     } catch (error) {
         console.error('Erro ao cancelar:', error);
-        botao.innerText = 'Erro';
-        botao.style.background = '#ff6b6b';
-        setTimeout(() => {
-            botao.innerText = 'Cancelar';
-            botao.style.background = '';
-            botao.disabled = false;
-        }, 3000);
+        alert('Erro ao cancelar trabalho.');
     }
 };
+
+function getStatusColor(status) {
+    switch (status) {
+        case 'ABERTO': return '#00e0ff';
+        case 'EM_ESPERA': return '#ffa500';
+        case 'EM_ANDAMENTO': return '#4caf50';
+        case 'CONCLUIDO': return '#9c27b0';
+        case 'CANCELADO': return '#f44336';
+        default: return '#666';
+    }
+}
+
+function getStatusText(status) {
+    switch (status) {
+        case 'ABERTO': return 'ABERTO';
+        case 'EM_ESPERA': return 'EM ESPERA';
+        case 'EM_ANDAMENTO': return 'EM ANDAMENTO';
+        case 'CONCLUIDO': return 'CONCLUIDO';
+        case 'CANCELADO': return 'CANCELADO';
+        default: return status;
+    }
+}
 
 window.abrirModalDetalhesTrabalho = function(trabalho) {
     const modal = document.getElementById('modalDetalhesTrabalho');
@@ -123,13 +162,27 @@ window.abrirModalDetalhesTrabalho = function(trabalho) {
 
     set('detalheStatus', trabalho && trabalho.status ? String(trabalho.status).replace('_', ' ') : '');
 
-    const imgEl = document.getElementById('detalheImagem');
-    if (imgEl) {
-        if (trabalho && trabalho.imagem) {
-            imgEl.src = trabalho.imagem.startsWith('http') || trabalho.imagem.startsWith('/') ? trabalho.imagem : `/upload/${trabalho.imagem}`;
-            imgEl.style.display = 'block';
+    const imagensEl = document.getElementById('detalheImagens');
+    if (imagensEl) {
+        if (trabalho && trabalho.imagens && trabalho.imagens.length > 0) {
+            imagensEl.innerHTML = `
+                <div class="imagens-problema">
+                    ${trabalho.imagens.map((img, index) => `
+                        <div style="text-align: center;">
+                            <img src="${img.startsWith('http') || img.startsWith('/') ? img : '/upload/' + img}" 
+                                 alt="Imagem do problema" 
+                                 class="img-problema"
+                                 onclick="abrirImagemTelaCheia('${img.startsWith('http') || img.startsWith('/') ? img : '/upload/' + img}')">
+                            <br>
+                            <button class="botao-visualizar" onclick="abrirImagemTelaCheia('${img.startsWith('http') || img.startsWith('/') ? img : '/upload/' + img}')">
+                                Visualizar
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
         } else {
-            imgEl.style.display = 'none';
+            imagensEl.innerHTML = '<p style="color:#888;font-size:0.9rem;">Nenhuma imagem anexada.</p>';
         }
     }
 
@@ -139,6 +192,53 @@ window.abrirModalDetalhesTrabalho = function(trabalho) {
 window.fecharModalDetalhesTrabalho = function() {
     const modal = document.getElementById('modalDetalhesTrabalho');
     if (modal) modal.classList.add('escondido');
+};
+
+window.abrirImagemTelaCheia = function(src) {
+    const janela = window.open('', '_blank');
+    janela.document.write(`
+        <html>
+            <head>
+                <title>Imagem em Tela Cheia</title>
+                <style>
+                    body { 
+                        margin: 0; 
+                        padding: 20px; 
+                        background: #000; 
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        min-height: 100vh;
+                        flex-direction: column;
+                    }
+                    img { 
+                        max-width: 100%; 
+                        max-height: 90vh; 
+                        object-fit: contain;
+                        border-radius: 8px;
+                    }
+                    button {
+                        margin-top: 20px;
+                        padding: 10px 20px;
+                        background: #00e0ff;
+                        color: #000;
+                        border: none;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-weight: 600;
+                    }
+                    button:hover {
+                        background: #33ebff;
+                    }
+                </style>
+            </head>
+            <body>
+                <img src="${src}" alt="Imagem do problema">
+                <button onclick="window.close()">Fechar</button>
+            </body>
+        </html>
+    `);
+    janela.document.close();
 };
 
 function resolverSrcFoto(foto) {
@@ -206,6 +306,25 @@ async function carregarContadorHistorico() {
         contador.innerText = Array.isArray(historico) ? String(historico.length) : '0';
     } catch (e) {
         contador.innerText = '0';
+    }
+}
+
+async function carregarLucroTotal() {
+    const contador = document.getElementById('contadorLucroTotal');
+    if (!contador) return;
+
+    try {
+        const historico = await requisicao('/profissional/historico', 'GET');
+        if (!Array.isArray(historico)) {
+            contador.innerText = 'R$ 0,00';
+            return;
+        }
+        const lucro = historico
+            .filter(t => t && t.status === 'CONCLUIDO' && t.pagamento)
+            .reduce((sum, t) => sum + Number(t.pagamento), 0);
+        contador.innerText = 'R$ ' + lucro.toFixed(2).replace('.', ',');
+    } catch (e) {
+        contador.innerText = 'R$ 0,00';
     }
 }
 

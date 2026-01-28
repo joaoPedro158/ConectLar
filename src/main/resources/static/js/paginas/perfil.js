@@ -2,109 +2,109 @@ document.addEventListener('DOMContentLoaded', () => {
     verificarAutenticacao();
     carregarPerfil();
 
-    document.getElementById('btnSair').onclick = logout;
-    document.getElementById('formAtualizarPerfil').addEventListener('submit', atualizarPerfil);
+    const formPerfil = document.getElementById('formPerfil');
+    if (formPerfil) formPerfil.addEventListener('submit', atualizarPerfil);
 });
 
-async function carregarPerfil() {
-    const container = document.getElementById('conteudoPerfil');
+async function buscarMeuPerfil() {
+    const role = getUsuarioRole();
+    const endpoint = role === 'PROFISSIONAL' ? '/profissional/meusdados' : '/usuario/meusdados';
+    const dados = await requisicao(endpoint, 'GET');
+    return dados;
+}
 
+async function carregarPerfil() {
     try {
         const perfil = await buscarMeuPerfil();
+        if (!perfil) return;
 
-        if (!perfil) {
-            container.innerHTML = '<p>Perfil não encontrado.</p>';
-            return;
+        const imgPreview = document.getElementById('imgPreview');
+        if (imgPreview && perfil.fotoPerfil) {
+            imgPreview.src = perfil.fotoPerfil.startsWith('http') || perfil.fotoPerfil.startsWith('/') ? perfil.fotoPerfil : '/upload/' + perfil.fotoPerfil;
         }
 
-        container.innerHTML = `
-            <div class="perfil-header">
-                <div class="foto-perfil">
-                    <img src="${perfil.fotoPerfil ? '/upload/' + perfil.fotoPerfil : '/assets/avatar-padrao.png'}" alt="Foto de perfil">
-                    <label for="novaFoto" class="botao-trocar-foto">📷 Trocar Foto</label>
-                    <input type="file" id="novaFoto" accept="image/*" style="display: none;">
-                </div>
-                <div class="info-perfil">
-                    <h2>${perfil.nome}</h2>
-                    <p>📧 ${perfil.email}</p>
-                    <p>📱 ${perfil.telefone || 'Não informado'}</p>
-                    ${perfil.categoria ? `<p>🔧 ${perfil.categoria}</p>` : ''}
-                    <p>📍 ${perfil.localizacao ? `${perfil.localizacao.cidade} - ${perfil.localizacao.estado}` : 'Local não informado'}</p>
-                </div>
-            </div>
+        const campoNome = document.querySelector('input[name="nome"]');
+        if (campoNome) campoNome.value = perfil.nome || '';
 
-            <div class="formulario-edicao">
-                <h3>Editar Dados</h3>
-                <form id="formAtualizarPerfil">
-                    <div class="campo-form">
-                        <label>Nome</label>
-                        <input type="text" id="editNome" value="${perfil.nome}" required>
-                    </div>
-                    <div class="campo-form">
-                        <label>Email</label>
-                        <input type="email" id="editEmail" value="${perfil.email}" required>
-                    </div>
-                    <div class="campo-form">
-                        <label>Telefone</label>
-                        <input type="text" id="editTelefone" value="${perfil.telefone || ''}" placeholder="(00) 00000-0000">
-                    </div>
-                    <div class="campo-form">
-                        <label>Cidade</label>
-                        <input type="text" id="editCidade" value="${perfil.localizacao ? perfil.localizacao.cidade : ''}">
-                    </div>
-                    <div class="campo-form">
-                        <label>Estado</label>
-                        <input type="text" id="editEstado" value="${perfil.localizacao ? perfil.localizacao.estado : ''}">
-                    </div>
-                    <button type="submit" class="botao-salvar">Salvar Alterações</button>
-                </form>
-            </div>
-        `;
+        const campoTelefone = document.querySelector('input[name="telefone"]');
+        if (campoTelefone) campoTelefone.value = perfil.telefone || '';
 
-        document.getElementById('novaFoto').addEventListener('change', (e) => {
-            const arquivo = e.target.files[0];
-            if (arquivo) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = container.querySelector('.foto-perfil img');
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(arquivo);
-            }
-        });
+        const campoEmail = document.querySelector('input[name="login"]');
+        if (campoEmail) campoEmail.value = perfil.email || '';
 
-        aplicarMascaraTelefone();
+        const loc = perfil.localizacao || {};
+        const campoCep = document.querySelector('input[name="cep"]');
+        if (campoCep) campoCep.value = loc.cep || '';
 
-    } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
-        container.innerHTML = '<p style="color:red">Erro ao carregar perfil.</p>';
+        const campoRua = document.querySelector('input[name="rua"]');
+        if (campoRua) campoRua.value = loc.rua || '';
+
+        const campoBairro = document.querySelector('input[name="bairro"]');
+        if (campoBairro) campoBairro.value = loc.bairro || '';
+
+        const campoNumero = document.querySelector('input[name="numero"]');
+        if (campoNumero) campoNumero.value = loc.numero || '';
+
+        const campoEstado = document.querySelector('input[name="estado"]');
+        if (campoEstado) campoEstado.value = loc.estado || '';
+
+        const campoCidade = document.querySelector('input[name="cidade"]');
+        if (campoCidade) campoCidade.value = loc.cidade || '';
+
+        const campoComplemento = document.querySelector('input[name="complemento"]');
+        if (campoComplemento) campoComplemento.value = loc.complemento || '';
+
+        const inputFoto = document.getElementById('inputFotoPerfil');
+        if (inputFoto) {
+            inputFoto.addEventListener('change', (e) => {
+                const arquivo = e.target.files[0];
+                if (arquivo) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        if (imgPreview) imgPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(arquivo);
+                }
+            });
+        }
+
+    } catch (erro) {
+        console.error('Erro ao carregar perfil:', erro);
     }
 }
 
 async function atualizarPerfil(e) {
     e.preventDefault();
 
-    const btn = e.target.querySelector('.botao-salvar');
-    btn.disabled = true;
-    btn.textContent = 'Salvando...';
+    const btn = e.target.querySelector('.botaozao-roxo');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
+    }
 
     const role = getUsuarioRole();
     const endpoint = role === 'PROFISSIONAL' ? '/profissional/update' : '/usuario/update';
 
     const dados = {
-        nome: document.getElementById('editNome').value,
-        email: document.getElementById('editEmail').value,
-        telefone: document.getElementById('editTelefone').value,
+        nome: document.querySelector('input[name="nome"]').value,
+        email: document.querySelector('input[name="login"]').value,
+        telefone: document.querySelector('input[name="telefone"]').value,
         localizacao: {
-            cidade: document.getElementById('editCidade').value,
-            estado: document.getElementById('editEstado').value,
-            rua: "Não informado",
-            bairro: "Não informado",
-            numero: "S/N",
-            cep: "00000-000"
+            cep: document.querySelector('input[name="cep"]').value,
+            rua: document.querySelector('input[name="rua"]').value,
+            bairro: document.querySelector('input[name="bairro"]').value,
+            numero: document.querySelector('input[name="numero"]').value,
+            estado: document.querySelector('input[name="estado"]').value,
+            cidade: document.querySelector('input[name="cidade"]').value,
+            complemento: document.querySelector('input[name="complemento"]').value
         },
         role: role
     };
+
+    const senha = document.querySelector('input[name="senha"]').value.trim();
+    if (senha) {
+        dados.senha = senha;
+    }
 
     if (role === 'PROFISSIONAL') {
         const perfilAtual = await buscarMeuPerfil();
@@ -114,7 +114,7 @@ async function atualizarPerfil(e) {
     const formData = new FormData();
     formData.append('dados', new Blob([JSON.stringify(dados)], { type: 'application/json' }));
 
-    const arquivoFoto = document.getElementById('novaFoto').files[0];
+    const arquivoFoto = document.getElementById('inputFotoPerfil')?.files[0];
     if (arquivoFoto) {
         formData.append('arquivo', arquivoFoto);
     }
@@ -123,32 +123,19 @@ async function atualizarPerfil(e) {
         await requisicao(endpoint, 'PUT', formData, true);
         alert('Perfil atualizado com sucesso!');
         localStorage.setItem('usuario_nome', dados.nome);
-        carregarPerfil();
-    } catch (error) {
-        console.error('Erro ao atualizar perfil:', error);
+        if (senha) {
+            alert('Senha alterada. Faça login novamente.');
+            logout();
+        } else {
+            carregarPerfil();
+        }
+    } catch (erro) {
+        console.error('Erro ao atualizar perfil:', erro);
         alert('Erro ao atualizar perfil.');
     } finally {
-        btn.disabled = false;
-        btn.textContent = 'Salvar Alterações';
-    }
-}
-
-function aplicarMascaraTelefone() {
-    const telefone = document.getElementById('editTelefone');
-    if (telefone) {
-        telefone.addEventListener('input', (e) => {
-            let valor = e.target.value.replace(/\D/g, '');
-            if (valor.length > 11) valor = valor.slice(0, 11);
-            
-            if (valor.length > 10) {
-                valor = `(${valor.slice(0,2)}) ${valor.slice(2,7)}-${valor.slice(7)}`;
-            } else if (valor.length > 6) {
-                valor = `(${valor.slice(0,2)}) ${valor.slice(2,6)}-${valor.slice(6)}`;
-            } else if (valor.length > 2) {
-                valor = `(${valor.slice(0,2)}) ${valor.slice(2)}`;
-            }
-            
-            e.target.value = valor;
-        });
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Salvar Alterações';
+        }
     }
 }

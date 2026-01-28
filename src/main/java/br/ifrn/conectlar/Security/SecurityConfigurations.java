@@ -43,10 +43,10 @@ public class SecurityConfigurations {
                                 "/painel-cliente.html",
                                 "/feed-trabalhador.html",
                                 "/historico_cliente.html",
+                                "/historico_profissional.html",
                                 "/perfil.html",
                                 "/perfil_cliente.html",
-                                "/perfil_trabalhador.html",
-                                "/adm.html"
+                                "/perfil_trabalhador.html"
                         ).permitAll()
                         .requestMatchers("/js/**", "/css/**", "/assets/**", "/upload/**", "/uploads/**", "/script.js").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()

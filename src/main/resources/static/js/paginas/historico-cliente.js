@@ -34,24 +34,40 @@ async function carregarHistorico() {
             const resumo = montarResumo(servico);
 
             card.innerHTML = `
-                <div class="info-historico">
+                <div class="historico-cabecalho">
                     <h3>${servico.problema || 'Sem título'}</h3>
-                    <p class="descricao">${resumo}</p>
-                    <div class="detalhes">
-                        <span>📍 ${cidade} - ${estado}</span>
-                        <span>🔧 ${servico.categoria || 'Geral'}</span>
-                        <span>💰 R$ ${servico.pagamento || '0,00'}</span>
-                    </div>
-                    ${servico.nomeProfissional ? `<span class="profissional">👨‍💼 ${servico.nomeProfissional}</span>` : ''}
-                </div>
-                <div class="status-info">
                     <span class="status-badge ${statusClass}">${statusTexto}</span>
-                    ${servico.status === 'EM_ESPERA' ? `
-                        <button class="botao-concluir" onclick="responderSolicitacao(${servico.id}, true)">Aceitar</button>
-                        <button class="botao-avaliar" onclick="responderSolicitacao(${servico.id}, false)">Recusar</button>
+                </div>
+                <div class="historico-corpo">
+                    <div class="caixa-descricao">
+                        <p class="descricao">${servico.descricao || 'Sem descrição'}</p>
+                    </div>
+                    ${servico.imagens && servico.imagens.length > 0 ? `
+                        <div class="caixa-imagens">
+                            <div class="imagens-problema">
+                                ${servico.imagens.map(img => `
+                                    <img src="${img.startsWith('http') || img.startsWith('/') ? img : '/upload/' + img}" alt="Imagem do problema" class="img-problema">
+                                `).join('')}
+                            </div>
+                        </div>
                     ` : ''}
-                    ${servico.status === 'CONCLUIDO' ? `<button class="botao-avaliar" onclick="avaliarServico(${servico.id})">Avaliar</button>` : ''}
-                    ${servico.status === 'EM_ANDAMENTO' ? `<button class="botao-concluir" onclick="concluirServico(${servico.id})">Concluir</button>` : ''}
+                    <div class="caixa-detalhes">
+                        <div class="detalhes-historico">
+                            <span>📍 ${cidade} - ${estado}</span>
+                            <span>🔧 ${servico.categoria || 'Geral'}</span>
+                            <span>💰 R$ ${servico.pagamento || '0,00'}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="historico-rodape">
+                    <div class="caixa-data">
+                        <span class="data">${new Date(servico.dataHoraAberta).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                    ${servico.profissionalNome ? `
+                        <div class="caixa-profissional">
+                            <span class="profissional">Profissional: ${servico.profissionalNome}</span>
+                        </div>
+                    ` : ''}
                 </div>
             `;
 
@@ -74,6 +90,33 @@ window.responderSolicitacao = async function(idTrabalho, resposta) {
     } catch (error) {
         console.error('Erro ao responder solicitação:', error);
         alert('Erro ao processar sua resposta.');
+    }
+};
+
+window.finalizarTrabalho = async function(idTrabalho) {
+    try {
+        await requisicao(`/trabalho/${idTrabalho}/concluir`, 'POST');
+        const avaliacao = prompt('Avalie o serviço (0 a 5):');
+        if (avaliacao && avaliacao >= 0 && avaliacao <= 5) {
+            await requisicao(`/avaliacao/avaliar/${idTrabalho}`, 'POST', { nota: Number(avaliacao) });
+        }
+        alert('Serviço finalizado!');
+        carregarHistorico();
+    } catch (error) {
+        console.error('Erro ao finalizar:', error);
+        alert('Erro ao finalizar serviço.');
+    }
+};
+
+window.cancelarTrabalho = async function(idTrabalho) {
+    if (!confirm('Tem certeza que deseja cancelar este serviço?')) return;
+    try {
+        await requisicao(`/trabalho/${idTrabalho}/cancelar`, 'POST');
+        alert('Serviço cancelado.');
+        carregarHistorico();
+    } catch (error) {
+        console.error('Erro ao cancelar:', error);
+        alert('Erro ao cancelar serviço.');
     }
 };
 

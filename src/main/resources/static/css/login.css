@@ -204,14 +204,14 @@ body {
 }
 
 .label-upload {
-    font-size: 0.9rem;
+    font-size: 14.4px;
     margin-bottom: 10px;
     color: #a8a8b3;
 }
 
 .input-arquivo {
     width: 100%;
-    font-size: 0.8rem;
+    font-size: 12.8px;
     color: #888;
 }
 

@@ -16,6 +16,7 @@
     <div class="menu-pro">
         <button onclick="window.location.href='feed-trabalhador.html'">Home</button>
         <button onclick="window.location.href='historico_profissional.html'">Histórico <span id="contadorHistorico" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">0</span></button>
+        <button onclick="window.location.href='historico_profissional.html'">Lucro total <span id="contadorLucroTotal" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">R$ 0,00</span></button>
         <button onclick="window.location.href='perfil_trabalhador.html'">Perfil</button>
         <button onclick="logout()" class="botao-sair">Sair</button>
     </div>
@@ -64,7 +65,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h2>Detalhes do Trabalho</h2>
-            <button class="modal-fechar" onclick="fecharModalDetalhesTrabalho()">&times;</button>
+            <button class="modal-fechar" data-action="fechar-modal">&times;</button>
         </div>
         <div class="modal-body">
             <form id="formDetalhesTrabalho" class="form-dark">
@@ -97,6 +98,18 @@
                     <input type="text" id="detalheRua" readonly>
                 </div>
                 <div class="form-grupo">
+                    <label for="detalheDescricao">Descrição</label>
+                    <textarea id="detalheDescricao" rows="4" readonly></textarea>
+                </div>
+                <div class="form-grupo">
+                    <label>Imagens do Problema</label>
+                    <div id="detalheImagens"></div>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheStatus">Status</label>
+                    <input type="text" id="detalheStatus" readonly>
+                </div>
+                <div class="form-grupo">
                     <label for="detalheBairro">Bairro</label>
                     <input type="text" id="detalheBairro" readonly>
                 </div>
@@ -108,18 +121,6 @@
                     <label for="detalheComplemento">Complemento</label>
                     <input type="text" id="detalheComplemento" readonly>
                 </div>
-                <div class="form-grupo">
-                    <label for="detalheDescricao">Descrição</label>
-                    <textarea id="detalheDescricao" rows="4" readonly></textarea>
-                </div>
-                <div class="form-grupo">
-                    <label for="detalheImagem">Imagem do problema</label>
-                    <img id="detalheImagem" style="max-width:100%; border-radius:8px; margin-top:8px;" alt="Imagem do problema">
-                </div>
-                <div class="form-grupo">
-                    <label for="detalheStatus">Status</label>
-                    <input type="text" id="detalheStatus" readonly>
-                </div>
             </form>
         </div>
     </div>
@@ -127,5 +128,6 @@
 
 <script src="/js/api.js"></script>
 <script src="/js/paginas/feed-profissional.js"></script>
+<script src="/js/paginas/feed-profissional-events.js"></script>
 </body>
 </html>

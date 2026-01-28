@@ -44,6 +44,21 @@ function abrirModalDetalhes(pedido) {
 
     set('detalheStatus', pedido && pedido.status ? String(pedido.status).replace('_', ' ') : '');
 
+    const imagensEl = document.getElementById('detalheImagens');
+    if (imagensEl) {
+        if (pedido && pedido.imagens && pedido.imagens.length > 0) {
+            imagensEl.innerHTML = `
+                <div class="imagens-problema">
+                    ${pedido.imagens.map(img => `
+                        <img src="${img.startsWith('http') || img.startsWith('/') ? img : '/upload/' + img}" alt="Imagem do problema" class="img-problema">
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            imagensEl.innerHTML = '<p style="color:#888;font-size:0.9rem;">Nenhuma imagem anexada.</p>';
+        }
+    }
+
     modal.classList.remove('escondido');
 }
 
@@ -153,14 +168,32 @@ async function carregarPedidos() {
         lista.innerHTML = '';
 
         servicos.forEach(p => {
-            const div = document.createElement('div');
-            div.className = 'card-pedido';
+            const card = document.createElement('div');
+            card.className = 'card-pedido';
 
             const cidade = p.localizacao ? p.localizacao.cidade : (p.cidade || 'Local não inf.');
             const estado = p.localizacao ? p.localizacao.estado : (p.estado || 'RN');
             const statusFormatado = (p.status || 'ABERTO').replace('_', ' ');
 
-            div.innerHTML = `
+            let botoesAcao = '';
+            
+            if (p.status === 'EM_ESPERA') {
+                botoesAcao = `
+                    <div class="botoes-card">
+                        <button class="botao-aceitar" onclick="responderSolicitacao(${p.id}, true)">Aceitar</button>
+                        <button class="botao-recusar" onclick="responderSolicitacao(${p.id}, false)">Recusar</button>
+                    </div>
+                `;
+            } else if (p.status === 'EM_ANDAMENTO') {
+                botoesAcao = `
+                    <div class="botoes-card">
+                        <button class="botao-finalizar" onclick="finalizarTrabalho(${p.id})">Finalizar</button>
+                        <button class="botao-cancelar" onclick="cancelarTrabalho(${p.id})">Cancelar</button>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
                 <div class="info-card">
                     <h3>${p.problema || 'Sem título'}</h3>
                     <div class="detalhes-card">
@@ -168,15 +201,29 @@ async function carregarPedidos() {
                         <span style="color: #00e0ff;">🔧 ${p.categoria || 'Geral'}</span>
                         <span>💰 R$ ${p.pagamento || '0,00'}</span>
                     </div>
+                    ${p.profissionalNome ? `<div class="profissional-nome">Profissional: ${p.profissionalNome}</div>` : ''}
                 </div>
                 <span class="status-badge" style="border-color: #00e0ff; color: #00e0ff;">
                     ${statusFormatado}
                 </span>
             `;
 
-            div.style.cursor = 'pointer';
-            div.addEventListener('click', () => abrirModalDetalhes(p));
-            lista.appendChild(div);
+            const botoesContainer = document.createElement('div');
+            botoesContainer.className = 'botoes-container';
+            botoesContainer.innerHTML = botoesAcao;
+
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = 'card-wrapper';
+            cardWrapper.appendChild(card);
+            cardWrapper.appendChild(botoesContainer);
+
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', (e) => {
+                if (!e.target.closest('.botoes-container')) {
+                    abrirModalDetalhes(p);
+                }
+            });
+            lista.appendChild(cardWrapper);
         });
     } catch (error) {
         console.error('Erro ao carregar:', error);
@@ -184,18 +231,81 @@ async function carregarPedidos() {
     }
 }
 
+window.responderSolicitacao = async function(idTrabalho, resposta) {
+    try {
+        const endpoint = resposta ? `/trabalho/${idTrabalho}/responder` : `/trabalho/${idTrabalho}/responder`;
+        const response = await requisicao(endpoint, 'POST', resposta);
+        
+        if (response) {
+            alert(resposta ? 'Trabalho aceito com sucesso!' : 'Trabalho recusado com sucesso!');
+            carregarPedidos();
+        }
+    } catch (error) {
+        console.error('Erro ao responder solicitação:', error);
+        alert('Erro ao processar solicitação. Tente novamente.');
+    }
+};
+
+window.finalizarTrabalho = async function(idTrabalho) {
+    try {
+        const response = await requisicao(`/trabalho/${idTrabalho}/concluir`, 'POST');
+        
+        if (response) {
+            alert('Trabalho finalizado com sucesso!');
+            carregarPedidos();
+        }
+    } catch (error) {
+        console.error('Erro ao finalizar trabalho:', error);
+        alert('Erro ao finalizar trabalho. Tente novamente.');
+    }
+};
+
+window.cancelarTrabalho = async function(idTrabalho) {
+    try {
+        const response = await requisicao(`/trabalho/${idTrabalho}/cancelar`, 'POST');
+        
+        if (response) {
+            alert('Trabalho cancelado com sucesso!');
+            carregarPedidos();
+        }
+    } catch (error) {
+        console.error('Erro ao cancelar trabalho:', error);
+        alert('Erro ao cancelar trabalho. Tente novamente.');
+    }
+};
+
 async function enviarNovoTrabalho(e) {
     e.preventDefault();
-
-    const btn = document.querySelector('.botao-criar-projeto');
+    const btn = e.target.querySelector('.botao-criar-projeto');
     if (btn) {
         btn.disabled = true;
-        btn.innerText = 'Enviando...';
+        btn.innerText = 'Publicando...';
+    }
+
+    const titulo = valor('tituloServico').trim();
+    const descricao = valor('descServico').trim();
+
+    if (!titulo) {
+        alert('Preencha o título do serviço.');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = 'Publicar Agora';
+        }
+        return;
+    }
+
+    if (descricao.length < 10) {
+        alert('A descrição deve ter pelo menos 10 caracteres.');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = 'Publicar Agora';
+        }
+        return;
     }
 
     const dadosTrabalho = {
-        problema: valor('tituloServico'),
-        descricao: valor('descServico'),
+        problema: titulo,
+        descricao: descricao,
         categoria: valor('categoriaServico'),
         status: 'ABERTO',
         pagamento: parseFloat(valor('pagamentoServico')) || 0,
@@ -226,7 +336,7 @@ async function enviarNovoTrabalho(e) {
         carregarPedidos();
     } catch (error) {
         console.error(error);
-        alert('Erro de conexão.');
+        alert('Erro ao publicar: ' + (error.message || 'Verifique os campos e tente novamente.'));
     } finally {
         if (btn) {
             btn.disabled = false;
