@@ -55,7 +55,15 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/cadastrar").permitAll()      // Criar conta de usuário
                         .requestMatchers(HttpMethod.POST, "/profissional/cadastrar").permitAll() // Criar conta de profissional
-                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra).authenticated()
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra,
+                                RotasPrincipais.RootTrabalho + RotasBases.concluirTrabalho).authenticated()
+
+
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.Lista).permitAll()
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.PorId).permitAll()
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.Busca).permitAll()
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.filtroCategoria).permitAll()
+
 
 
 
