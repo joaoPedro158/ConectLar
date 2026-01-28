@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Configuration;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,5 +21,10 @@ public class WebConfig implements WebMvcConfigurer {
 
         // rota limpa para o painel do profissional
         registry.addViewController("/app/profissional").setViewName("forward:/feed-trabalhador.html");
+    }
+
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/upload/**")
+                .addResourceLocations("file:./upload/"); // <--- Adicione o PONTO antes da barra
     }
 }
