@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.BaseAuthEntity;
+import br.ifrn.conectlar.Repository.Entity.BaseAuthEntity;
 
 
 public interface TokenService {

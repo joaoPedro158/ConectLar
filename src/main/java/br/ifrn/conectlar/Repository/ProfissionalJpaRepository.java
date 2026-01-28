@@ -1,7 +1,6 @@
 package br.ifrn.conectlar.Repository;
 
-import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

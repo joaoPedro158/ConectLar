@@ -1,0 +1,248 @@
+/* Reseta padrões */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.container-principal {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+.painel-acesso {
+    background: rgba(30, 30, 30, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.logo-sistema {
+    display: block;
+    margin: 0 auto 32px auto;
+    max-width: 240px;
+    width: 70%;
+    height: auto;
+}
+
+.secao-selecao-tipo {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.botao-selecao {
+    flex: 1;
+    padding: 10px;
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    color: #888888;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.botao-selecao:hover {
+    background: #2a2a2a;
+    color: #ffffff;
+}
+
+.botao-selecao.selecionado {
+    background: #00e0ff;
+    color: #000000;
+    border-color: #00e0ff;
+    font-weight: bold;
+}
+
+.formulario-padrao {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.campos-cadastro {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input-dados {
+    background: #1e1e1e;
+    border: 1px solid #333333;
+    color: #ffffff;
+    padding: 14px;
+    border-radius: 6px;
+    outline: none;
+    font-size: 16px;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.input-dados::placeholder {
+    color: #888888;
+}
+
+.input-dados:focus {
+    background: #252525;
+    border-color: #00e0ff;
+    box-shadow: 0 0 0 2px rgba(0, 224, 255, 0.2);
+}
+
+.campo-senha {
+    position: relative;
+    width: 100%;
+}
+
+.campo-senha .input-dados {
+    padding-right: 48px;
+}
+
+.botao-olho {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: 1px solid #333333;
+    background: #1e1e1e;
+    color: #00e0ff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-olho:hover {
+    background: #252525;
+    border-color: #00e0ff;
+}
+
+.botao-principal {
+    background: #00e0ff;
+    color: #000000;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.2s;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0, 224, 255, 0.2);
+    margin-top: 10px;
+    width: 100%;
+}
+
+.botao-principal:hover {
+    background: #33ebff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 224, 255, 0.4);
+}
+
+.texto-alternar {
+    color: #00e0ff;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.texto-alternar:hover {
+    text-decoration: underline;
+    opacity: 1;
+}
+
+.container-upload {
+    border: 2px dashed #444444;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background: #1e1e1e;
+    border-radius: 6px;
+    color: #aaaaaa;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container-upload:hover {
+    border-color: #00e0ff;
+    background: rgba(0, 224, 255, 0.05);
+    color: #00e0ff;
+}
+
+.label-upload {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: #a8a8b3;
+}
+
+.input-arquivo {
+    width: 100%;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+@keyframes pulsar {
+    0% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.2); opacity: 0.6; }
+    100% { transform: scale(1); opacity: 0.3; }
+}
+
+.decoracao-fundo-1, .decoracao-fundo-2 {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 1;
+    animation: pulsar 6s infinite ease-in-out;
+}
+
+.decoracao-fundo-1 {
+    width: 300px;
+    height: 300px;
+    background: #00e0ff;
+    top: -50px;
+    left: -50px;
+    animation-delay: 0s;
+}
+
+.decoracao-fundo-2 {
+    width: 400px;
+    height: 400px;
+    background: #008b99;
+    bottom: -50px;
+    right: -50px;
+    animation-delay: 3s;
+}

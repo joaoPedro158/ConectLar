@@ -1,24 +1,27 @@
 package br.ifrn.conectlar.Configuration;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8181", "http://127.0.0.1:5500", "*") // Ajuste conforme seu front
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
-    }
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // redireciona a raiz para o index.html
+        registry.addViewController("/").setViewName("forward:/index.html");
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // mapeia a URL /uploads/** para a pasta física upload/ na raiz do projeto
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:upload/");
+        // cria uma rota /login que também abre o index
+        registry.addViewController("/login").setViewName("forward:/index.html");
+
+        // rota limpa para o painel do cliente
+        registry.addViewController("/app/cliente").setViewName("forward:/painel-cliente.html");
+
+        // rota limpa para o painel do profissional
+        registry.addViewController("/app/profissional").setViewName("forward:/feed-trabalhador.html");
+
     }
 }

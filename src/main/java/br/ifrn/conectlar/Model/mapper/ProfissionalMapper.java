@@ -1,6 +1,6 @@
 package br.ifrn.conectlar.Model.mapper;
 
-import br.ifrn.conectlar.Model.Entity.ProfissionalEntity;
+import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;

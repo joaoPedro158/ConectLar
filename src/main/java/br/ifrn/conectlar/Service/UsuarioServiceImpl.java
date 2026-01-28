@@ -1,27 +1,27 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Model.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
-import br.ifrn.conectlar.Model.Entity.UsuarioEntity;
+import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -133,4 +133,23 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<TrabalhoEntity> historico = trabalhoRepository.findByUsuarioIdOrderByDataHoraAbertaDesc(id);
         return historico.stream().map(trabalhoMapper::toDTO).toList();
     }
+
+    @Override
+    public BigDecimal getGastoTotal(Long idUsuario) {
+        List<TrabalhoEntity> trabalhos =  trabalhoRepository.findAllByUsuarioIdAndStatus(idUsuario, StatusTrabalho.CONCLUIDO);
+
+        return trabalhos.stream()
+                .map(TrabalhoEntity::getPagamento)       // Pega os valores
+                .filter(valor -> valor != null)      // Remove nulos para não quebrar
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    @Override
+    public UsuarioDTO getUsuario(Long id) {
+        UsuarioEntity usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("usuario nao encontrado"));
+        return mapper.toDTO(usuario);
+    }
+
+
 }
