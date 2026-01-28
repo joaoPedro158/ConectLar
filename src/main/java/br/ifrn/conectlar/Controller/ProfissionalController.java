@@ -2,6 +2,7 @@ package br.ifrn.conectlar.Controller;
 
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
+import br.ifrn.conectlar.Model.dto.DadosProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
@@ -65,5 +66,12 @@ public class ProfissionalController {
         Long profissionaoId = user.getId();
         ProfissionalDTO profissional = profissionalService.getProfissional(profissionaoId);
         return ResponseEntity.ok(profissional);
+    }
+
+    @GetMapping(RotasBases.dadosProfissional)
+    public ResponseEntity getDadosProfissiona(@AuthenticationPrincipal UsuarioDetails user) {
+        Long profissionalId = user.getId();
+        DadosProfissionalDTO dados =  profissionalService.getDadosProfissional(profissionalId);
+        return ResponseEntity.ok(dados);
     }
 }

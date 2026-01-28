@@ -40,6 +40,8 @@ public class TrabalhoEntity {
     @Column(nullable = false)
     private String descricao;
 
+    private String data_hora_finalizada;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusTrabalho status;
@@ -51,10 +53,10 @@ public class TrabalhoEntity {
     //  (Chaves Estrangeiras) ---
     @ElementCollection
     @CollectionTable(
-            name = "trabalho_imagem",                        // 1. Nome da tabela que criamos no SQL
-            joinColumns = @JoinColumn(name = "id_trabalho")  // 2. Nome da coluna Foreign Key no SQL
+            name = "trabalho_imagem",
+            joinColumns = @JoinColumn(name = "id_trabalho")
     )
-    @Column(name = "caminho_imagem")                     // 3. Nome da coluna de valor no SQL
+    @Column(name = "caminho_imagem")
     private List<String> imagens = new ArrayList<>();
 
     /*
@@ -69,6 +71,9 @@ public class TrabalhoEntity {
     @ManyToOne // Um profissional tem vários trabalhos
     @JoinColumn(name = "id_profissional") // Nome da coluna no banco
     private ProfissionalEntity profissional;
+
+    @OneToOne(mappedBy = "trabalho") // O nome deve ser igual ao atributo na AvaliacaoEntity
+    private AvaliacaoEntity avaliacao;
 
 
 }

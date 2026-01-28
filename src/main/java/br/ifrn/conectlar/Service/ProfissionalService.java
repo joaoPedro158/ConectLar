@@ -1,5 +1,6 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.dto.DadosProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
@@ -16,4 +17,5 @@ public interface ProfissionalService {
    ProfissionalDTO updateProfissional(Long id, ProfissionalRecord profissionalRecord,  MultipartFile arquivo);
    List<TrabalhoDTO> historico(Long id);
    ProfissionalDTO getProfissional(Long id);
+   DadosProfissionalDTO getDadosProfissional(Long id);
 }

@@ -63,7 +63,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.PorId).permitAll()
                         .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.Busca).permitAll()
                         .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.filtroCategoria).permitAll()
-
+                        .requestMatchers(HttpMethod.GET, RotasPrincipais.RootProfissional + RotasBases.dadosProfissional).authenticated()
 
 
 

@@ -15,6 +15,8 @@ public interface TrabalhoJpaRepository extends JpaRepository<TrabalhoEntity, Lon
   List<TrabalhoEntity> findByProfissionalIdOrderByDataHoraAbertaDesc(Long id);
   List<TrabalhoEntity> findByCategoriaOrderByDataHoraAbertaDesc(CategoriaEnum categoria);
   List<TrabalhoEntity> findAllByUsuarioIdAndStatus(Long id, StatusTrabalho status);
+  List<TrabalhoEntity> findAllByProfissionalId(Long idProfissional);
+
 
   Optional<TrabalhoEntity> findById(Long id);
 
