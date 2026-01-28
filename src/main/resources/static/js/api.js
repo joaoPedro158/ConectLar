@@ -84,6 +84,11 @@ function salvarDadosUsuario(dados) {
     localStorage.setItem('usuario_nome', dados.nome);
     localStorage.setItem('usuario_role', dados.role);
     localStorage.setItem('usuario_id', dados.id);
+    if (dados.fotoPerfil) {
+        localStorage.setItem('usuario_foto', dados.fotoPerfil);
+    } else {
+        localStorage.removeItem('usuario_foto');
+    }
 }
 
 function getUsuarioRole() {

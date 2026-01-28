@@ -20,7 +20,7 @@ async function carregarPerfil() {
         container.innerHTML = `
             <div class="perfil-header">
                 <div class="foto-perfil">
-                    <img src="${perfil.fotoPerfil ? '/uploads/' + perfil.fotoPerfil : '/assets/avatar-padrao.png'}" alt="Foto de perfil">
+                    <img src="${perfil.fotoPerfil ? '/upload/' + perfil.fotoPerfil : '/assets/avatar-padrao.png'}" alt="Foto de perfil">
                     <label for="novaFoto" class="botao-trocar-foto">📷 Trocar Foto</label>
                     <input type="file" id="novaFoto" accept="image/*" style="display: none;">
                 </div>

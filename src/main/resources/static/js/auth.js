@@ -29,7 +29,8 @@ async function login(email, senha, tipo) {
             token: resposta.token,
             nome: dadosUsuario && dadosUsuario.nome ? dadosUsuario.nome : (tipo === 'profissional' ? 'Profissional' : 'Cliente'),
             role: role,
-            id: dadosUsuario && dadosUsuario.id ? dadosUsuario.id : null
+            id: dadosUsuario && dadosUsuario.id ? dadosUsuario.id : null,
+            fotoPerfil: dadosUsuario && dadosUsuario.fotoPerfil ? dadosUsuario.fotoPerfil : null
         });
 
         redirecionarPorRole(tipo);
@@ -80,8 +81,6 @@ async function buscarDadosUsuario(token, tipo) {
 function redirecionarPorRole(tipo) {
     if (tipo === 'profissional') {
         window.location.href = 'feed-trabalhador.html';
-    } else if (tipo === 'adm') {
-        window.location.href = 'adm.html';
     } else {
         window.location.href = 'painel-cliente.html';
     }
@@ -98,6 +97,15 @@ async function cadastrarUsuario(dados, arquivo, tipo) {
 
         const endpoint = tipo === 'profissional' ? '/profissional/cadastrar' : '/usuario/cadastrar';
         const criado = await requisicao(endpoint, 'POST', formData, true);
+
+        
+        if (tipo === 'profissional') {
+            try {
+                await requisicao('/profissional/meusdados', 'GET');
+            } catch (e) {
+               
+            }
+        }
 
         return { sucesso: true, criado: criado };
     } catch (erro) {

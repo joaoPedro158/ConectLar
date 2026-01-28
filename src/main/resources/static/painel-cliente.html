@@ -14,14 +14,20 @@
     </div>
     <div class="teste">
         <button onclick="window.location.href='painel-cliente.html'">Home</button>
-        <button onclick="window.location.href='historico_cliente.html'">Histórico</button>
+        <button onclick="window.location.href='historico_cliente.html'">Histórico <span id="contadorHistorico" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">0</span></button>
         <button onclick="window.location.href='perfil_cliente.html'">Perfil</button>
+        <button onclick="window.location.href='historico_cliente.html'">Gasto total <span id="contadorGastoTotal" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">R$ 0,00</span></button>
         <button id="btnSair" class="botao-sair" onclick="logout()">Sair</button>
     </div>
 </header>
 
 <main class="container-principal">
     <section class="painel-conteudo">
+
+        <div id="saudacaoUsuario" style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <img id="fotoUsuario" alt="Foto do usuário" src="/assets/avatar-padrao.png" style="width:46px; height:46px; border-radius:50%; object-fit:cover; border:2px solid #00e0ff;">
+            <div id="textoSaudacao" style="font-weight:700;">Olá, <span id="nomeUsuarioSaudacao">Cliente</span></div>
+        </div>
 
         <div class="container-busca">
             <form class="form-busca">
@@ -70,11 +76,11 @@
         <hr class="divisor"> 
         
         <div class="secao-servicos">
-            <h1 class="titulo-sessao">Serviços</h1>
+            <h1 class="titulo-sessao">Caixinha de pedidos</h1>
             <div class="empty-state">
                 <div class="empty-icon">📦</div>
-                <h2>Nenhum serviço disponível</h2>
-                <p>Você ainda não publicou nenhum serviço. Clique no botão + para começar!</p>
+                <h2>Nenhum pedido disponível</h2>
+                <p>Você ainda não publicou nenhum pedido. Clique no botão + para começar!</p>
             </div>
         </div>
         <button class="fab-botao" onclick="abrirModal()">+</button>
@@ -168,6 +174,79 @@
                 Publicar Agora
             </button>
         </form>
+    </div>
+</div>
+
+<div id="modalDetalhesPedido" class="modal-backdrop escondido">
+    <div class="modal-content">
+        <header class="modal-header">
+            <h3>Detalhes do Pedido</h3>
+            <button class="botao-fechar-modal" onclick="fecharModalDetalhes()">&times;</button>
+        </header>
+
+        <div class="form-grupo">
+            <label>Título do Problema</label>
+            <input type="text" id="detalheTitulo" class="input-dark" readonly>
+        </div>
+
+        <div class="form-row">
+            <div class="form-grupo">
+                <label>Categoria</label>
+                <input type="text" id="detalheCategoria" class="input-dark" readonly>
+            </div>
+            <div class="form-grupo">
+                <label>Valor (R$)</label>
+                <input type="text" id="detalhePagamento" class="input-dark" readonly>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-grupo">
+                <label>CEP</label>
+                <input type="text" id="detalheCep" class="input-dark" readonly>
+            </div>
+            <div class="form-grupo">
+                <label>Cidade</label>
+                <input type="text" id="detalheCidade" class="input-dark" readonly>
+            </div>
+            <div class="form-grupo grupo-uf" style="width: 80px;">
+                <label>UF</label>
+                <input type="text" id="detalheEstado" class="input-dark" readonly>
+            </div>
+        </div>
+
+        <div class="form-grupo">
+            <label>Rua</label>
+            <input type="text" id="detalheRua" class="input-dark" readonly>
+        </div>
+
+        <div class="form-row">
+            <div class="form-grupo">
+                <label>Bairro</label>
+                <input type="text" id="detalheBairro" class="input-dark" readonly>
+            </div>
+            <div class="form-grupo">
+                <label>Número</label>
+                <input type="text" id="detalheNumero" class="input-dark" readonly>
+            </div>
+        </div>
+
+        <div class="form-grupo">
+            <label>Complemento</label>
+            <input type="text" id="detalheComplemento" class="input-dark" readonly>
+        </div>
+
+        <div class="form-grupo">
+            <label>Descrição</label>
+            <textarea id="detalheDescricao" class="input-dark" rows="4" readonly></textarea>
+        </div>
+
+        <div class="form-grupo">
+            <label>Status</label>
+            <input type="text" id="detalheStatus" class="input-dark" readonly>
+        </div>
+
+        <button type="button" class="botao-criar-projeto botao-full" onclick="fecharModalDetalhes()">Fechar</button>
     </div>
 </div>
 

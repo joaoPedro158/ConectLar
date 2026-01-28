@@ -15,7 +15,7 @@
     </div>
     <div class="menu-pro">
         <button onclick="window.location.href='feed-trabalhador.html'">Home</button>
-        <button onclick="window.location.href='historico_profissional.html'">Histórico</button>
+        <button onclick="window.location.href='historico_profissional.html'">Histórico <span id="contadorHistorico" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">0</span></button>
         <button onclick="window.location.href='perfil_trabalhador.html'">Perfil</button>
         <button onclick="logout()" class="botao-sair">Sair</button>
     </div>
@@ -23,6 +23,20 @@
 
 <main class="container-principal">
     <section class="painel-conteudo">
+        <div id="saudacaoUsuario" style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <img id="fotoUsuario" alt="Foto do usuário" src="/assets/avatar-padrao.png" style="width:46px; height:46px; border-radius:50%; object-fit:cover; border:2px solid #00e0ff;">
+            <div id="textoSaudacao" style="font-weight:700;">Olá, <span id="nomeUsuarioSaudacao">Profissional</span></div>
+        </div>
+
+        <div id="caixaNotificacoes" style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+            <div style="flex:1; min-width:220px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:12px;">
+                <div style="font-weight:800; margin-bottom:6px;">Notificações</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <span style="padding:6px 10px; border-radius:999px; background:#00e0ff; color:#000; font-weight:800;">Pendentes: <span id="notificacoesPendentes">0</span></span>
+                    <span style="padding:6px 10px; border-radius:999px; background:#00e0ff; color:#000; font-weight:800;">Aceitas: <span id="notificacoesAceitas">0</span></span>
+                </div>
+            </div>
+        </div>
         <div class="container-busca">
             <div class="form-busca">
                 <span class="icon-busca">&#128269;</span>
@@ -44,6 +58,72 @@
         </div>
     </section>
 </main>
+
+
+<div id="modalDetalhesTrabalho" class="modal-backdrop escondido">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Detalhes do Trabalho</h2>
+            <button class="modal-fechar" onclick="fecharModalDetalhesTrabalho()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="formDetalhesTrabalho" class="form-dark">
+                <div class="form-grupo">
+                    <label for="detalheTitulo">Título</label>
+                    <input type="text" id="detalheTitulo" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheCategoria">Categoria</label>
+                    <input type="text" id="detalheCategoria" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalhePagamento">Valor (R$)</label>
+                    <input type="text" id="detalhePagamento" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheCep">CEP</label>
+                    <input type="text" id="detalheCep" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheCidade">Cidade</label>
+                    <input type="text" id="detalheCidade" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheEstado">Estado</label>
+                    <input type="text" id="detalheEstado" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheRua">Rua</label>
+                    <input type="text" id="detalheRua" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheBairro">Bairro</label>
+                    <input type="text" id="detalheBairro" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheNumero">Número</label>
+                    <input type="text" id="detalheNumero" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheComplemento">Complemento</label>
+                    <input type="text" id="detalheComplemento" readonly>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheDescricao">Descrição</label>
+                    <textarea id="detalheDescricao" rows="4" readonly></textarea>
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheImagem">Imagem do problema</label>
+                    <img id="detalheImagem" style="max-width:100%; border-radius:8px; margin-top:8px;" alt="Imagem do problema">
+                </div>
+                <div class="form-grupo">
+                    <label for="detalheStatus">Status</label>
+                    <input type="text" id="detalheStatus" readonly>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script src="/js/api.js"></script>
 <script src="/js/paginas/feed-profissional.js"></script>
