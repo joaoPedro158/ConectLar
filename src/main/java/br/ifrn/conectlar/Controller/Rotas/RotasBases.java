@@ -4,7 +4,7 @@ public interface RotasBases {
 
     String Delete = "/delete/{id}";
 
-    String Cadastra = "/form";
+    String Cadastra = "/cadastrar";
 
     String Lista = "/list";
 
@@ -17,8 +17,8 @@ public interface RotasBases {
     String historico = "/historico";
 
     String candidatar = "/{id}/candidatar";
-    String aceitarCandidato= "{idTrabalho}/responder";
-    String cancelarTrabalho = "{idTrabalho}/cancelar";
+    String aceitarCandidato = "/{idTrabalho}/responder";
+    String cancelarTrabalho = "/{idTrabalho}/cancelar";
     String concluirTrabalho = "/{idTrabalho}/concluir";
 
     String Busca = "/busca";

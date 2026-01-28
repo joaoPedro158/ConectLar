@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConectLar - Histórico</title>
+    <link rel="stylesheet" href="css/historico_cliente.css">
+</head>
+<body>
+    <header class="cabecalho-top">
+        <div class="logo-area">
+            <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+        </div>
+        <div class="teste">
+            <button onclick="window.location.href='painel-cliente.html'">Home</button>
+            <button onclick="window.location.href='historico_cliente.html'">Histórico</button>
+            <button onclick="window.location.href='perfil_cliente.html'">Perfil</button>
+            <button onclick="logout()" class="botao-sair">Sair</button>
+        </div>
+    </header>
+
+    <main class="container-principal">
+
+        <h1 class="titulo-sessao">Meu Histórico de Pedidos</h1>
+
+        <div class="layout-historico">
+            <!-- Caixa só das estatísticas -->
+            <section class="caixa-estatisticas">
+            <div class="estatisticas-grid" id="stats-container">
+                <div class="estatistica-card">
+                <p>Total de Pedidos</p>
+                <h2 id="total-pedidos">0</h2>
+                </div>
+
+                <div class="estatistica-card">
+                <p>Pedidos Concluídos</p>
+                <h2 id="pedidos-concluidos">0</h2>
+                </div>
+
+                <div class="estatistica-card">
+                <p>Gasto Total</p>
+                <h2 id="gasto-total">R$ 0,00</h2>
+                </div>
+
+                <div class="estatistica-card">
+                <p>Avaliação Média</p>
+                <h2 id="avaliacao-media">0.0</h2>
+                </div>
+            </div>
+            </section>
+            <section class="area-historico">
+            <div id="listaHistorico" class="lista-pedidos"></div>
+            </section>
+        </div>
+
+</main>
+
+
+    <script src="/js/api.js"></script>
+    <script src="/js/paginas/historico-cliente.js"></script>
+</body>
+</html>

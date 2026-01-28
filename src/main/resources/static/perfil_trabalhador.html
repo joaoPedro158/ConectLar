@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConectLar - Perfil Trabalhador</title>
+    <link rel="stylesheet" href="/css/perfil_trabalhador.css">
+</head>
+<body>
+    <header class="cabecalho-top">
+        <div class="logo-area">
+            <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+            <span class="badge-pro">Profissional</span>
+        </div>
+        <div class="teste">
+            <button onclick="window.location.href='/painel-cliente.html'">Home</button>
+            <button>Histórico</button>
+            <button class="botao-sino">&#128276;</button>
+        </div>
+    </header>
+
+    <main class="container-principal">
+        <section class="painel-conteudo">
+            <h1 class="titulo-sessao">Meu Perfil</h1>
+            
+            <form id="formPerfil" class="form-da-vida">
+                <div class="perfil-topo">
+                    <div class="perfil-avatar-container">
+                        <div class="foto-perfil-wrapper">
+                            <img src="/assets/avatar-padrao.png" id="imgPreview" alt="Foto de Perfil">
+                            <label class="btn-trocar-foto">
+                                <img src="/assets/camera-padrao.png" alt="Ícone de Câmera">
+                                <input type="file" id="inputFotoPerfil" accept="image/*" hidden>
+                            </label>
+                        </div>
+                        <div class="badge-tipo">Profissional</div>
+                    </div>
+                </div>
+
+                <div class="grid-perfil">
+                    <div class="form-grupo">
+                        <label>Nome Completo</label>
+                        <input type="text" name="nome" class="campinho-texto" placeholder="Carregando...">
+                    </div>
+                    
+                    <div class="form-grupo">
+                        <label>Telefone</label>
+                        <input type="text" name="telefone" class="campinho-texto" placeholder="(00) 00000-0000">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>E-mail (Login)</label>
+                        <input type="email" name="login" class="campinho-texto" readonly style="opacity: 0.6; cursor: not-allowed;">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Nova Senha (deixe em branco para não alterar)</label>
+                        <input type="password" name="senha" class="campinho-texto" placeholder="********">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>CEP</label>
+                        <input type="text" name="cep" class="campinho-texto">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Rua</label>
+                        <input type="text" name="rua" class="campinho-texto">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Bairro</label>
+                        <input type="text" name="bairro" class="campinho-texto">
+                    </div>
+
+                    <div class="form-grupo-flex">
+                        <div class="form-grupo">
+                            <label>Número</label>
+                            <input type="text" name="numero" class="campinho-texto">
+                        </div>
+                        <div class="form-grupo">
+                            <label>Estado (UF)</label>
+                            <input type="text" name="estado" class="campinho-texto">
+                        </div>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Cidade</label>
+                        <input type="text" name="cidade" class="campinho-texto">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label>Complemento</label>
+                        <input type="text" name="complemento" class="campinho-texto">
+                    </div>
+                </div>
+
+                <button type="submit" class="botaozao-roxo">Salvar Alterações</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="/js/utilidades.js"></script>
+    <script src="/js/perfil.js"></script>
+</body>
+</html>
