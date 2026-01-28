@@ -67,22 +67,26 @@ body {
 
 .menu-pro {
     display: flex;
-    gap: 20px;
     align-items: center;
+    gap: 25px;
 }
 
 .menu-pro button {
-    background: transparent;
-    border: none;
-    color: #e1e1e6;
-    font-size: 18px;
-    font-weight: 500;
+    background: transparent; 
+    color: #e1e1e6; 
+    border: 3px solid transparent; 
+    font-size: 24px;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.3s;
+    border-radius: 12px;
+    padding: 10px 18px;
+    transition: all 0.3s ease;
 }
 
 .menu-pro button:hover {
-    color: #00e0ff;
+    background: rgba(0, 224, 255, 0.1); 
+    color: #00e0ff; 
+    border-color: rgba(0, 224, 255, 0.3);
 }
 
 .container-principal {
@@ -188,3 +192,63 @@ body {
     margin-bottom: 20px;
     opacity: 0.3;
 }
+
+.lista-trabalhos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card-trabalho {
+    background: rgba(40, 40, 40, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    transition: 0.3s;
+}
+
+.card-trabalho:hover {
+    border-color: #00e0ff;
+    transform: translateY(-3px);
+}
+
+.info-trabalho h3 {
+    color: #00e0ff;
+    margin-bottom: 8px;
+}
+
+.descricao {
+    color: #ccc;
+    font-size: 14px;
+    margin-bottom: 15px;
+    max-width: 500px;
+}
+
+.detalhes span {
+    display: inline-block;
+    margin-right: 15px;
+    color: #888;
+    font-size: 13px;
+}
+
+/* Botão de Candidatura */
+.botao-candidatar {
+    background: #00e0ff;
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.botao-candidatar:hover {
+    background: #33ebff;
+    box-shadow: 0 0 10px rgba(0, 224, 255, 0.2);
+}
+
