@@ -1,5 +1,7 @@
 package br.ifrn.conectlar.Security;
 
+import br.ifrn.conectlar.Controller.Rotas.RotasBases;
+import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,6 +55,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuario/cadastrar").permitAll()      // Criar conta de usuário
                         .requestMatchers(HttpMethod.POST, "/profissional/cadastrar").permitAll() // Criar conta de profissional
+                        .requestMatchers(HttpMethod.POST, RotasPrincipais.RootTrabalho + RotasBases.Cadastra).authenticated()
 
 
 
