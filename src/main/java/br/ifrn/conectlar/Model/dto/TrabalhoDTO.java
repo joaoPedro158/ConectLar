@@ -34,5 +34,6 @@ public class TrabalhoDTO {
     //imnagem de trabalho
     private List<String> imagens;
 
+    private LocalDateTime dataHoraFinalizado;
 
 }

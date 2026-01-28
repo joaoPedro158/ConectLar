@@ -40,7 +40,7 @@ public class TrabalhoEntity {
     @Column(nullable = false)
     private String descricao;
 
-//    private String data_hora_finalizada;
+    private String data_hora_finalizada;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
