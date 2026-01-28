@@ -32,7 +32,7 @@ public class TrabalhoDTO {
     private String nomeProfissional;
 
     //imnagem de trabalho
-//    private List<String> imagens;
+    private List<String> imagens;
 
 
 }

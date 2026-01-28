@@ -26,6 +26,7 @@ public interface RotasBases {
 
     String  gastoTotal = "/gastoTotal";
     String meudados = "/meusdados";
+    String dadosProfissional = "/dadosProfissional";
 
     String avaliar = "/avaliar/{idTrabalho}";
 }

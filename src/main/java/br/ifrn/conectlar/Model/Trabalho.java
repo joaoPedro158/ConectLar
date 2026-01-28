@@ -24,7 +24,9 @@ public class Trabalho {
     private CategoriaEnum categoria;
 
 
-    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta,StatusTrabalho status, Long idUsuario, Long idProfissional, CategoriaEnum categoria) {
+    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao,
+                       LocalDateTime dataHoraAberta,StatusTrabalho status, Long idUsuario, Long idProfissional,
+                       CategoriaEnum categoria) {
         this.id = id;
         this.localizacao = localizacao;
         this.problema = problema;
