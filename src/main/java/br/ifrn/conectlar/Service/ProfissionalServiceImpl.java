@@ -1,5 +1,8 @@
 package br.ifrn.conectlar.Service;
 
+import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
+import br.ifrn.conectlar.Model.dto.DadosProfissionalDTO;
+import br.ifrn.conectlar.Repository.Entity.AvaliacaoEntity;
 import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Profissional;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -129,6 +133,43 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         ProfissionalEntity profissional = profissionalRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("profissional nao encontrado"));
         return mapper.toDTO(profissional);
+    }
+
+    @Override
+    public DadosProfissionalDTO getDadosProfissional(Long idProfissional) {
+
+        ProfissionalEntity profissional = profissionalRepository.findById(idProfissional)
+                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
+
+        List<TrabalhoEntity> trabalhos = trabalhoRepository.findAllByProfissionalId(idProfissional);
+
+        BigDecimal totalGanho = trabalhos.stream()
+                .filter(t -> t.getStatus() == StatusTrabalho.CONCLUIDO)
+                .filter(t -> t.getPagamento() != null)
+                .map(TrabalhoEntity::getPagamento)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        Double mediaAvaliacao = trabalhos.stream()
+                .map(TrabalhoEntity::getAvaliacao)
+                .filter(avaliacao -> avaliacao != null)
+                .mapToDouble(AvaliacaoEntity::getNota)
+                .average()
+                .orElse(0.0);
+
+        int totalPedidos = (int) trabalhos.stream()
+                .filter(t -> t.getStatus() == StatusTrabalho.CONCLUIDO)
+                .count();
+
+        int totalPendentes = (int) trabalhos.stream()
+                .filter(t -> t.getStatus() == StatusTrabalho.EM_ANDAMENTO)
+                .count();
+
+        return DadosProfissionalDTO.builder()
+                .mediaAvaliacao(mediaAvaliacao)
+                .lucroTotal(totalGanho)
+                .pedidosConcluido(totalPedidos)
+                .pedidosAndamento(totalPendentes)
+                .build();
     }
 
 }

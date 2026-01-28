@@ -139,8 +139,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<TrabalhoEntity> trabalhos =  trabalhoRepository.findAllByUsuarioIdAndStatus(idUsuario, StatusTrabalho.CONCLUIDO);
 
         return trabalhos.stream()
-                .map(TrabalhoEntity::getPagamento)       // Pega os valores
-                .filter(valor -> valor != null)      // Remove nulos para não quebrar
+                .map(TrabalhoEntity::getPagamento)
+                .filter(valor -> valor != null)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

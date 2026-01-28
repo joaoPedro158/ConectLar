@@ -15,28 +15,30 @@ public class Trabalho {
     private Long id;
     private Localizacao localizacao;
     private String problema;
-    private BigDecimal pagamento;
+    private BigDecimal pagamento; // Atenção: no DTO anterior vc chamou de 'valor', padronize
     private String descricao;
     private LocalDateTime dataHoraAberta;
-    private StatusTrabalho status;
+    private LocalDateTime dataHoraFinalizada; // <--- Ordem correta: Primeiro a Data
+    private StatusTrabalho status;            // <--- Ordem correta: Depois o Status
     private Long idUsuario;
     private Long idProfissional;
     private CategoriaEnum categoria;
 
-
-    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao, LocalDateTime dataHoraAberta,StatusTrabalho status, Long idUsuario, Long idProfissional, CategoriaEnum categoria) {
+    // CONSTRUTOR CORRIGIDO (Seguindo a ordem das variáveis)
+    protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao,
+                       LocalDateTime dataHoraAberta, LocalDateTime dataHoraFinalizada, StatusTrabalho status,
+                       Long idUsuario, Long idProfissional, CategoriaEnum categoria) {
         this.id = id;
         this.localizacao = localizacao;
         this.problema = problema;
         this.pagamento = pagamento;
         this.descricao = descricao;
         this.dataHoraAberta = dataHoraAberta;
-        this.status = status;
+        this.dataHoraFinalizada = dataHoraFinalizada; // Agora bate com a posição 7
+        this.status = status;                         // Agora bate com a posição 8
         this.idUsuario = idUsuario;
         this.idProfissional = idProfissional;
         this.categoria = categoria;
-
-
         validacao();
     }
 
@@ -73,6 +75,7 @@ public class Trabalho {
         }
 
         this.status = StatusTrabalho.CONCLUIDO;
+        this.dataHoraFinalizada = LocalDateTime.now();
     }
 
     public void cancelarTrabalho(Long idUsuario) {
