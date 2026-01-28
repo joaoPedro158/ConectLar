@@ -35,6 +35,7 @@ public class SecurityConfigurations {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
 
+
                         .requestMatchers("/", "/login", "/app/**").permitAll()
                         .requestMatchers(
                                 "/index.html",
@@ -48,6 +49,7 @@ public class SecurityConfigurations {
                         ).permitAll()
                         .requestMatchers("/js/**", "/css/**", "/assets/**", "/upload/**", "/uploads/**", "/script.js").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
+
 
 
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
