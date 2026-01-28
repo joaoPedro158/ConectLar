@@ -14,10 +14,10 @@
         <span class="badge-pro">Profissional</span>
     </div>
     <div class="menu-pro">
-        <button onclick="window.location.href='feed-trabalhador.html'">Home</button>
-        <button onclick="window.location.href='historico_profissional.html'">Histórico</button>
-        <button onclick="window.location.href='perfil_trabalhador.html'">Perfil</button>
-        <button onclick="logout()" class="botao-sair">Sair</button>
+        <button>Home</button>
+        <button>Histórico</button>
+        <button>Perfil</button>
+        <button class="botao-sino">&#128276;</button>
     </div>
 </header>
 
@@ -34,7 +34,7 @@
         <div class="secao-feed">
             <h1 class="titulo-sessao">Oportunidades Disponíveis</h1>
             
-            <div id="listaTrabalhos" class="lista-trabalhos">
+            <div id="listaOportunidades" class="lista-trabalhos">
                 <div class="empty-state">
                     <div class="empty-icon">🔎</div>
                     <h2>Buscando as melhores vagas...</h2>
@@ -45,7 +45,11 @@
     </section>
 </main>
 
-<script src="/js/api.js"></script>
-<script src="/js/paginas/feed-profissional.js"></script>
+<script src="/js/formulario.js"></script>
+<script src="/js/profissional.js"></script>
+<script src="/js/utilidades.js"></script>
+<script>
+    carregarFeedGeral();
+</script>
 </body>
 </html>

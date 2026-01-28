@@ -1,3 +1,4 @@
+/* --- Reset e Base --- */
 * {
     margin: 0;
     padding: 0;
@@ -11,6 +12,7 @@ body {
     min-height: 100vh;
 }
 
+/* --- Cabeçalho (Header) --- */
 .cabecalho-top {
     display: flex;
     justify-content: space-between;
@@ -59,6 +61,7 @@ body {
     font-size: 30px !important;
 }
 
+/* --- Container e Painel --- */
 .container-principal {
     max-width: 900px;
     margin: 40px auto;
@@ -81,6 +84,7 @@ body {
     text-align: center;
 }
 
+/* --- Foto de Perfil Uniforme --- */
 .perfil-topo {
     display: flex;
     justify-content: center;
@@ -115,7 +119,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: 4px solid #1a1a1a;
+    border: 4px solid #1a1a1a; /* Borda para separar da imagem */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
 }
@@ -128,12 +132,13 @@ body {
 .btn-trocar-foto img {
     width: 22px;
     height: 22px;
-    filter: brightness(0);
+    filter: brightness(0); /* Deixa o ícone preto para contrastar com o azul */
 }
 
+/* --- Grid do Formulário --- */
 .grid-perfil {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; /* Divide em duas colunas */
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -165,14 +170,14 @@ body {
     border-color: #00e0ff;
     box-shadow: 0 0 10px rgba(0, 224, 255, 0.1);
 }
-
 .form-grupo-flex {
     display: flex;
     gap: 15px;
 }
 
-.form-grupo-flex .form-grupo:first-child { flex: 2; }
-.form-grupo-flex .form-grupo:last-child { flex: 1; }
+.form-grupo-flex .form-grupo:first-child { flex: 2; } 
+.form-grupo-flex .form-grupo:last-child { flex: 1; }  
+
 
 .botaozao-roxo {
     background: #00e0ff;
@@ -195,33 +200,40 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 224, 255, 0.4);
 }
-
 .badge-tipo {
+    /* MUDANÇAS AQUI: Removido o position absolute para centralizar automaticamente */
     background: rgba(0, 224, 255, 0.1);
     color: #00e0ff;
     border: 1px solid #00e0ff;
-    padding: 5px 15px;
-    font-size: 0.7rem;
-    border-radius: 50px;
+    
+    /* Diminuindo o tamanho */
+    padding: 5px 15px;           /* Menos espaço interno */
+    font-size: 0.7rem;          /* Fonte menor */
+    border-radius: 50px;        /* Formato de pílula (arredondado total) */
+    
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
+    
+    /* Garante que ele se comporte como um bloco pequeno no centro */
     display: inline-block;
-    margin-top: 5px;
+    margin-top: 5px;            /* Espaço entre a foto e o badge */
 }
 
 .perfil-avatar-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Centraliza a foto e o badge horizontalmente */
     gap: 10px;
 }
 
+
+
 @media (max-width: 768px) {
     .grid-perfil {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; 
     }
-
+    
     .titulo-sessao {
         font-size: 1.5rem;
     }
