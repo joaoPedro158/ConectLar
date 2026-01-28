@@ -70,8 +70,10 @@ public class SecurityConfigurations {
 
                         .requestMatchers(HttpMethod.GET, "/trabalho/list").permitAll()
                         .requestMatchers(HttpMethod.GET, "/trabalho/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/usuario/meusdados").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/profissional/meusdados").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/profissional/dadosProfissional").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/adm/**").hasRole("ADM")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

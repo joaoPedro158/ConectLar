@@ -62,6 +62,9 @@ async function buscarDadosUsuario(token, tipo) {
         });
 
         if (!resposta.ok) {
+            if (resposta.status === 401 || resposta.status === 403) {
+                throw new Error('Não autorizado - faça login novamente');
+            }
             throw new Error('Erro ao buscar dados do usuário');
         }
 
@@ -74,7 +77,13 @@ async function buscarDadosUsuario(token, tipo) {
     try {
         return await tentar(primario);
     } catch (e) {
-        return await tentar(alternativo);
+        console.warn(`Tentativa primária falhou (${primario}):`, e.message);
+        try {
+            return await tentar(alternativo);
+        } catch (e2) {
+            console.warn(`Tentativa alternativa falhou (${alternativo}):`, e2.message);
+            throw new Error('Não foi possível buscar dados do usuário após cadastro');
+        }
     }
 }
 
@@ -98,16 +107,22 @@ async function cadastrarUsuario(dados, arquivo, tipo) {
         const endpoint = tipo === 'profissional' ? '/profissional/cadastrar' : '/usuario/cadastrar';
         const criado = await requisicao(endpoint, 'POST', formData, true);
 
-        
-        if (tipo === 'profissional') {
-            try {
-                await requisicao('/profissional/meusdados', 'GET');
-            } catch (e) {
-               
+        // Aguardar um pouco para o backend processar
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Tentar fazer login automático
+        try {
+            const resultadoLogin = await login(dados.email, dados.senha, tipo);
+            if (resultadoLogin.sucesso) {
+                return { sucesso: true, criado: criado, loginAutomatico: true };
+            } else {
+                return { sucesso: true, criado: criado, loginAutomatico: false, erro: resultadoLogin.erro };
             }
+        } catch (loginError) {
+            console.warn('Login automático falhou:', loginError);
+            return { sucesso: true, criado: criado, loginAutomatico: false, erro: loginError.message };
         }
 
-        return { sucesso: true, criado: criado };
     } catch (erro) {
         return { sucesso: false, erro: erro.message };
     }

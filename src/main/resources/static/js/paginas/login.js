@@ -239,12 +239,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultado = await cadastrarUsuario(dados, arquivo, tipo);
 
         if (resultado.sucesso) {
-            const resultadoLogin = await login(email, senha, tipo);
-            if (!resultadoLogin.sucesso) {
-                alert('Cadastro realizado, mas não foi possível entrar automaticamente: ' + mensagemErroAmigavel(resultadoLogin.erro));
+            if (resultado.loginAutomatico) {
+                // Login automático funcionou, redirecionamento já foi feito
+                return;
+            } else {
+                // Cadastro funcionou mas login automático falhou
+                alert('Cadastro realizado com sucesso! Por favor, faça login manualmente.');
                 modoAtual = 'login';
                 atualizarInterface();
-                return;
+                document.getElementById('email').value = email;
+                document.getElementById('senha').value = '';
+                document.getElementById('senha').focus();
             }
         } else {
             alert('Erro ao cadastrar: ' + mensagemErroAmigavel(resultado.erro));
