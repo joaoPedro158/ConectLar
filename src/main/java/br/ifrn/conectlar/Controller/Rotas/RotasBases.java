@@ -17,8 +17,8 @@ public interface RotasBases {
     String historico = "/historico";
 
     String candidatar = "/{id}/candidatar";
-    String aceitarCandidato= "{idTrabalho}/responder";
-    String cancelarTrabalho = "{idTrabalho}/cancelar";
+    String aceitarCandidato = "/{idTrabalho}/responder";
+    String cancelarTrabalho = "/{idTrabalho}/cancelar";
     String concluirTrabalho = "/{idTrabalho}/concluir";
 
     String Busca = "/busca";

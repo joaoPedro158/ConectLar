@@ -19,6 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/app/cliente").setViewName("forward:/painel-cliente.html");
 
         // rota limpa para o painel do profissional
-        registry.addViewController("/app/profissional").setViewName("forward:/painel-profissional.html");
+        registry.addViewController("/app/profissional").setViewName("forward:/feed-trabalhador.html");
     }
 }

@@ -8,16 +8,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const btnSair = document.getElementById('btnSair');
-    if (btnSair) btnSair.onclick = fazerLogout;
+    if (btnSair) btnSair.onclick = logout;
 });
 
 async function listarUsuarios() {
     const container = document.getElementById('listaUsuariosAdm');
-    if(!container) return;
+    if (!container) return;
 
     try {
-        const usuarios = await enviarRequisicao('/usuario/list', 'GET');
+        const usuarios = await requisicao('/usuario/list', 'GET');
         container.innerHTML = '';
+
+        if (!usuarios || usuarios.length === 0) {
+            container.innerHTML = '<p>Nenhum usuário encontrado.</p>';
+            return;
+        }
 
         usuarios.forEach(u => {
             const linha = document.createElement('div');
@@ -26,6 +31,7 @@ async function listarUsuarios() {
                 <div class="dados-user">
                     <strong>${u.nome}</strong>
                     <span>${u.email}</span>
+                    <span class="role-badge">${u.role}</span>
                 </div>
                 <button class="btn-deletar" onclick="excluirUsuario(${u.id})">Excluir</button>
             `;
@@ -36,13 +42,12 @@ async function listarUsuarios() {
     }
 }
 
-// Global
 window.excluirUsuario = async function(id) {
     if (!confirm('ATENÇÃO: Deseja realmente excluir este usuário?')) return;
 
     try {
-        await enviarRequisicao(`/usuario/delete/${id}`, 'DELETE');
-        listarUsuarios(); // Atualiza a lista
+        await requisicao(`/usuario/delete/${id}`, 'DELETE');
+        listarUsuarios();
     } catch (e) {
         alert('Erro ao excluir usuário.');
     }
@@ -53,8 +58,15 @@ async function criarAdm(e) {
     const email = document.getElementById('admEmail').value;
     const senha = document.getElementById('admSenha').value;
 
+    const dados = {
+        nome: email.split('@')[0],
+        email: email,
+        senha: senha,
+        role: 'ADM'
+    };
+
     try {
-        await enviarRequisicao('/adm/cadastrar', 'POST', { email, senha });
+        await requisicao('/adm/cadastrar', 'POST', dados);
         alert('Novo administrador cadastrado com sucesso!');
         e.target.reset();
     } catch (erro) {

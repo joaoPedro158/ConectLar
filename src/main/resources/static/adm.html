@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - ConectLar</title>
+    <link rel="stylesheet" href="/css/painel-cliente.css">
+    <link rel="stylesheet" href="/css/navegacao.css">
+</head>
+<body>
+<header class="cabecalho-top">
+    <div class="logo-area">
+        <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
+        <span class="badge-admin">Administrador</span>
+    </div>
+    <div class="navegacao">
+        <button onclick="window.location.href='adm.html'">Painel</button>
+        <button onclick="window.location.href='index.html'">Sair</button>
+    </div>
+</header>
+
+<main class="container-principal">
+    <section class="painel-conteudo">
+        <h1 class="titulo-sessao">Painel Administrativo</h1>
+        
+        <div class="secao-adm">
+            <div class="card-adm">
+                <h2>👥 Usuários Cadastrados</h2>
+                <div id="listaUsuariosAdm" class="lista-usuarios">
+                    <div class="loading">Carregando usuários...</div>
+                </div>
+            </div>
+
+            <div class="card-adm">
+                <h2>➕ Cadastrar Administrador</h2>
+                <form id="formAdmCadastro" class="form-adm">
+                    <div class="form-group">
+                        <label>E-mail do Administrador</label>
+                        <input type="email" id="admEmail" class="campinho-texto" placeholder="admin@exemplo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="password" id="admSenha" class="campinho-texto" placeholder="Mínimo 6 caracteres" required>
+                    </div>
+                    <button type="submit" class="botaozao-roxo">Cadastrar Administrador</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/paginas/adm.js"></script>
+</body>
+</html>

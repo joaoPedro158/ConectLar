@@ -36,8 +36,17 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
 
                         .requestMatchers("/", "/login", "/app/**").permitAll()
-                        .requestMatchers("/index.html", "/painel-cliente.html", "/painel-profissional.html").permitAll()
-                        .requestMatchers("/js/**", "/css/**", "/assets/**", "/upload/**", "/script.js").permitAll()
+                        .requestMatchers(
+                                "/index.html",
+                                "/painel-cliente.html",
+                                "/feed-trabalhador.html",
+                                "/historico_cliente.html",
+                                "/perfil.html",
+                                "/perfil_cliente.html",
+                                "/perfil_trabalhador.html",
+                                "/adm.html"
+                        ).permitAll()
+                        .requestMatchers("/js/**", "/css/**", "/assets/**", "/upload/**", "/uploads/**", "/script.js").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
 
 
@@ -62,7 +71,7 @@ public class SecurityConfigurations {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:8181", "*"));
+        configuration.setAllowedOrigins(List.of("http://localhost:8182", "*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(false);
