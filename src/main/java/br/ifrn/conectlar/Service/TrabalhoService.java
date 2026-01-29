@@ -11,8 +11,8 @@ public interface TrabalhoService {
 
     List<TrabalhoDTO> getAll();
     TrabalhoDTO findById(Long id);
-    TrabalhoDTO save(TrabalhoRecord record, List<MultipartFile> arquivos, Long idUsuario);
-    TrabalhoDTO update(Long id, TrabalhoRecord trabalho, List<MultipartFile> arquivo);
+    TrabalhoDTO save(TrabalhoRecord record, MultipartFile arquivos, Long idUsuario);
+    TrabalhoDTO update(Long id, TrabalhoRecord trabalho, MultipartFile arquivo);
     void delete(Long id);
     void solicitarTrabalho(Long idTrabalho, Long  idProfissional);
     void processarResposta(Long idTrabalho, boolean resposta);

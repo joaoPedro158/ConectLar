@@ -15,7 +15,6 @@ import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,66 +52,60 @@ public class TrabalhoServiceImpl implements TrabalhoService {
     }
 
     @Override
-    public TrabalhoDTO save(TrabalhoRecord trabalhoRecord, List<MultipartFile> arquivos, Long idUsuario) {
-        Trabalho TrabalhoModel = mapper.toModel(trabalhoRecord);
-
+    public TrabalhoDTO save(TrabalhoRecord trabalhoRecord, MultipartFile arquivo, Long idUsuario) {
         UsuarioEntity usuario = usuarioRepository.findById(idUsuario)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario do ID: " + idUsuario));
-        TrabalhoEntity entityToSave = mapper.toEntity(TrabalhoModel);
-        List<String> caminhosImagem = new ArrayList<>();
+                .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado com ID: " + idUsuario));
+
+        var trabalhoModel = mapper.toModel(trabalhoRecord);
+        TrabalhoEntity entityToSave = mapper.toEntity(trabalhoModel);
+
+        String caminhoImagem = null;
         try {
-            if (arquivos != null && !arquivos.isEmpty()) {
-                for (MultipartFile arquivo : arquivos) {
-                    if (!arquivo.isEmpty()) {
-                        String nomeArquivo = salvaArquivoService.salvaImagem(arquivo);
-                        caminhosImagem.add(nomeArquivo);
-                    }
-                }
+            if (arquivo != null && !arquivo.isEmpty()) {
+                caminhoImagem = salvaArquivoService.salvaImagem(arquivo);
+                entityToSave.setCaminhoImagem(caminhoImagem);
             }
         } catch (IOException e) {
-            throw  new RuntimeException("Erro ao salvar do arquivo");
+            throw new RuntimeException("Erro ao salvar o arquivo: " + e.getMessage());
         }
 
-
-        entityToSave.setImagens(caminhosImagem);
         entityToSave.setUsuario(usuario);
         entityToSave.setDataHoraAberta(LocalDateTime.now());
+
         if (entityToSave.getStatus() == null) {
             entityToSave.setStatus(StatusTrabalho.ABERTO);
         }
 
-        TrabalhoEntity saveEntity = trabalhoRepository.save(entityToSave);
-        return mapper.toDTO(saveEntity);
+        TrabalhoEntity savedEntity = trabalhoRepository.save(entityToSave);
+        return mapper.toDTO(savedEntity);
     }
 
     @Override
-    public TrabalhoDTO update(Long id, TrabalhoRecord trabalho, List<MultipartFile> arquivos) {
+    public TrabalhoDTO update(Long id, TrabalhoRecord trabalho, MultipartFile arquivo) {
+
         TrabalhoEntity entityToUpdate = trabalhoRepository.findById(id).orElseThrow(()
-                -> new EntityNotFoundException("Trabalho do ID: " + id + "  nao encontrado "));
+                -> new EntityNotFoundException("Trabalho do ID: " + id + " nao encontrado"));
+
         if (trabalho != null) {
-            Trabalho TrabalhoModel = mapper.toModel(trabalho);
-            mapper.updateEntityFromModel(TrabalhoModel, entityToUpdate);
+            Trabalho trabalhoModel = mapper.toModel(trabalho);
+            mapper.updateEntityFromModel(trabalhoModel, entityToUpdate);
         }
+
+
         try {
+            if (arquivo != null && !arquivo.isEmpty()) {
 
-            if (arquivos != null && !arquivos.isEmpty()) {
-                if (entityToUpdate.getImagens() == null) {
-                    entityToUpdate.setImagens(new ArrayList<>());
-                }
+                String nomeArquivo = salvaArquivoService.salvaImagem(arquivo);
 
-                for (MultipartFile arquivo : arquivos) {
-                    if (!arquivo.isEmpty()) {
-                        String nomeArquivo = salvaArquivoService.salvaImagem(arquivo);
-                        entityToUpdate.getImagens().add(nomeArquivo);
-                    }
-                }
+                entityToUpdate.setCaminhoImagem(nomeArquivo);
             }
+
+
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar novas fotos: " + e.getMessage());
+            throw new RuntimeException("Erro ao salvar a nova foto: " + e.getMessage());
         }
 
         TrabalhoEntity entityUpdated = trabalhoRepository.save(entityToUpdate);
-
         return mapper.toDTO(entityUpdated);
     }
 

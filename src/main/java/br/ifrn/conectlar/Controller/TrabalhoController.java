@@ -28,7 +28,7 @@ public class TrabalhoController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity saveTrabalho(@RequestPart("dados") TrabalhoRecord trabalhoRecord,
-                                       @RequestPart(value = "imagen", required = false)List<MultipartFile> imagens,
+                                       @RequestPart(value = "imagen", required = false)MultipartFile imagens,
                                        @AuthenticationPrincipal UsuarioDetails usuario) {
         Long id = usuario.getId();
         TrabalhoDTO trabalho = trabalhoService.save(trabalhoRecord, imagens,id);
@@ -45,7 +45,7 @@ public class TrabalhoController {
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateTrabalho(@PathVariable Long id,
                                          @RequestPart(value = "dados", required = false) TrabalhoRecord trabalhoRecord,
-                                         @RequestPart(value = "imagen", required = false) List<MultipartFile> arquivo){
+                                         @RequestPart(value = "imagen", required = false) MultipartFile arquivo){
        TrabalhoDTO trabalhoAtualizado = trabalhoService.update(id,trabalhoRecord,arquivo);
        return ResponseEntity.ok(trabalhoAtualizado);
     }

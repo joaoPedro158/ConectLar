@@ -50,14 +50,8 @@ public class TrabalhoEntity {
     @Column(nullable = true)
     private CategoriaEnum categoria;
 
-    //  (Chaves Estrangeiras) ---
-    @ElementCollection
-    @CollectionTable(
-            name = "trabalho_imagem",
-            joinColumns = @JoinColumn(name = "id_trabalho")
-    )
     @Column(name = "caminho_imagem")
-    private List<String> imagens = new ArrayList<>();
+    private String caminhoImagem;
 
     /*
      * @ManyToOne: "Muitos trabalhos podem ser de UM usuário"

@@ -524,3 +524,26 @@ body {
     padding: 8px 12px;
   }
 }
+.teste {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.teste button {
+    background: transparent;
+    color: #e1e1e6;
+    border: 3px solid transparent;
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 10px 18px;
+    transition: all 0.3s ease;
+}
+
+.teste button:hover {
+    background: rgba(0, 224, 255, 0.1);
+    color: #00e0ff;
+    border-color: rgba(0, 224, 255, 0.3);
+}
