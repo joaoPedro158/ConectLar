@@ -390,3 +390,18 @@ async function filtrarPorCategoria(categoria) {
         if(lista) lista.innerHTML = '<p>Erro ao buscar categoria.</p>';
     }
 }
+
+window.finalizarTrabalho = async function(idTrabalho) {
+    try {
+        // Chama o endpoint de conclusão
+        const response = await requisicao(`/trabalho/${idTrabalho}/concluir`, 'POST');
+
+        if (response) {
+            alert('Trabalho finalizado com sucesso!');
+            carregarPedidos(); // Atualiza a lista na tela
+        }
+    } catch (error) {
+        console.error('Erro ao finalizar trabalho:', error);
+        alert('Erro ao finalizar trabalho. Tente novamente.');
+    }
+};

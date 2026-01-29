@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -39,8 +40,15 @@ public class TrabalhoServiceImpl implements TrabalhoService {
 
     @Override
     public List<TrabalhoDTO> getAll() {
-        List<TrabalhoEntity> trabalhos = trabalhoRepository.findByStatusOrderByDataHoraAbertaDesc(StatusTrabalho.ABERTO);
-        return trabalhos.stream().map(mapper::toDTO).toList();
+        List<StatusTrabalho> statusExcluidos = Arrays.asList(
+                StatusTrabalho.CONCLUIDO,
+                StatusTrabalho.CANCELADO
+        );
+        List<TrabalhoEntity> trabalhos = trabalhoRepository.findByStatusNotInOrderByDataHoraAbertaDesc(statusExcluidos);
+
+        return trabalhos.stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
     @Override
