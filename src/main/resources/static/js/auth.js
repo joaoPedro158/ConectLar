@@ -73,3 +73,37 @@ function decodificarToken(token) {
         return null;
     }
 }
+async function cadastrarUsuario(dados, arquivo, tipo) {
+    try {
+        const formData = new FormData();
+        formData.append('dados', new Blob([JSON.stringify(dados)], { type: 'application/json' }));
+
+        if (arquivo) {
+            formData.append('arquivo', arquivo);
+        }
+
+        const endpoint = tipo === 'profissional' ? '/profissional/cadastrar' : '/usuario/cadastrar';
+        const criado = await requisicao(endpoint, 'POST', formData, true);
+
+        // Aguardar um pouco para o backend processar
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Tentar fazer login automático
+        try {
+            const resultadoLogin = await login(dados.email, dados.senha, tipo);
+            if (resultadoLogin.sucesso) {
+                return { sucesso: true, criado: criado, loginAutomatico: true };
+            } else {
+                return { sucesso: true, criado: criado, loginAutomatico: false, erro: resultadoLogin.erro };
+            }
+        } catch (loginError) {
+            console.warn('Login automático falhou:', loginError);
+            return { sucesso: true, criado: criado, loginAutomatico: false, erro: loginError.message };
+        }
+
+    } catch (erro) {
+        return { sucesso: false, erro: erro.message };
+        console.error("Erro ao ler token", e);
+        return null;
+    }
+}
