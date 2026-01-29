@@ -23,11 +23,12 @@ public class Trabalho {
     private Long idUsuario;
     private Long idProfissional;
     private CategoriaEnum categoria;
+    private String caminhoImagem;
 
     // CONSTRUTOR CORRIGIDO (Seguindo a ordem das variáveis)
     protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao,
                        LocalDateTime dataHoraAberta, LocalDateTime dataHoraFinalizada, StatusTrabalho status,
-                       Long idUsuario, Long idProfissional, CategoriaEnum categoria) {
+                       Long idUsuario, Long idProfissional, CategoriaEnum categoria,  String caminhoImagem) {
         this.id = id;
         this.localizacao = localizacao;
         this.problema = problema;
@@ -39,6 +40,7 @@ public class Trabalho {
         this.idUsuario = idUsuario;
         this.idProfissional = idProfissional;
         this.categoria = categoria;
+        this.caminhoImagem = caminhoImagem;
         validacao();
     }
 

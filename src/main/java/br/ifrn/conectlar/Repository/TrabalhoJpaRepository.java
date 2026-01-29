@@ -23,5 +23,5 @@ public interface TrabalhoJpaRepository extends JpaRepository<TrabalhoEntity, Lon
 
   List<TrabalhoEntity> findByProblemaContainingIgnoreCaseAndStatusOrderByDataHoraAbertaDesc(String problema, StatusTrabalho status);
 
-    Long id(Long id);
+
 }

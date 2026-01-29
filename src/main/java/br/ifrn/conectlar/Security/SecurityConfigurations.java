@@ -50,6 +50,8 @@ public class SecurityConfigurations {
                         ).permitAll()
                         .requestMatchers("/js/**", "/css/**", "/assets/**", "/upload/**", "/uploads/**", "/script.js").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/detalhes-trabalho.html").permitAll()
+
 
 
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()

@@ -1,0 +1,99 @@
+/* --- RESET E BASE --- */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background-color: #121212; color: #e1e1e6; min-height: 100vh; }
+
+/* --- CABEÇALHO (Estilo Vidro) --- */
+.cabecalho-top {
+    width: 100%;
+    height: 100px;
+    background: rgba(30, 30, 30, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 0 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.logo-img { height: 65px; width: auto; transition: transform 0.3s ease; }
+.logo-img:hover { transform: scale(1.05); }
+.teste { display: flex; align-items: center; gap: 25px; }
+.teste button {
+    background: transparent; color: #e1e1e6; border: 1px solid transparent;
+    font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 12px;
+    padding: 10px 18px; transition: all 0.3s ease; display: flex; align-items: center;
+}
+.teste button:hover { background: rgba(0, 224, 255, 0.1); color: #00e0ff; border-color: rgba(0, 224, 255, 0.3); }
+#btnSair { background-color: #ff4b4b !important; border: none; }
+#btnSair:hover { background-color: #c83737 !important; box-shadow: 0 0 10px rgba(255, 75, 75, 0.4); }
+
+/* --- CONTAINER PRINCIPAL --- */
+.container-principal { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+
+.painel-conteudo {
+    background: rgba(30, 30, 30, 0.6);
+    width: 100%;
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+/* --- DETALHES DO TRABALHO --- */
+.header-detalhes {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 20px;
+}
+.titulo-problema { font-size: 28px; color: #fff; margin-bottom: 10px; }
+.categoria-badge {
+    background: rgba(0, 224, 255, 0.1); color: #00e0ff; border: 1px solid rgba(0, 224, 255, 0.3);
+    padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; text-transform: uppercase;
+}
+
+.status-badge {
+    padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; text-transform: uppercase;
+}
+.status-ABERTO { background: #ff9800; color: #000; }
+.status-ANDAMENTO { background: #2196f3; color: #fff; }
+.status-CONCLUIDO { background: #4caf50; color: #fff; }
+.status-CANCELADO { background: #f44336; color: #fff; }
+
+/* --- GRIDS DE INFORMAÇÃO --- */
+.grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+
+.info-box h3 { color: #888; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.info-box p { font-size: 18px; color: #e1e1e6; font-weight: 500; }
+.valor-destaque { color: #00e0ff !important; font-size: 24px !important; font-weight: 700 !important; }
+
+.descricao-box { background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid rgba(255, 255, 255, 0.05); }
+.descricao-texto { line-height: 1.6; color: #ccc; white-space: pre-wrap; }
+
+/* --- ENDEREÇO --- */
+.endereco-box { margin-bottom: 30px; }
+.endereco-formatado { display: flex; flex-wrap: wrap; gap: 15px; color: #ccc; margin-top: 10px; }
+.item-end { background: rgba(255, 255, 255, 0.05); padding: 8px 14px; border-radius: 8px; font-size: 14px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+/* --- GALERIA DE IMAGENS --- */
+.galeria { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.img-detalhe {
+    width: 100px; height: 100px; object-fit: cover; border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.3s;
+}
+.img-detalhe:hover { transform: scale(1.1); border-color: #00e0ff; }
+.sem-imagem { color: #666; font-style: italic; }
+
+/* --- BOTÃO VOLTAR --- */
+.btn-voltar {
+    background: transparent; border: 1px solid #00e0ff; color: #00e0ff;
+    padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer;
+    transition: 0.3s; margin-top: 20px; display: inline-block; text-decoration: none;
+}
+.btn-voltar:hover { background: #00e0ff; color: #000; }
+
+@media (max-width: 600px) {
+    .grid-info { grid-template-columns: 1fr; }
+    .header-detalhes { flex-direction: column; gap: 15px; }
+}

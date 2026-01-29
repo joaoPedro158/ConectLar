@@ -157,9 +157,9 @@ async function carregarPedidos() {
 
 window.responderSolicitacao = async function(idTrabalho, resposta) {
     try {
-        const endpoint = resposta ? `/trabalho/${idTrabalho}/responder` : `/trabalho/${idTrabalho}/responder`;
-        const response = await requisicao(endpoint, 'POST', resposta);
-        
+        const endpoint = `/trabalho/${idTrabalho}/responder`;
+        const response = await requisicao(endpoint, 'POST', String(resposta));
+
         if (response) {
             alert(resposta ? 'Trabalho aceito com sucesso!' : 'Trabalho recusado com sucesso!');
             carregarPedidos();
@@ -170,19 +170,22 @@ window.responderSolicitacao = async function(idTrabalho, resposta) {
     }
 };
 
-window.finalizarTrabalho = async function(idTrabalho) {
+async function carregarPedidos() {
     try {
-        const response = await requisicao(`/trabalho/${idTrabalho}/concluir`, 'POST');
-        
-        if (response) {
-            alert('Trabalho finalizado com sucesso!');
-            carregarPedidos();
-        }
+        // --- MUDANÇA AQUI ---
+        // Antes: const servicos = await requisicao('/usuario/historico', 'GET');
+        // Agora: Busca a lista de trabalhos em aberto
+        const servicos = await requisicao('/trabalho/list', 'GET');
+
+        // Usa a função para desenhar (a estrutura do JSON deve ser a mesma)
+        renderizarListaTrabalhos(servicos);
+
     } catch (error) {
-        console.error('Erro ao finalizar trabalho:', error);
-        alert('Erro ao finalizar trabalho. Tente novamente.');
+        console.error('Erro ao carregar:', error);
+        const lista = document.getElementById('listaMeusPedidos');
+        if(lista) lista.innerHTML = '<p style="color:red">Erro de conexão ao buscar pedidos.</p>';
     }
-};
+}
 
 window.cancelarTrabalho = async function(idTrabalho) {
     try {
@@ -360,7 +363,7 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {
             if (!e.target.closest('.botoes-container')) {
-                abrirModalDetalhes(p);
+                window.location.href = `detalhes-trabalho.html?id=${p.id}`;
             }
         });
 
