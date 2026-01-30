@@ -40,9 +40,7 @@ async function filtrarPorCategoria(categoria) {
                     <button class="btn-solicitar" onclick="event.stopPropagation(); candidatar(${trabalho.id}, this)">
                         Candidatar-se
                     </button>
-                    <button class="btn-cancelar" onclick="event.stopPropagation(); cancelarCandidatura(${trabalho.id}, this)">
-                        Cancelar
-                    </button>
+              
                 </div>
             `;
 
