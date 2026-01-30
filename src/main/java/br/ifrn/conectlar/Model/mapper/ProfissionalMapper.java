@@ -18,8 +18,4 @@ public interface ProfissionalMapper {
     @Mapping(target = "id", ignore = true)
     void updateEntityFromModel(Profissional model, @MappingTarget ProfissionalEntity entity);
 
-    @AfterMapping
-    default void validade(@MappingTarget Profissional model) {
-        model.validacao();
-    }
 }

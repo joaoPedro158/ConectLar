@@ -425,3 +425,76 @@ body {
     border: 1px solid rgba(76, 175, 80, 0.3);
     text-align: center;
 }
+
+/* --- Título da Seção --- */
+.titulo-sessao {
+    font-size: 24px;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+/* --- Grid (Layout das Categorias) --- */
+.grid-categorias {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+    gap: 12px;
+    margin-bottom: 30px;
+    justify-items: center;
+}
+
+/* --- Card Individual (Botão da Categoria) --- */
+.card-cat {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    width: 90px;
+}
+
+.card-cat:hover {
+    transform: translateY(-5px); /* Efeito de subir ao passar o mouse */
+}
+
+/* --- Círculo do Ícone --- */
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+/* Efeito Hover no Círculo */
+.card-cat:hover .icon-circle {
+    filter: brightness(1.2);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* --- Texto (Nome da Categoria) --- */
+.card-cat span {
+    font-size: 13px;
+    color: #888;
+    transition: color 0.3s ease;
+}
+
+.card-cat:hover span {
+    color: #fff;
+}
+
+/* --- Cores Específicas de Cada Categoria --- */
+.encanador .icon-circle { background: #3182ce; }
+.eletricista .icon-circle { background: #ecc94b; }
+.limpeza .icon-circle { background: #9f7aea; }
+.pintor .icon-circle { background: #ed64a6; }
+.marceneiro .icon-circle { background: #ed8936; }
+.jardineiro .icon-circle { background: #48bb78; }
+.mecanico .icon-circle { background: #f56565; }
+.geral .icon-circle { background: #4a5568; }

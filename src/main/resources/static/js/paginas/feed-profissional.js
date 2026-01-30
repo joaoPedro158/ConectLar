@@ -15,6 +15,9 @@ window.buscarVagas = async function() {
     if (!container) return;
 
     try {
+        // Feedback visual de busca
+        container.innerHTML = '<p style="color:#ccc; padding:20px;">Pesquisando...</p>';
+
         const trabalhos = await requisicao('/trabalho/list', 'GET');
         container.innerHTML = '';
 
@@ -23,13 +26,16 @@ window.buscarVagas = async function() {
             return;
         }
 
+        // Filtra os trabalhos (Aberto + Texto)
         const filtrados = trabalhos.filter(t => {
             if (t.status !== 'ABERTO') return false;
             if (!termo) return true;
+
             const titulo = (t.problema || '').toLowerCase();
             const desc = (t.descricao || '').toLowerCase();
             const cat = (t.categoria || '').toLowerCase();
             const cidade = (t.localizacao?.cidade || '').toLowerCase();
+
             return titulo.includes(termo) || desc.includes(termo) || cat.includes(termo) || cidade.includes(termo);
         });
 
@@ -38,69 +44,50 @@ window.buscarVagas = async function() {
             return;
         }
 
+        // --- GERAÇÃO DOS CARDS (ESTILO DO FEED) ---
         filtrados.forEach(trabalho => {
             const card = document.createElement('div');
-            card.className = 'card-pedido';
+            // MUDANÇA: Usando 'card-trabalho' igual ao carregarTrabalhos
+            card.className = 'card-trabalho';
             card.style.cursor = 'pointer';
-            card.onclick = () => abrirModalDetalhesTrabalho(trabalho);
+
+            // REDIRECIONAMENTO (Com proteção contra clique no botão)
+            card.onclick = (e) => {
+                if (!e.target.closest('button')) {
+                    window.location.href = `detalhes-trabalho.html?id=${trabalho.id}`;
+                }
+            };
 
             const cidade = trabalho.localizacao ? trabalho.localizacao.cidade : 'Não informada';
             const estado = trabalho.localizacao ? trabalho.localizacao.estado : 'RN';
-            const corStatus = getStatusColor(trabalho.status);
-            const textoStatus = getStatusText(trabalho.status);
+            const valorFormatado = trabalho.pagamento ? Number(trabalho.pagamento).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}) : 'A combinar';
 
-            let botoesAcao = '';
-            
-            if (trabalho.status === 'ABERTO') {
-                botoesAcao = `
-                    <div class="botoes-card">
-                        <button class="botao-aceitar" onclick="candidatar(${trabalho.id})">Candidatar</button>
-                    </div>
-                `;
-            } else if (trabalho.status === 'EM_ESPERA' && trabalho.profissionalId == idUsuarioLogado) {
-                botoesAcao = `
-                    <div class="botoes-card">
-                        <button class="botao-cancelar" onclick="cancelarCandidatura(${trabalho.id})">Cancelar Candidatura</button>
-                    </div>
-                `;
-            } else if (trabalho.status === 'EM_ANDAMENTO' && trabalho.profissionalId == idUsuarioLogado) {
-                botoesAcao = `
-                    <div class="botoes-card">
-                        <button class="botao-cancelar" onclick="cancelarTrabalho(${trabalho.id})">Cancelar Trabalho</button>
-                    </div>
-                `;
-            } else if (trabalho.status === 'CONCLUIDO' && trabalho.profissionalId == idUsuarioLogado) {
-                botoesAcao = `
-                    <div class="valor-recebido">
-                        <span style="color: #4caf50; font-weight: 700;">💰 Valor recebido: R$ ${trabalho.pagamento || '0'}</span>
-                    </div>
-                `;
-            }
-
+            // HTML IDÊNTICO AO CARREGAR TRABALHOS
             card.innerHTML = `
-                <div class="info-card">
+                <div class="info-trabalho">
                     <h3>${trabalho.problema || 'Sem título'}</h3>
-                    <div class="detalhes-card">
+                    <p class="descricao">${trabalho.descricao || 'Sem descrição'}</p>
+                    <div class="detalhes">
                         <span>📍 ${cidade} - ${estado}</span>
-                        <span style="color: #00e0ff;">🔧 ${trabalho.categoria || 'Geral'}</span>
-                        <span>💰 R$ ${trabalho.pagamento || '0'}</span>
+                        <span>🔧 ${trabalho.categoria || 'Geral'}</span>
+                        <span>💰 ${valorFormatado}</span>
                     </div>
-                    ${trabalho.clienteNome ? `<div class="cliente-nome">Cliente: ${trabalho.clienteNome}</div>` : ''}
                 </div>
-                <span class="status-badge" style="border-color: ${corStatus}; color: ${corStatus};">
-                    ${textoStatus}
-                </span>
-                ${botoesAcao}
+                <div class="acoes">
+                    <button class="btn-solicitar" onclick="event.stopPropagation(); candidatar(${trabalho.id}, this)">
+                        Candidatar-se
+                    </button>
+                    </div>
             `;
 
             container.appendChild(card);
         });
+
     } catch (error) {
         console.error('Erro ao buscar trabalhos:', error);
         container.innerHTML = '<p style="color:red">Erro ao buscar trabalhos.</p>';
     }
 };
-
 window.cancelarTrabalho = async function(idTrabalho) {
     if (!confirm('Tem certeza que deseja cancelar este trabalho?')) return;
     try {
@@ -346,11 +333,19 @@ async function carregarTrabalhos() {
             const card = document.createElement('div');
             card.className = 'card-trabalho';
             card.style.cursor = 'pointer';
-            card.onclick = () => abrirModalDetalhesTrabalho(trabalho);
+
+            // --- MUDANÇA AQUI (Redirecionamento) ---
+            card.onclick = (e) => {
+                // Só redireciona se O CLIQUE NÃO FOI EM UM BOTÃO
+                if (!e.target.closest('button')) {
+                    window.location.href = `detalhes-trabalho.html?id=${trabalho.id}`;
+                }
+            };
 
             const cidade = trabalho.localizacao ? trabalho.localizacao.cidade : 'Não informada';
             const estado = trabalho.localizacao ? trabalho.localizacao.estado : 'RN';
 
+            // Nota: Adicionei event.stopPropagation() nos botões HTML abaixo por garantia
             card.innerHTML = `
                 <div class="info-trabalho">
                     <h3>${trabalho.problema || 'Sem título'}</h3>
@@ -365,9 +360,7 @@ async function carregarTrabalhos() {
                     <button class="btn-solicitar" onclick="event.stopPropagation(); candidatar(${trabalho.id}, this)">
                         Candidatar-se
                     </button>
-                    <button class="btn-cancelar" onclick="event.stopPropagation(); cancelarCandidatura(${trabalho.id}, this)">
-                        Cancelar
-                    </button>
+                  
                 </div>
             `;
 
