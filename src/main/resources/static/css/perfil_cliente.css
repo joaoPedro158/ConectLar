@@ -12,12 +12,13 @@ body {
 }
 
 .cabecalho-top {
+    width: 100%;
+    background: rgba(30, 30, 30, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 10px 5% 10px 2%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 5%;
-    background: rgba(30, 30, 30, 0.9);
-    backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
@@ -31,6 +32,10 @@ body {
     transition: transform 0.3s ease;
 }
 
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
 .teste {
     display: flex;
     align-items: center;
@@ -41,12 +46,12 @@ body {
     background: transparent;
     color: #e1e1e6;
     border: 3px solid transparent;
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     border-radius: 12px;
     padding: 10px 18px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .teste button:hover {

@@ -8,11 +8,15 @@ import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {TrabalhoMapper.class})
 public interface AvaliacaoMapper {
+
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dataAvaliacao", ignore = true)
     @Mapping(target = "trabalho", source = "trabalhoEntity")
     Avaliacao toModel(AvaliacaoRecord record, TrabalhoEntity trabalhoEntity);
+
     AvaliacaoEntity toEntity(Avaliacao model);
+
     AvaliacaoDTO toDTO(AvaliacaoEntity entity);
 }

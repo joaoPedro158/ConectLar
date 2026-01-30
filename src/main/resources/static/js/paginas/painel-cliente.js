@@ -142,16 +142,12 @@ async function carregarContadores() {
 
 async function carregarPedidos() {
     try {
-        // Busca o histórico padrão
         const servicos = await requisicao('/usuario/historico', 'GET');
-
-        // Usa a função nova para desenhar
         renderizarListaTrabalhos(servicos);
-
     } catch (error) {
         console.error('Erro ao carregar:', error);
         const lista = document.getElementById('listaMeusPedidos');
-        if(lista) lista.innerHTML = '<p style="color:red">Erro de conexão ao buscar pedidos.</p>';
+        if(lista) lista.innerHTML = '<p style="color:red">Erro ao buscar seus pedidos.</p>';
     }
 }
 
@@ -159,7 +155,6 @@ window.responderSolicitacao = async function(idTrabalho, resposta) {
     try {
         const endpoint = `/trabalho/${idTrabalho}/responder`;
         const response = await requisicao(endpoint, 'POST', String(resposta));
-
         if (response) {
             alert(resposta ? 'Trabalho aceito com sucesso!' : 'Trabalho recusado com sucesso!');
             carregarPedidos();
@@ -284,11 +279,9 @@ function fecharModal() {
 function renderizarListaTrabalhos(listaDeTrabalhos) {
     let lista = document.getElementById('listaMeusPedidos');
 
-    // Se a lista não existir, tenta criar ou buscar
     if (!lista) {
         const secao = document.querySelector('.secao-servicos');
         if (secao) {
-            // Limpa mensagens de vazio antigas
             const vazio = secao.querySelector('.empty-state');
             if (vazio) vazio.remove();
 
@@ -297,11 +290,11 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
             lista.className = 'lista-pedidos';
             secao.appendChild(lista);
         } else {
-            return; // Não tem onde desenhar
+            return;
         }
     }
 
-    lista.innerHTML = ''; // Limpa a lista atual
+    lista.innerHTML = '';
 
     if (!listaDeTrabalhos || listaDeTrabalhos.length === 0) {
         lista.innerHTML = '<p class="mensagem-vazia">Nenhum trabalho encontrado.</p>';
@@ -312,13 +305,25 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
         const card = document.createElement('div');
         card.className = 'card-pedido';
 
-        // Tratamento de nulos
         const cidade = p.localizacao ? p.localizacao.cidade : (p.cidade || 'Local não inf.');
         const estado = p.localizacao ? p.localizacao.estado : (p.estado || 'RN');
         const statusFormatado = (p.status || 'ABERTO').replace('_', ' ');
         const valorFormatado = p.pagamento ? p.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
 
-        // Lógica de botões (Mantive a original)
+        // --- NOVO: Lógica de exibição da Avaliação ---
+        let avaliacaoHtml = '';
+        if (p.status === 'CONCLUIDO' && p.nota) {
+            avaliacaoHtml = `
+                <div class="avaliacao-card-info" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #333;">
+                    <span style="color: #f1c40f; font-size: 1.1rem;">
+                        ${'★'.repeat(p.nota)}${'☆'.repeat(5 - p.nota)}
+                    </span>
+                    ${p.comentario ? `<p style="font-style: italic; color: #bbb; font-size: 0.85rem; margin-top: 4px;">"${p.comentario}"</p>` : ''}
+                </div>
+            `;
+        }
+
+        // Lógica de botões
         let botoesAcao = '';
         if (p.status === 'EM_ESPERA') {
             botoesAcao = `
@@ -334,7 +339,6 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
                 </div>`;
         }
 
-        // HTML do Card
         card.innerHTML = `
             <div class="info-card">
                 <h3>${p.problema || 'Sem título'}</h3>
@@ -343,8 +347,8 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
                     <span style="color: #00e0ff;">🔧 ${p.categoria || 'Geral'}</span>
                     <span>💰 ${valorFormatado}</span>
                 </div>
-                ${p.profissionalNome ? `<div class="profissional-nome">Profissional: ${p.profissionalNome}</div>` : ''}
-            </div>
+                ${p.nomeProfissional ? `<div class="profissional-nome" style="font-size: 0.85rem; color: #888; margin-top: 5px;">Profissional: ${p.nomeProfissional}</div>` : ''}
+                ${avaliacaoHtml} </div>
             <span class="status-badge" style="border-color: #00e0ff; color: #00e0ff;">
                 ${statusFormatado}
             </span>
@@ -359,7 +363,6 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
         cardWrapper.appendChild(card);
         cardWrapper.appendChild(botoesContainer);
 
-        // Evento de clique no card (exceto botões)
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {
             if (!e.target.closest('.botoes-container')) {
@@ -370,7 +373,6 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
         lista.appendChild(cardWrapper);
     });
 }
-
 async function filtrarPorCategoria(categoria) {
     const lista = document.getElementById('listaMeusPedidos');
     if(lista) lista.innerHTML = '<p>Carregando...</p>';

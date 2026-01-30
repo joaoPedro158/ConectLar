@@ -1,17 +1,20 @@
-package br.ifrn.conectlar.Service;
+package br.ifrn.conectlar.Service.Impl;
 
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
-import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioRecord;
-import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
+import br.ifrn.conectlar.Repository.AvaliacaoJparepository;
+import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
+import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
+import br.ifrn.conectlar.Service.SalvaArquivoService;
+import br.ifrn.conectlar.Service.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,13 +32,13 @@ import java.util.List;
 @AllArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
 
-
     private final UsuarioJpaRepository usuarioRepository;
     private final UsuarioMapper mapper;
     private final TrabalhoJpaRepository trabalhoRepository;
     private final TrabalhoMapper trabalhoMapper;
-    private PasswordEncoder passwordEncoder;
-    private SalvaArquivoService salvaArquivoService;
+    private final AvaliacaoJparepository avaliacaoRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final SalvaArquivoService salvaArquivoService;
 
     @Override
     @Transactional
@@ -55,7 +58,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (entityToSave.getRole() == null) {
             entityToSave.setRole(UsuarioRole.USUARIO);
         }
-
 
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
@@ -85,8 +87,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public UsuarioDTO updateUsuario(Long id, UsuarioRecord usuario, MultipartFile fotoPerfil) {
-        UsuarioEntity entityToUpdate = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
+        UsuarioEntity entityToUpdate = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
         if (usuario != null){
             Usuario usuarioModel = mapper.toModel(usuario);
@@ -102,12 +106,10 @@ public class UsuarioServiceImpl implements UsuarioService {
                 String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
                 entityToUpdate.setSenha(senhaCriptografada);
             }
-
         }
 
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
-
                 String fotoAntiga = entityToUpdate.getFotoPerfil();
                 if (fotoAntiga != null && !fotoAntiga.isBlank()) {
                     try {
@@ -117,26 +119,35 @@ public class UsuarioServiceImpl implements UsuarioService {
                     }
                 }
                 String novaFoto = salvaArquivoService.salvaImagem(fotoPerfil);
-
                 entityToUpdate.setFotoPerfil(novaFoto);
             }
         } catch (IOException e) {
             throw new RuntimeException("Erro ao atualizar foto de perfil: " + e.getMessage());
         }
-        UsuarioEntity updatedEntity = usuarioRepository.save(entityToUpdate);
 
+        UsuarioEntity updatedEntity = usuarioRepository.save(entityToUpdate);
         return mapper.toDTO(updatedEntity);
     }
 
     @Override
     public List<TrabalhoDTO> historico(Long id) {
-        List<TrabalhoEntity> historico = trabalhoRepository.findByUsuarioIdOrderByDataHoraAbertaDesc(id);
-        return historico.stream().map(trabalhoMapper::toDTO).toList();
+        List<TrabalhoEntity> historicoEntities = trabalhoRepository.findByUsuarioIdOrderByDataHoraAbertaDesc(id);
+
+        // Mapeia para DTO e verifica se cada um já foi avaliado
+        return historicoEntities.stream().map(entidade -> {
+            TrabalhoDTO dto = trabalhoMapper.toDTO(entidade);
+
+            // Verifica no banco se existe avaliação vinculada ao ID deste trabalho
+            boolean jaAvaliado = avaliacaoRepository.existsByTrabalhoId(entidade.getId());
+            dto.setAvaliado(jaAvaliado);
+
+            return dto;
+        }).toList();
     }
 
     @Override
     public BigDecimal getGastoTotal(Long idUsuario) {
-        List<TrabalhoEntity> trabalhos =  trabalhoRepository.findAllByUsuarioIdAndStatus(idUsuario, StatusTrabalho.CONCLUIDO);
+        List<TrabalhoEntity> trabalhos = trabalhoRepository.findAllByUsuarioIdAndStatus(idUsuario, StatusTrabalho.CONCLUIDO);
 
         return trabalhos.stream()
                 .map(TrabalhoEntity::getPagamento)
@@ -147,9 +158,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public UsuarioDTO getUsuario(Long id) {
         UsuarioEntity usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("usuario nao encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
         return mapper.toDTO(usuario);
     }
-
-
 }

@@ -4,36 +4,28 @@ import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter; // Adicione o Setter para facilitar
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Builder
+@Setter // Adicionado para permitir marcar como avaliado no Service
 public class TrabalhoDTO {
-
     private Long id;
     private LocalizacaoDTO localizacao;
     private String problema;
     private BigDecimal pagamento;
     private String descricao;
     private LocalDateTime dataHoraAberta;
-    private StatusTrabalho  status;
+    private StatusTrabalho status;
     private CategoriaEnum categoria;
-
-    // Dados do Usuário
     private Long idUsuario;
     private String nomeUsuario;
-
-    //dados do profissional
-
-    private  Long idProfissional;
+    private Long idProfissional;
     private String nomeProfissional;
-
-    //imnagem de trabalho
     private String caminhoImagem;
-
     private LocalDateTime dataHoraFinalizado;
-
+    private boolean avaliado;
 }

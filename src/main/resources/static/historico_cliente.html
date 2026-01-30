@@ -55,6 +55,28 @@
 
 </main>
 
+    <div id="modalAvaliacao" class="modal-avaliacao-overlay">
+        <div class="modal-avaliacao-content">
+            <h2>Avaliar Serviço</h2>
+            <p>Como foi sua experiência com o profissional?</p>
+
+            <div class="estrelas-selecao">
+                <input type="radio" name="estrela" id="e5" value="5"><label for="e5">★</label>
+                <input type="radio" name="estrela" id="e4" value="4"><label for="e4">★</label>
+                <input type="radio" name="estrela" id="e3" value="3"><label for="e3">★</label>
+                <input type="radio" name="estrela" id="e2" value="2"><label for="e2">★</label>
+                <input type="radio" name="estrela" id="e1" value="1"><label for="e1">★</label>
+            </div>
+
+            <textarea id="comentarioAvaliacao" placeholder="Deixe um comentário sobre o serviço (opcional)..." rows="4"></textarea>
+
+            <div class="modal-acoes">
+                <button onclick="fecharModalAvaliacao()" class="btn-cancelar">Depois</button>
+                <button onclick="enviarAvaliacaoAtual()" class="btn-confirmar">Enviar Avaliação</button>
+            </div>
+        </div>
+    </div>
+
 
     <script src="/js/api.js"></script>
     <script src="/js/paginas/historico-cliente.js"></script>
