@@ -17,7 +17,11 @@ async function filtrarPorCategoria(categoria) {
             const card = document.createElement('div');
             card.className = 'card-trabalho';
             card.style.cursor = 'pointer';
-            card.onclick = () => abrirModalDetalhesTrabalho(trabalho);
+            card.onclick = (e) => {
+                if (!e.target.closest('button')) {
+                    window.location.href = `detalhes-trabalho.html?id=${trabalho.id}`;
+                }
+            };
 
             const cidade = trabalho.localizacao ? trabalho.localizacao.cidade : 'Não informada';
             const estado = trabalho.localizacao ? trabalho.localizacao.estado : 'RN';
