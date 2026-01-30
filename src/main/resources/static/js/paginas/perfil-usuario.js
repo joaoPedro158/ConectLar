@@ -1,13 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-    carregarDadosPerfil();
+    carregarDadosUsuario();
     configurarFormulario();
     configurarUploadFoto();
+    configurarBotaoSair();
 });
 
-// Carregar dados do perfil
-async function carregarDadosPerfil() {
+// Carregar dados do usuário
+async function carregarDadosUsuario() {
     try {
-        const dados = await requisicao('/profissional/meusdados', 'GET');
+        const dados = await requisicao('/usuario/meusdados', 'GET');
 
         if (!dados) {
             alert('Erro ao carregar dados do perfil');
@@ -15,21 +16,19 @@ async function carregarDadosPerfil() {
         }
 
         // Preenche os campos do formulário
-        const form = document.getElementById('formPerfil');
-
-        form.querySelector('[name="nome"]').value = dados.nome || '';
-        form.querySelector('[name="telefone"]').value = dados.telefone || '';
-        form.querySelector('[name="login"]').value = dados.email || '';
+        document.getElementById('editNome').value = dados.nome || '';
+        document.getElementById('editTelefone').value = dados.telefone || '';
+        document.getElementById('editEmail').value = dados.email || '';
 
         // Preenche dados de localização
         if (dados.localizacao) {
-            form.querySelector('[name="cep"]').value = dados.localizacao.cep || '';
-            form.querySelector('[name="rua"]').value = dados.localizacao.rua || '';
-            form.querySelector('[name="bairro"]').value = dados.localizacao.bairro || '';
-            form.querySelector('[name="numero"]').value = dados.localizacao.numero || '';
-            form.querySelector('[name="estado"]').value = dados.localizacao.estado || '';
-            form.querySelector('[name="cidade"]').value = dados.localizacao.cidade || '';
-            form.querySelector('[name="complemento"]').value = dados.localizacao.complemento || '';
+            document.getElementById('editCep').value = dados.localizacao.cep || '';
+            document.getElementById('editRua').value = dados.localizacao.rua || '';
+            document.getElementById('editBairro').value = dados.localizacao.bairro || '';
+            document.getElementById('editNumero').value = dados.localizacao.numero || '';
+            document.getElementById('editEstado').value = dados.localizacao.estado || '';
+            document.getElementById('editCidade').value = dados.localizacao.cidade || '';
+            document.getElementById('editComplemento').value = dados.localizacao.complemento || '';
         }
 
         // Carrega a foto de perfil
@@ -49,30 +48,23 @@ async function carregarDadosPerfil() {
 
 // Configurar envio do formulário
 function configurarFormulario() {
-    const form = document.getElementById('formPerfil');
+    const form = document.getElementById('formAtualizarPerfil');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        console.log('=== INÍCIO DO SUBMIT ===');
-
         // Pega os valores diretamente dos inputs
-        const nome = form.querySelector('[name="nome"]').value;
-        const telefone = form.querySelector('[name="telefone"]').value;
-        const cep = form.querySelector('[name="cep"]').value;
-        const rua = form.querySelector('[name="rua"]').value;
-        const bairro = form.querySelector('[name="bairro"]').value;
-        const numero = form.querySelector('[name="numero"]').value;
-        const estado = form.querySelector('[name="estado"]').value;
-        const cidade = form.querySelector('[name="cidade"]').value;
-        const complemento = form.querySelector('[name="complemento"]').value;
-        const senha = form.querySelector('[name="senha"]').value;
-
-        console.log('Nome digitado:', nome);
-        console.log('Telefone digitado:', telefone);
+        const nome = document.getElementById('editNome').value;
+        const telefone = document.getElementById('editTelefone').value;
+        const cep = document.getElementById('editCep').value;
+        const rua = document.getElementById('editRua').value;
+        const bairro = document.getElementById('editBairro').value;
+        const numero = document.getElementById('editNumero').value;
+        const estado = document.getElementById('editEstado').value;
+        const cidade = document.getElementById('editCidade').value;
+        const complemento = document.getElementById('editComplemento').value;
 
         const dadosAtualizados = {
-            email: form.querySelector('[name="login"]').value, // Adiciona o email
             nome: nome,
             telefone: telefone,
             localizacao: {
@@ -86,13 +78,6 @@ function configurarFormulario() {
             }
         };
 
-        // Só envia senha se foi preenchida
-        if (senha && senha.trim() !== '') {
-            dadosAtualizados.senha = senha;
-        }
-
-        console.log('Dados que serão enviados:', JSON.stringify(dadosAtualizados, null, 2));
-
         try {
             // Cria FormData para enviar como multipart/form-data
             const formData = new FormData();
@@ -104,15 +89,12 @@ function configurarFormulario() {
             formData.append('dados', dadosBlob);
 
             // Envia usando requisicao com multipart=true
-            const resultado = await requisicao('/profissional/update', 'PUT', formData, true);
+            const resultado = await requisicao('/usuario/update', 'PUT', formData, true);
             console.log('Resposta do servidor:', resultado);
             alert('Perfil atualizado com sucesso!');
 
             // Atualiza o localStorage
             localStorage.setItem('usuario_nome', dadosAtualizados.nome);
-
-            // Limpa o campo de senha
-            form.querySelector('[name="senha"]').value = '';
 
         } catch (error) {
             console.error('Erro ao atualizar perfil:', error);
@@ -123,7 +105,7 @@ function configurarFormulario() {
 
 // Configurar upload de foto
 function configurarUploadFoto() {
-    const inputFoto = document.getElementById('inputFotoPerfil');
+    const inputFoto = document.getElementById('novaFoto');
     const imgPreview = document.getElementById('imgPreview');
 
     inputFoto.addEventListener('change', async (e) => {
@@ -158,7 +140,7 @@ function configurarUploadFoto() {
             formData.append('arquivo', arquivo);
 
             // Envia usando requisicao com multipart=true
-            const resultado = await requisicao('/profissional/update', 'PUT', formData, true);
+            const resultado = await requisicao('/usuario/update', 'PUT', formData, true);
             alert('Foto atualizada com sucesso!');
 
             // Atualiza o localStorage
@@ -171,4 +153,16 @@ function configurarUploadFoto() {
             alert('Erro ao atualizar foto. Tente novamente.');
         }
     });
+}
+
+// Configurar botão de sair
+function configurarBotaoSair() {
+    const btnSair = document.getElementById('btnSair');
+    if (btnSair) {
+        btnSair.addEventListener('click', () => {
+            if (confirm('Deseja realmente sair?')) {
+                logout();
+            }
+        });
+    }
 }
