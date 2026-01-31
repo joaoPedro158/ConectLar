@@ -96,18 +96,12 @@ async function carregarHistorico() {
 
 async function carregarContadores() {
     try {
-        const historico = await requisicao('/profissional/historico', 'GET');
-        if (!Array.isArray(historico)) return;
+        const dados = await requisicao('/profissional/dadosProfissional', 'GET');
 
-        const total = historico.length;
-        const concluidos = historico.filter(t => t && t.status === 'CONCLUIDO').length;
-        const lucro = historico
-            .filter(t => t && t.status === 'CONCLUIDO' && t.pagamento)
-            .reduce((soma, t) => soma + Number(t.pagamento), 0);
-        const avaliacoes = historico
-            .filter(t => t && t.avaliacao)
-            .map(t => Number(t.avaliacao));
-        const media = avaliacoes.length ? (avaliacoes.reduce((a, b) => a + b, 0) / avaliacoes.length).toFixed(1) : '0.0';
+        const total = (dados.pedidosConcluido || 0) + (dados.pedidosAndamento || 0);
+        const concluidos = dados.pedidosConcluido || 0;
+        const lucro = dados.lucroTotal || 0;
+        const media = dados.mediaAvaliacao ? dados.mediaAvaliacao.toFixed(1) : '0.0';
 
         const totalEl = document.getElementById('total-pedidos');
         const concluidosEl = document.getElementById('pedidos-concluidos');
