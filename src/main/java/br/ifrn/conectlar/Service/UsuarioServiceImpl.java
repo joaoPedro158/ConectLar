@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Service.Impl;
+package br.ifrn.conectlar.Service;
 
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
@@ -92,20 +92,37 @@ public class UsuarioServiceImpl implements UsuarioService {
         UsuarioEntity entityToUpdate = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
+        Usuario usuarioModel = mapper.toModel(entityToUpdate);
+
         if (usuario != null){
-            Usuario usuarioModel = mapper.toModel(usuario);
-            if (usuarioRepository.findByEmailAndIdNot(usuarioModel.getEmail(), id).isPresent()) {
-                throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
-            }
-            if (usuarioRepository.findByTelefoneAndIdNot(usuarioModel.getTelefone(), id).isPresent()) {
-                throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
+            if (usuario.email() != null && !usuario.email().equals(usuarioModel.getEmail())) {
+                if (usuarioRepository.findByEmailAndIdNot(usuario.email(), id).isPresent()) {
+                    throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
+                }
             }
 
-            mapper.updateEntityFromModel(usuarioModel, entityToUpdate);
+            if (usuario.telefone() != null && !usuario.telefone().equals(usuarioModel.getTelefone())) {
+                if (usuarioRepository.findByTelefoneAndIdNot(usuario.telefone(), id).isPresent()) {
+                    throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
+                }
+            }
+            if (usuario.senha() != null && !usuario.senha().isBlank()) {
+                usuarioModel.validarSenha(usuario.senha());
+                String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
+                entityToUpdate.setSenha(senhaCriptografada);
+            }
+            usuarioModel.atualizarDados(
+                    usuario.nome(),
+                    usuario.email(),
+                    usuario.telefone()
+
+            );
+
             if (usuarioModel.getSenha() != null && !usuarioModel.getSenha().isBlank()) {
                 String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
                 entityToUpdate.setSenha(senhaCriptografada);
             }
+            mapper.updateEntityFromModel(usuarioModel, entityToUpdate);
         }
 
         try {

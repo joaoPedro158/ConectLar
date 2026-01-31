@@ -93,4 +93,76 @@ public class Usuario {
         }
 
     }
+
+    public void atualizarDados(String nome, String email, String telefone) {
+        if (nome != null && !nome.isBlank()) {
+            validarNome(nome);
+            this.nome = nome;
+        }
+
+        if (email != null && !email.isBlank()) {
+            validarEmail(email);
+            this.email = email;
+        }
+
+        if (telefone != null && !telefone.isBlank()) {
+            validarTelefone(telefone);
+            this.telefone = telefone;
+        }
+
+    }
+
+    private void validarNome(String nome) {
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome não pode ser vazio");
+        }
+        if (nome.length() < 3) {
+            throw new IllegalArgumentException("Nome deve ter no mínimo 3 caracteres");
+        }
+        if (nome.length() > 100) {
+            throw new IllegalArgumentException("Nome deve ter no máximo 100 caracteres");
+        }
+    }
+
+    private void validarEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email não pode ser vazio");
+        }
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        if (!email.matches(emailRegex)) {
+            throw new IllegalArgumentException("Email inválido");
+        }
+    }
+
+    private void validarTelefone(String telefone) {
+        if (telefone == null || telefone.isBlank()) {
+            throw new IllegalArgumentException("Telefone não pode ser vazio");
+        }
+        String telefoneNumeros = telefone.replaceAll("[^0-9]", "");
+        if (telefoneNumeros.length() < 10 || telefoneNumeros.length() > 11) {
+            throw new IllegalArgumentException("Telefone deve ter 10 ou 11 dígitos");
+        }
+    }
+
+    public void validarSenha(String senha) {
+        if (senha == null || this.senha.isBlank()) {
+            throw new IllegalArgumentException("A senha é obrigatória.");
+        }
+
+        if (senha.length() < MIN_PASSWORD_LENGTH) {
+            throw new IllegalArgumentException("A senha deve ter no mínimo " + MIN_PASSWORD_LENGTH + " caracteres.");
+        }
+
+        if (!senha.matches(".*[a-z].*")) {
+            throw new IllegalArgumentException("A senha deve conter pelo menos uma letra minúscula.");
+        }
+
+        if (!senha.matches(".*[A-Z].*")) {
+            throw new IllegalArgumentException("A senha deve conter pelo menos uma letra maiúscula.");
+        }
+
+        if (!senha.matches(".*[0-9].*")) {
+            throw new IllegalArgumentException("A senha deve conter pelo menos um número.");
+        }
+    }
 }

@@ -11,6 +11,7 @@ import org.mapstruct.*;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UsuarioMapper {
     Usuario toModel(UsuarioRecord record);
+    Usuario toModel(UsuarioEntity entity);
     @Mapping(target = "senha", ignore = true)
     UsuarioEntity toEntity(Usuario model);
     UsuarioDTO toDTO(UsuarioEntity entity);
