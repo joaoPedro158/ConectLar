@@ -833,87 +833,147 @@ body {
     border-color: rgba(0, 224, 255, 0.3);
 }
 
-/* Overlay do Modal */
 .modal-avaliacao-overlay {
-    display: none; /* Escondido por padrão */
+    display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
     z-index: 1000;
     justify-content: center;
     align-items: center;
 }
 
 .modal-avaliacao-content {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 32px;
+    border-radius: 24px;
     width: 90%;
-    max-width: 400px;
+    max-width: 450px;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-/* Sistema de Estrelas (Input Radio Trick) */
+.modal-avaliacao-content h2 {
+    margin: 0 0 12px 0;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.modal-avaliacao-content p {
+    margin: 0 0 24px 0;
+    color: #b0b0b0;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
 .estrelas-selecao {
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
-    font-size: 40px;
-    margin: 20px 0;
+    font-size: 48px;
+    margin: 24px 0;
+    gap: 8px;
 }
 
 .estrelas-selecao input { display: none; }
 
 .estrelas-selecao label {
-    color: #ccc;
+    color: rgba(255, 255, 255, 0.2);
     cursor: pointer;
-    transition: color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1);
 }
 
-.estrelas-selecao input:checked ~ label,
-.estrelas-selecao label:hover,
+.estrelas-selecao label:hover {
+    transform: scale(1.1);
+    color: #ffd700;
+}
+
+.estrelas-selecao input:checked ~ label {
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transform: scale(1.05);
+}
+
+.estrelas-selecao input:checked ~ label:hover,
 .estrelas-selecao label:hover ~ label {
-    color: #f1c40f;
+    color: #ffd700;
 }
-
 
 #comentarioAvaliacao {
     width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
     resize: none;
     font-family: inherit;
+    color: #ffffff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+#comentarioAvaliacao::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#comentarioAvaliacao:focus {
+    outline: none;
+    border-color: #00e0ff;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px rgba(0, 224, 255, 0.2);
 }
 
 .modal-acoes {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     justify-content: center;
 }
 
 .btn-confirmar {
-    background: #27ae60;
-    color: white;
+    background: linear-gradient(135deg, #00e0ff, #00b8d4);
+    color: #000;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 24px;
+    border-radius: 50px;
     cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 224, 255, 0.3);
+}
+
+.btn-confirmar:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 224, 255, 0.4);
+    background: linear-gradient(135deg, #33ebff, #00d4e4);
 }
 
 .btn-cancelar {
-    background: #95a5a6;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 24px;
+    border-radius: 50px;
     cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-cancelar:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
 }
 
 .mensagem-avaliado {
-    color: #4caf50; /* Verde */
+    color: #4caf50;
     font-weight: 800;
     font-size: 14px;
     padding: 10px 14px;

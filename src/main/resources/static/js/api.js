@@ -7,7 +7,6 @@ async function requisicao(endpoint, metodo, corpo = null, multipart = false) {
     const headers = {};
 
     if (token && !ROTAS_PUBLICAS.includes(endpoint)) {
-        // Verificar se o token está próximo de expirar (6 horas antes)
         if (verificarTokenExpirando(token)) {
             await refreshToken();
         }
@@ -75,9 +74,9 @@ async function requisicao(endpoint, metodo, corpo = null, multipart = false) {
 function verificarTokenExpirando(token) {
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        const expiracao = payload.exp * 1000; // Converter para milissegundos
+        const expiracao = payload.exp * 1000;
         const agora = Date.now();
-        const seisHoras = 6 * 60 * 60 * 1000; // 6 horas em milissegundos
+        const seisHoras = 6 * 60 * 60 * 1000;
         
         return (expiracao - agora) < seisHoras;
     } catch (e) {
