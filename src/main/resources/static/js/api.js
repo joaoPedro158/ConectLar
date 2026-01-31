@@ -7,7 +7,11 @@ async function requisicao(endpoint, metodo, corpo = null, multipart = false) {
     const headers = {};
 
     if (token && !ROTAS_PUBLICAS.includes(endpoint)) {
-        headers['Authorization'] = `Bearer ${token}`;
+        // Verificar se o token está próximo de expirar (6 horas antes)
+        if (verificarTokenExpirando(token)) {
+            await refreshToken();
+        }
+        headers['Authorization'] = `Bearer ${localStorage.getItem('token_conectlar')}`;
     }
 
     const opcoes = {
@@ -65,6 +69,40 @@ async function requisicao(endpoint, metodo, corpo = null, multipart = false) {
     } catch (erro) {
         console.error('Erro API:', erro);
         throw erro;
+    }
+}
+
+function verificarTokenExpirando(token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const expiracao = payload.exp * 1000; // Converter para milissegundos
+        const agora = Date.now();
+        const seisHoras = 6 * 60 * 60 * 1000; // 6 horas em milissegundos
+        
+        return (expiracao - agora) < seisHoras;
+    } catch (e) {
+        return false;
+    }
+}
+
+async function refreshToken() {
+    try {
+        const token = localStorage.getItem('token_conectlar');
+        const response = await fetch('/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            salvarDadosUsuario(data);
+            console.log('Token atualizado com sucesso');
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar token:', error);
     }
 }
 

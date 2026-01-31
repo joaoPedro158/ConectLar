@@ -38,42 +38,31 @@ async function carregarHistorico() {
                     <span class="status-badge ${statusClass}">${statusTexto}</span>
                 </div>
                 <div class="historico-corpo">
-                    <div class="card-layout">
-                        <div class="card-imagem">
-                            ${servico.caminhoImagem ? 
-                                `<img src="/upload/${servico.caminhoImagem}" alt="Imagem do serviço" onerror="this.style.display='none'">` : 
-                                '<div class="sem-imagem">📷</div>'
-                            }
-                        </div>
-                        <div class="card-info">
-                            <div class="caixa-titulo">
-                                <h4 class="titulo-servico">${servico.problema || 'Sem título'}</h4>
-                                <div class="detalhes-card">
-                                    <span>📍 ${cidade}</span>
-                                    <span style="color: #00e0ff;">🔧 ${servico.categoria || 'Geral'}</span>
-                                    <span>💰 ${formatarMoeda(servico.pagamento)}</span>
-                                </div>
-                            </div>
+                    <div class="caixa-descricao">
+                        <div class="label">Descrição</div>
+                        <p class="descricao">${servico.descricao || 'Sem descrição'}</p>
+                    </div>
+                    
+                    <div class="caixa-detalhes">
+                        <div class="label">Informações</div>
+                        <div class="detalhes-historico">
+                            <span>📍 ${cidade}</span>
+                            <span>🔧 ${servico.categoria || 'Geral'}</span>
+                            <span>💰 ${formatarMoeda(servico.pagamento)}</span>
                         </div>
                     </div>
                 </div>
                 <div class="historico-rodape">
-                    <div class="profissional-info">
-                        <div class="icon">📅</div>
-                        <div class="text">
-                            <div class="label">Data</div>
-                            <div class="name">${new Date(servico.dataHoraAberta).toLocaleDateString('pt-BR')}</div>
-                        </div>
+                    <div class="caixa-data">
+                        <div class="label">Data</div>
+                        <span class="data">${new Date(servico.dataHoraAberta).toLocaleDateString('pt-BR')}</span>
                     </div>
                     ${servico.nomeProfissional ? `
-                        <div class="profissional-info">
-                            <div class="icon">👷</div>
-                            <div class="text">
-                                <div class="label">Profissional</div>
-                                <div class="name">${servico.nomeProfissional}</div>
-                            </div>
+                        <div class="caixa-profissional">
+                            <div class="label">Profissional</div>
+                            <span>${servico.nomeProfissional}</span>
                         </div>
-                    ` : '<div></div>'}
+                    ` : ''}
                     <div class="acoes-card">
                         ${renderizarBotoesAcao(servico)}
                     </div>

@@ -392,6 +392,72 @@ body {
     border-left: 4px solid #00e0ff;
 }
 
+.caixa-descricao .label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.caixa-descricao .descricao {
+    margin: 0;
+    color: #e1e1e6;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.caixa-detalhes {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.caixa-detalhes .label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.detalhes-historico {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.detalhes-historico span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detalhes-historico span:hover {
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.15), rgba(0, 224, 255, 0.25));
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 224, 255, 0.3);
+}
+
+.caixa-descricao {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 4px solid #00e0ff;
+}
+
 .caixa-descricao .descricao {
     margin: 0;
     color: #e1e1e6;
@@ -455,6 +521,78 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     align-items: center;
+}
+
+.caixa-data {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.caixa-data .label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.caixa-data .data {
+    font-size: 14px;
+    color: #00e0ff;
+    font-weight: 600;
+}
+
+.caixa-profissional {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.caixa-profissional .label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.caixa-profissional span {
+    font-size: 14px;
+    color: #e1e1e6;
+    font-weight: 500;
+}
+
+.caixa-cliente {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.caixa-cliente .label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.caixa-cliente .cliente {
+    font-size: 14px;
+    color: #e1e1e6;
+    font-weight: 500;
+}
+
+.caixa-imagens .label {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
 .profissional-info {

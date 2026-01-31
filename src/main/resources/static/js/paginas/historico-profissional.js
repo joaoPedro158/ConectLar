@@ -54,10 +54,12 @@ async function carregarHistorico() {
                 </div>
                 <div class="historico-corpo">
                     <div class="caixa-descricao">
+                        <div class="label">Descrição</div>
                         <p class="descricao">${trabalho.descricao || 'Sem descrição'}</p>
                     </div>
                     ${trabalho.imagens && trabalho.imagens.length > 0 ? `
                         <div class="caixa-imagens">
+                            <div class="label">Imagens</div>
                             <div class="imagens-problema">
                                 ${trabalho.imagens.map(img => `
                                     <img src="${img.startsWith('http') || img.startsWith('/') ? img : '/upload/' + img}" alt="Imagem do problema" class="img-problema">
@@ -66,6 +68,7 @@ async function carregarHistorico() {
                         </div>
                     ` : ''}
                     <div class="caixa-detalhes">
+                        <div class="label">Informações</div>
                         <div class="detalhes-historico">
                             <span>📍 ${cidade} - ${estado}</span>
                             <span>🔧 ${trabalho.categoria || 'Geral'}</span>
@@ -76,11 +79,13 @@ async function carregarHistorico() {
                 </div>
                 <div class="historico-rodape">
                     <div class="caixa-data">
+                        <div class="label">Data</div>
                         <span class="data">${new Date(trabalho.dataHoraAberta).toLocaleDateString('pt-BR')}</span>
                     </div>
                     ${trabalho.usuarioNome ? `
                         <div class="caixa-cliente">
-                            <span class="cliente">Cliente: ${trabalho.usuarioNome}</span>
+                            <div class="label">Cliente</div>
+                            <span class="cliente">${trabalho.usuarioNome}</span>
                         </div>
                     ` : ''}
                 </div>
