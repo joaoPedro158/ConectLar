@@ -11,6 +11,7 @@ import org.mapstruct.*;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ProfissionalMapper {
     Profissional toModel(ProfissionalRecord record);
+    Profissional toModel(ProfissionalEntity entity);
     @Mapping(target = "senha", ignore = true)
     ProfissionalEntity toEntity(Profissional model);
     ProfissionalDTO toDTO(ProfissionalEntity entity);

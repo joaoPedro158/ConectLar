@@ -85,19 +85,31 @@ public class ProfissionalServiceImpl implements ProfissionalService {
     public ProfissionalDTO updateProfissional(Long id, ProfissionalRecord profissionalRecord,MultipartFile fotoPerfil ) {
         ProfissionalEntity entityToUpdate = profissionalRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("o profissional não encontrado com o ID: " + id ));
 
+        Profissional profissionalModel = mapper.toModel(entityToUpdate);
         if (profissionalRecord != null) {
-            Profissional profissionalModel = mapper.toModel(profissionalRecord);
-            if (profissionalRepository.findByEmailAndIdNot(profissionalModel.getEmail(), id).isPresent()) {
-                throw new IllegalArgumentException("Este e-mail ja esta em uso por outro profissional.");
+            if (profissionalRecord.email() != null && !profissionalRecord.email().equals(profissionalModel.getEmail())) {
+                if (profissionalRepository.findByEmailAndIdNot(profissionalRecord.email(), id).isPresent()) {
+                    throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
+                }
             }
-            if (profissionalRepository.findByTelefoneAndIdNot(profissionalModel.getTelefone(), id).isPresent()) {
-                throw new IllegalArgumentException("Este telefone ja esta em uso por outro profissional.");
+            if (profissionalRecord.telefone() != null && !profissionalRecord.telefone().equals(profissionalModel.getTelefone())) {
+                if (profissionalRepository.findByTelefoneAndIdNot(profissionalRecord.telefone(), id).isPresent()) {
+                    throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
+                }
             }
-            mapper.updateEntityFromModel(profissionalModel, entityToUpdate);
-           if (profissionalModel.getSenha() != null && !profissionalModel.getSenha().isBlank()) {
+           if (profissionalRecord.senha() != null && !profissionalRecord.senha().isBlank()) {
+               profissionalModel.validarSenha(profissionalRecord.senha());
                String senhaCriptografada = passwordEncoder.encode(profissionalModel.getSenha());
                entityToUpdate.setSenha(senhaCriptografada);
            }
+
+           profissionalModel.atualizarDados(
+                   profissionalRecord.nome(),
+                   profissionalRecord.email(),
+                   profissionalRecord.telefone()
+           );
+           
+            mapper.updateEntityFromModel(profissionalModel, entityToUpdate);
         }
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {

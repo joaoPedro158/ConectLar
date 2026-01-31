@@ -33,7 +33,5 @@ public class Profissional extends Usuario {
             throw new IllegalArgumentException("Erro de consistência: Um objeto 'Profissional' deve possuir exclusivamente a role 'PROFISSIONAL'.");
         }
 
-
-
     }
 }

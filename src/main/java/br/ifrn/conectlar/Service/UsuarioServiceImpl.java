@@ -100,7 +100,6 @@ public class UsuarioServiceImpl implements UsuarioService {
                     throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
                 }
             }
-
             if (usuario.telefone() != null && !usuario.telefone().equals(usuarioModel.getTelefone())) {
                 if (usuarioRepository.findByTelefoneAndIdNot(usuario.telefone(), id).isPresent()) {
                     throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
@@ -118,10 +117,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
             );
 
-            if (usuarioModel.getSenha() != null && !usuarioModel.getSenha().isBlank()) {
-                String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
-                entityToUpdate.setSenha(senhaCriptografada);
-            }
             mapper.updateEntityFromModel(usuarioModel, entityToUpdate);
         }
 
