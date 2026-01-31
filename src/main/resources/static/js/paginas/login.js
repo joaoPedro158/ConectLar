@@ -290,6 +290,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Função para buscar endereço pelo CEP (automático ao digitar)
+    async function buscarEnderecoPorCep() {
+        const cepInput = document.getElementById('cep');
+        const cep = cepInput.value.replace(/\D/g, '');
+        
+        if (cep.length !== 8) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await response.json();
+
+            if (!data.erro) {
+                // Preencher os campos automaticamente
+                document.getElementById('rua').value = data.logradouro || '';
+                document.getElementById('bairro').value = data.bairro || '';
+                document.getElementById('cidade').value = data.localidade || '';
+                document.getElementById('estado').value = data.uf || '';
+                document.getElementById('complemento').value = data.complemento || '';
+                
+                // Focar no campo número
+                document.getElementById('numero').focus();
+            }
+        } catch (error) {
+            // Silencioso, não mostra erro para não incomodar o usuário
+        }
+    }
+
+    // Adicionar evento de input no campo CEP para busca automática
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
+        cepInput.addEventListener('input', buscarEnderecoPorCep);
+    }
+
     aplicarMascaraTelefone();
     atualizarInterface();
 });

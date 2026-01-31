@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: "Segoe UI", sans-serif;
 }
 
 body {
@@ -12,14 +12,12 @@ body {
 }
 
 .cabecalho-top {
-    width: 100%;
-    background: rgba(30, 30, 30, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 10px 5% 10px 2%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    background-color: #121214;
+    border-bottom: 1px solid #29292e;
     position: sticky;
     top: 0;
     z-index: 50;
@@ -46,7 +44,7 @@ body {
     background: transparent;
     color: #e1e1e6;
     border: 3px solid transparent;
-    font-size: 16px;
+    font-size: 24px;
     font-weight: 600;
     cursor: pointer;
     border-radius: 12px;

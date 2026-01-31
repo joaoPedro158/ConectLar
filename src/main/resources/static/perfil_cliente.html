@@ -12,13 +12,14 @@
         <img src="/assets/logo-conect.png" alt="Logo ConectLar" class="logo-img">
     </div>
     <div class="teste">
-        <button onclick="window.location.href='/painel-cliente.html'">Home</button>
+        <button onclick="window.location.href='painel-cliente.html'">Home</button>
         <button onclick="window.location.href='historico_cliente.html'">Histórico <span id="contadorHistorico" style="margin-left:6px; padding:2px 8px; border-radius:999px; background:#00e0ff; color:#000; font-weight:700; font-size:12px;">0</span></button>
-        <button onclick="logout()" class="botao-sair">Sair</button>
+        <button onclick="window.location.href='perfil_cliente.html'">Perfil</button>
+        <button id="btnSair" class="botao-sair" onclick="logout()">Sair</button>
     </div>
 </header>
 
-<main class="container-principal">
+    <main class="container-principal">
     <section class="painel-conteudo">
         <h1 class="titulo-sessao">Meu Perfil</h1>
 

@@ -2,24 +2,22 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: "Segoe UI", sans-serif;
 }
 
 body {
     background-color: #121212;
-    color: #e1e1e6;
+    color: #fff;
     min-height: 100vh;
 }
 
 .cabecalho-top {
-    width: 100%;
-    background: rgba(30, 30, 30, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 10px 5%;
     display: flex;
     justify-content: space-between;
-    align-items: center; 
-    border-bottom: 1px solid rgba(0, 224, 255, 0.2);
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #121214;
+    border-bottom: 1px solid #29292e;
     position: sticky;
     top: 0;
     z-index: 50;
@@ -50,22 +48,26 @@ body {
 
 .menu-pro {
     display: flex;
-    gap: 20px;
     align-items: center;
+    gap: 25px;
 }
 
 .menu-pro button {
-    background: transparent;
-    border: none;
-    color: #e1e1e6;
-    font-size: 12.8px;
-    font-weight: 500;
+    background: transparent; 
+    color: #e1e1e6; 
+    border: 3px solid transparent; 
+    font-size: 24px;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.3s;
+    border-radius: 12px;
+    padding: 10px 18px;
+    transition: all 0.3s ease;
 }
 
 .menu-pro button:hover {
-    color: #00e0ff;
+    background: rgba(0, 224, 255, 0.1); 
+    color: #00e0ff; 
+    border-color: rgba(0, 224, 255, 0.3);
 }
 
 .container-principal {
@@ -140,21 +142,101 @@ body {
 }
 
 .card-trabalho {
-    background: rgba(40, 40, 40, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 20px;
+    background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 0;
     margin-bottom: 20px;
-    transition: 0.3s;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .card-trabalho:hover {
-    border-color: #00e0ff;
-    transform: translateY(-3px);
-    background: rgba(50, 50, 50, 0.8);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 224, 255, 0.3);
+    border-color: rgba(0, 224, 255, 0.4);
+    background: linear-gradient(135deg, #242424, #2a2a2a);
+}
+
+.info-trabalho {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.info-trabalho h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.info-trabalho .descricao {
+    margin: 0;
+    font-size: 14px;
+    color: #b0b0b0;
+    line-height: 1.4;
+}
+
+.detalhes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #b0b0b0;
+}
+
+.detalhes span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.detalhes span:hover {
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.15), rgba(0, 224, 255, 0.25));
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 224, 255, 0.3);
+}
+
+.acoes {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.btn-solicitar {
+    background: linear-gradient(135deg, #00e0ff, #00b8d4);
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 224, 255, 0.3);
+}
+
+.btn-solicitar:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 224, 255, 0.4);
+    background: linear-gradient(135deg, #33ebff, #00d4e4);
 }
 
 .card-pedido {
