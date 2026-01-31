@@ -1,7 +1,6 @@
 package br.ifrn.conectlar.Model.Enum;
 
 public enum UsuarioRole {
-    ADM("adm"),
     PROFISSIONAL("profissional"),
     USUARIO("usuario");
 

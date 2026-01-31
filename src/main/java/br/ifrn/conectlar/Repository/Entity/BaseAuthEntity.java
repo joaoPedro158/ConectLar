@@ -35,14 +35,7 @@ public abstract class BaseAuthEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        if (this.getRole() == UsuarioRole.ADM) {
-            return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_USUARIO"),
-                    new SimpleGrantedAuthority("ROLE_PROFISSIONAL")
-            );
-        }
-        else if (this.getRole() == UsuarioRole.PROFISSIONAL) {
+        if (this.getRole() == UsuarioRole.PROFISSIONAL) {
             return List.of(
                     new SimpleGrantedAuthority("ROLE_PROFISSIONAL"),
                     new SimpleGrantedAuthority("ROLE_USUARIO")

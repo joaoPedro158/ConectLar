@@ -43,17 +43,6 @@ CREATE TABLE IF NOT EXISTS profissional (
     );
 
 -- -----------------------------------------------------
--- 3. Tabela ADM
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS adm (
-                                   id BIGSERIAL PRIMARY KEY,
-                                   nome VARCHAR(150) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL
-    );
-
--- -----------------------------------------------------
 -- 4. Tabela TRABALHO
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS trabalho (

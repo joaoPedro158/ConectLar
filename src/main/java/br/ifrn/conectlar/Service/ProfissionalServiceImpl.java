@@ -108,7 +108,7 @@ public class ProfissionalServiceImpl implements ProfissionalService {
                    profissionalRecord.email(),
                    profissionalRecord.telefone()
            );
-           
+
             mapper.updateEntityFromModel(profissionalModel, entityToUpdate);
         }
         try {

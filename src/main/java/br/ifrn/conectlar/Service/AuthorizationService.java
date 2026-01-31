@@ -1,6 +1,5 @@
 package br.ifrn.conectlar.Service;
 
-import br.ifrn.conectlar.Repository.AdmJpaRepository;
 import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ public class AuthorizationService implements UserDetailsService {
     @Autowired
     ProfissionalJpaRepository profissionalJpaRepository;
 
-    @Autowired
-    AdmJpaRepository admJpaRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -31,10 +28,6 @@ public class AuthorizationService implements UserDetailsService {
             return profissional.get();
         }
 
-        var adm = admJpaRepository.findByEmail(username);
-        if (adm.isPresent()) {
-            return adm.get();
-        }
 
         throw new UsernameNotFoundException("usuario nao encontrado na classe authorizerService");
     }

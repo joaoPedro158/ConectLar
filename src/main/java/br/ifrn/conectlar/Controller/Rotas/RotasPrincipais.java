@@ -8,7 +8,6 @@ public interface RotasPrincipais {
 
     String RootTrabalho = "/trabalho";
 
-    String RootAdm = "/adm";
 
     String Auth = "/auth";
 
