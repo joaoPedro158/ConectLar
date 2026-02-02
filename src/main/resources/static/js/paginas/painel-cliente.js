@@ -167,12 +167,10 @@ window.responderSolicitacao = async function(idTrabalho, resposta) {
 
 async function carregarPedidos() {
     try {
-        // --- MUDANÇA AQUI ---
-        // Antes: const servicos = await requisicao('/usuario/historico', 'GET');
-        // Agora: Busca a lista de trabalhos em aberto
+
         const servicos = await requisicao('/trabalho/list', 'GET');
 
-        // Usa a função para desenhar (a estrutura do JSON deve ser a mesma)
+
         renderizarListaTrabalhos(servicos);
 
     } catch (error) {
@@ -275,7 +273,7 @@ function fecharModal() {
     document.getElementById('modalNovoPedido').classList.add('escondido');
 }
 
-// Função auxiliar para desenhar os cards na tela (usada tanto pelo Histórico quanto pelo Filtro)
+
 function renderizarListaTrabalhos(listaDeTrabalhos) {
     let lista = document.getElementById('listaMeusPedidos');
 
@@ -310,7 +308,7 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
         const statusFormatado = (p.status || 'ABERTO').replace('_', ' ');
         const valorFormatado = p.pagamento ? p.pagamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
 
-        // --- NOVO: Lógica de exibição da Avaliação ---
+
         let avaliacaoHtml = '';
         if (p.status === 'CONCLUIDO' && p.nota) {
             avaliacaoHtml = `
@@ -323,7 +321,7 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
             `;
         }
 
-        // Lógica de botões
+
         let botoesAcao = '';
         if (p.status === 'EM_ESPERA') {
             botoesAcao = `
@@ -378,13 +376,12 @@ async function filtrarPorCategoria(categoria) {
     if(lista) lista.innerHTML = '<p>Carregando...</p>';
 
     try {
-        // Faz a requisição na URL nova que você passou
-        // IMPORTANTE: encodeURIComponent garante que caracteres especiais não quebrem a URL
+
         const resultado = await requisicao(`/trabalho/filtro/categoria?termo=${encodeURIComponent(categoria)}`, 'GET');
 
         console.log(`Resultados para ${categoria}:`, resultado);
 
-        // Reutiliza a função de desenho!
+
         renderizarListaTrabalhos(resultado);
 
     } catch (erro) {
@@ -395,12 +392,12 @@ async function filtrarPorCategoria(categoria) {
 
 window.finalizarTrabalho = async function(idTrabalho) {
     try {
-        // Chama o endpoint de conclusão
+
         const response = await requisicao(`/trabalho/${idTrabalho}/concluir`, 'POST');
 
         if (response) {
             alert('Trabalho finalizado com sucesso!');
-            carregarPedidos(); // Atualiza a lista na tela
+            carregarPedidos();
         }
     } catch (error) {
         console.error('Erro ao finalizar trabalho:', error);

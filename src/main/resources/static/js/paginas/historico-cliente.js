@@ -1,4 +1,4 @@
-let trabalhoIdAtual = null; // Armazena o ID do trabalho que está sendo avaliado
+let trabalhoIdAtual = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     verificarAutenticacao();
@@ -95,18 +95,18 @@ function renderizarBotoesAcao(servico) {
     return '';
 }
 
-/* ================= AÇÕES DE STATUS ================= */
+
 
 async function concluirServico(idServico) {
     if (!confirm('Confirmar que o serviço foi finalizado pelo profissional?')) return;
 
     try {
-        // O padrão do seu back-end é /trabalho/{id}/concluir
+
         await requisicao(`/trabalho/${idServico}/concluir`, 'POST');
 
         alert('Serviço concluído com sucesso!');
-        carregarHistorico(); // Recarrega a lista
-        abrirModalAvaliacao(idServico); // Abre o modal logo em seguida
+        carregarHistorico();
+        abrirModalAvaliacao(idServico);
     } catch (error) {
         console.error('Erro ao concluir:', error);
         alert('Não foi possível concluir o serviço. Verifique o console.');
@@ -209,6 +209,5 @@ async function atualizarResumo(servicos) {
         document.getElementById('gasto-total').innerText = 'R$ 0,00';
     }
 
-    // A avaliação média o back-end precisaria fornecer um endpoint específico ou calcular aqui se houvesse o dado
     document.getElementById('avaliacao-media').innerText = '-';
 }

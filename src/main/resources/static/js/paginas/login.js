@@ -310,16 +310,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('cidade').value = data.localidade || '';
                 document.getElementById('estado').value = data.uf || '';
                 document.getElementById('complemento').value = data.complemento || '';
-                
-                // Focar no campo número
+
                 document.getElementById('numero').focus();
             }
         } catch (error) {
-            // Silencioso, não mostra erro para não incomodar o usuário
+
         }
     }
 
-    // Adicionar evento de input no campo CEP para busca automática
+
     const cepInput = document.getElementById('cep');
     if (cepInput) {
         cepInput.addEventListener('input', buscarEnderecoPorCep);

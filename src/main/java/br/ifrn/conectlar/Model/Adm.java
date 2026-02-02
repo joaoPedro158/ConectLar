@@ -16,7 +16,7 @@ public class Adm {
     private String senha;
     private UsuarioRole role;
 
-    // Constantes de Validação (Reaproveitando o padrão de segurança)
+
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
     private static final int MIN_PASSWORD_LENGTH = 8;
 

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarBotaoSair();
 });
 
-// Carregar dados do usuário
+
 async function carregarDadosUsuario() {
     try {
         const dados = await requisicao('/usuario/meusdados', 'GET');
@@ -15,12 +15,12 @@ async function carregarDadosUsuario() {
             return;
         }
 
-        // Preenche os campos do formulário
+
         document.getElementById('editNome').value = dados.nome || '';
         document.getElementById('editTelefone').value = dados.telefone || '';
         document.getElementById('editEmail').value = dados.email || '';
 
-        // Preenche dados de localização
+
         if (dados.localizacao) {
             document.getElementById('editCep').value = dados.localizacao.cep || '';
             document.getElementById('editRua').value = dados.localizacao.rua || '';
@@ -31,7 +31,7 @@ async function carregarDadosUsuario() {
             document.getElementById('editComplemento').value = dados.localizacao.complemento || '';
         }
 
-        // Carrega a foto de perfil
+
         if (dados.fotoPerfil) {
             const imgPreview = document.getElementById('imgPreview');
             const srcFoto = dados.fotoPerfil.startsWith('http') || dados.fotoPerfil.startsWith('/')
@@ -46,14 +46,14 @@ async function carregarDadosUsuario() {
     }
 }
 
-// Configurar envio do formulário
+
 function configurarFormulario() {
     const form = document.getElementById('formAtualizarPerfil');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Pega os valores diretamente dos inputs
+
         const nome = document.getElementById('editNome').value;
         const telefone = document.getElementById('editTelefone').value;
         const cep = document.getElementById('editCep').value;
@@ -79,21 +79,21 @@ function configurarFormulario() {
         };
 
         try {
-            // Cria FormData para enviar como multipart/form-data
+
             const formData = new FormData();
 
-            // Adiciona os dados como JSON em um Blob
+
             const dadosBlob = new Blob([JSON.stringify(dadosAtualizados)], {
                 type: 'application/json'
             });
             formData.append('dados', dadosBlob);
 
-            // Envia usando requisicao com multipart=true
+
             const resultado = await requisicao('/usuario/update', 'PUT', formData, true);
             console.log('Resposta do servidor:', resultado);
             alert('Perfil atualizado com sucesso!');
 
-            // Atualiza o localStorage
+
             localStorage.setItem('usuario_nome', dadosAtualizados.nome);
 
         } catch (error) {
@@ -103,7 +103,7 @@ function configurarFormulario() {
     });
 }
 
-// Configurar upload de foto
+
 function configurarUploadFoto() {
     const inputFoto = document.getElementById('novaFoto');
     const imgPreview = document.getElementById('imgPreview');
@@ -113,37 +113,37 @@ function configurarUploadFoto() {
 
         if (!arquivo) return;
 
-        // Validação de tipo de arquivo
+
         if (!arquivo.type.startsWith('image/')) {
             alert('Por favor, selecione apenas imagens');
             return;
         }
 
-        // Validação de tamanho (max 5MB)
+
         if (arquivo.size > 5 * 1024 * 1024) {
             alert('A imagem deve ter no máximo 5MB');
             return;
         }
 
-        // Preview da imagem
+
         const reader = new FileReader();
         reader.onload = (event) => {
             imgPreview.src = event.target.result;
         };
         reader.readAsDataURL(arquivo);
 
-        // Upload da foto usando a mesma rota de atualização
+
         try {
             const formData = new FormData();
 
-            // Adiciona apenas o arquivo (sem os outros dados)
+
             formData.append('arquivo', arquivo);
 
-            // Envia usando requisicao com multipart=true
+
             const resultado = await requisicao('/usuario/update', 'PUT', formData, true);
             alert('Foto atualizada com sucesso!');
 
-            // Atualiza o localStorage
+
             if (resultado.fotoPerfil) {
                 localStorage.setItem('usuario_foto', resultado.fotoPerfil);
             }
@@ -155,7 +155,7 @@ function configurarUploadFoto() {
     });
 }
 
-// Configurar botão de sair
+
 function configurarBotaoSair() {
     const btnSair = document.getElementById('btnSair');
     if (btnSair) {

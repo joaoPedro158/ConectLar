@@ -1,4 +1,4 @@
-// Função para filtrar trabalhos por categoria
+
 async function filtrarPorCategoria(categoria) {
     const container = document.getElementById('listaTrabalhos');
 
@@ -52,19 +52,17 @@ async function filtrarPorCategoria(categoria) {
     }
 }
 
-// Adiciona os eventos aos botões de categoria quando a página carregar
+
 document.addEventListener('DOMContentLoaded', () => {
     const botoesCategoria = document.querySelectorAll('.card-cat');
 
     botoesCategoria.forEach(botao => {
         botao.addEventListener('click', () => {
-            // Remove a classe 'active' de todos os botões
+
             botoesCategoria.forEach(b => b.classList.remove('active'));
 
-            // Adiciona 'active' no botão clicado
             botao.classList.add('active');
 
-            // Pega a categoria do atributo data-categoria
             const categoria = botao.getAttribute('data-categoria');
 
             if (categoria) {

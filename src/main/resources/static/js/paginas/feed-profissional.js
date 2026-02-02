@@ -15,7 +15,6 @@ window.buscarVagas = async function() {
     if (!container) return;
 
     try {
-        // Feedback visual de busca
         container.innerHTML = '<p style="color:#ccc; padding:20px;">Pesquisando...</p>';
 
         const trabalhos = await requisicao('/trabalho/list', 'GET');
@@ -26,7 +25,6 @@ window.buscarVagas = async function() {
             return;
         }
 
-        // Filtra os trabalhos (Aberto + Texto)
         const filtrados = trabalhos.filter(t => {
             if (t.status !== 'ABERTO') return false;
             if (!termo) return true;
@@ -44,14 +42,14 @@ window.buscarVagas = async function() {
             return;
         }
 
-        // --- GERAÇÃO DOS CARDS (ESTILO DO FEED) ---
+
         filtrados.forEach(trabalho => {
             const card = document.createElement('div');
-            // MUDANÇA: Usando 'card-trabalho' igual ao carregarTrabalhos
+
             card.className = 'card-trabalho';
             card.style.cursor = 'pointer';
 
-            // REDIRECIONAMENTO (Com proteção contra clique no botão)
+
             card.onclick = (e) => {
                 if (!e.target.closest('button')) {
                     window.location.href = `detalhes-trabalho.html?id=${trabalho.id}`;
@@ -62,7 +60,7 @@ window.buscarVagas = async function() {
             const estado = trabalho.localizacao ? trabalho.localizacao.estado : 'RN';
             const valorFormatado = trabalho.pagamento ? Number(trabalho.pagamento).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}) : 'A combinar';
 
-            // HTML IDÊNTICO AO CARREGAR TRABALHOS
+
             card.innerHTML = `
                 <div class="info-trabalho">
                     <h3>${trabalho.problema || 'Sem título'}</h3>

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarUploadFoto();
 });
 
-// Carregar dados do perfil
+
 async function carregarDadosPerfil() {
     try {
         const dados = await requisicao('/profissional/meusdados', 'GET');
@@ -14,14 +14,14 @@ async function carregarDadosPerfil() {
             return;
         }
 
-        // Preenche os campos do formulário
+
         const form = document.getElementById('formPerfil');
 
         form.querySelector('[name="nome"]').value = dados.nome || '';
         form.querySelector('[name="telefone"]').value = dados.telefone || '';
         form.querySelector('[name="login"]').value = dados.email || '';
 
-        // Preenche dados de localização
+
         if (dados.localizacao) {
             form.querySelector('[name="cep"]').value = dados.localizacao.cep || '';
             form.querySelector('[name="rua"]').value = dados.localizacao.rua || '';
@@ -32,7 +32,7 @@ async function carregarDadosPerfil() {
             form.querySelector('[name="complemento"]').value = dados.localizacao.complemento || '';
         }
 
-        // Carrega a foto de perfil
+
         if (dados.fotoPerfil) {
             const imgPreview = document.getElementById('imgPreview');
             const srcFoto = dados.fotoPerfil.startsWith('http') || dados.fotoPerfil.startsWith('/')
@@ -47,7 +47,7 @@ async function carregarDadosPerfil() {
     }
 }
 
-// Configurar envio do formulário
+
 function configurarFormulario() {
     const form = document.getElementById('formPerfil');
 
@@ -86,7 +86,7 @@ function configurarFormulario() {
             }
         };
 
-        // Só envia senha se foi preenchida
+
         if (senha && senha.trim() !== '') {
             dadosAtualizados.senha = senha;
         }
@@ -94,24 +94,24 @@ function configurarFormulario() {
         console.log('Dados que serão enviados:', JSON.stringify(dadosAtualizados, null, 2));
 
         try {
-            // Cria FormData para enviar como multipart/form-data
+
             const formData = new FormData();
 
-            // Adiciona os dados como JSON em um Blob
+
             const dadosBlob = new Blob([JSON.stringify(dadosAtualizados)], {
                 type: 'application/json'
             });
             formData.append('dados', dadosBlob);
 
-            // Envia usando requisicao com multipart=true
+
             const resultado = await requisicao('/profissional/update', 'PUT', formData, true);
             console.log('Resposta do servidor:', resultado);
             alert('Perfil atualizado com sucesso!');
 
-            // Atualiza o localStorage
+
             localStorage.setItem('usuario_nome', dadosAtualizados.nome);
 
-            // Limpa o campo de senha
+
             form.querySelector('[name="senha"]').value = '';
 
         } catch (error) {
