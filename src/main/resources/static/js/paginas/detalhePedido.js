@@ -61,7 +61,7 @@ function preencherTela(t) {
         setText('data', 'Data não informada');
     }
 
-    // --- Status ---
+ 
     const elStatus = document.getElementById('status');
     const statusTexto = (t.status || 'ABERTO').replace(/_/g, ' ');
     elStatus.innerText = statusTexto;

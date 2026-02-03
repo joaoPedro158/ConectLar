@@ -105,16 +105,55 @@
     box-shadow: 0 4px 12px rgba(0, 224, 255, 0.3);
 }
 
-.profissional-nome {
-    font-size: 14px;
-    font-weight: 600;
-    color: #00e0ff;
+.profissional-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     margin-top: 12px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, rgba(0, 224, 255, 0.1), rgba(0, 224, 255, 0.2));
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    border: 1px solid rgba(0, 224, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0, 224, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.profissional-foto {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.profissional-dados {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.profissional-nome {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.profissional-avaliacoes {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.estrelas-avaliacao {
+    color: #ffd700;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.nota-numerica {
+    color: #888;
+    font-size: 14px;
 }
 
 .botoes-card {
@@ -384,12 +423,13 @@
     top: 12px;
     right: 12px;
     padding: 4px 10px;
-    border: 1px solid;
+    border: 1px solid #00e0ff;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     background: rgba(0, 0, 0, 0.3);
+    color: #00e0ff;
 }
 
 .status-aberto { background: #ff9800; color: #fff; }
