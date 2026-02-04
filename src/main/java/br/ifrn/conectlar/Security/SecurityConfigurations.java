@@ -67,9 +67,6 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, RotasPrincipais.RootTrabalho + RotasBases.filtroCategoria).permitAll()
                         .requestMatchers(HttpMethod.GET, RotasPrincipais.RootProfissional + RotasBases.dadosProfissional).authenticated()
 
-
-
-
                         .requestMatchers(HttpMethod.GET, "/trabalho/list").permitAll()
                         .requestMatchers(HttpMethod.GET, "/trabalho/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuario/meusdados").permitAll()

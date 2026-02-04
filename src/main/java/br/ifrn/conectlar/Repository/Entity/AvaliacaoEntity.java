@@ -28,8 +28,7 @@ public class AvaliacaoEntity {
     @Column(name = "data_avaliacao", nullable = false)
     private LocalDateTime dataAvaliacao;
 
-    // RELACIONAMENTO 1:1
-    // optional = false significa que é obrigatório ter um trabalho (NOT NULL no banco)
+
     @OneToOne(optional = false)
     @JoinColumn(name = "id_trabalho", unique = true, nullable = false)
     private TrabalhoEntity trabalho;

@@ -26,10 +26,9 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
         TrabalhoEntity trabalhoEntity = trabalhoRepository.findById(idTrabalho)
                 .orElseThrow(() -> new RuntimeException("Trabalho não encontrado"));
 
-        // Cria o modelo (isso dispara a validacao() da classe Avaliacao)
         Avaliacao avaliacao = avaliacaoMapper.toModel(record, trabalhoEntity);
 
-        // Salva a entidade
+
         var entity = avaliacaoMapper.toEntity(avaliacao);
         var salva = avaliacaoRepository.save(entity);
 

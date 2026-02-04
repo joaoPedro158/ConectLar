@@ -53,20 +53,17 @@ public class TrabalhoEntity {
     @Column(name = "caminho_imagem")
     private String caminhoImagem;
 
-    /*
-     * @ManyToOne: "Muitos trabalhos podem ser de UM usuário"
-     * @JoinColumn: Define qual coluna no banco guarda o ID do usuário.
-     */
+
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private UsuarioEntity usuario;
 
-    // VOCÊ PRECISA DISSO AQUI:
-    @ManyToOne // Um profissional tem vários trabalhos
-    @JoinColumn(name = "id_profissional") // Nome da coluna no banco
+
+    @ManyToOne
+    @JoinColumn(name = "id_profissional")
     private ProfissionalEntity profissional;
 
-    @OneToOne(mappedBy = "trabalho") // O nome deve ser igual ao atributo na AvaliacaoEntity
+    @OneToOne(mappedBy = "trabalho")
     private AvaliacaoEntity avaliacao;
 
 

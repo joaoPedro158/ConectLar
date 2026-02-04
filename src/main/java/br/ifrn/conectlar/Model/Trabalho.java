@@ -15,17 +15,17 @@ public class Trabalho {
     private Long id;
     private Localizacao localizacao;
     private String problema;
-    private BigDecimal pagamento; // Atenção: no DTO anterior vc chamou de 'valor', padronize
+    private BigDecimal pagamento;
     private String descricao;
     private LocalDateTime dataHoraAberta;
-    private LocalDateTime dataHoraFinalizada; // <--- Ordem correta: Primeiro a Data
-    private StatusTrabalho status;            // <--- Ordem correta: Depois o Status
+    private LocalDateTime dataHoraFinalizada;
+    private StatusTrabalho status;
     private Long idUsuario;
     private Long idProfissional;
     private CategoriaEnum categoria;
     private String caminhoImagem;
 
-    // CONSTRUTOR CORRIGIDO (Seguindo a ordem das variáveis)
+
     protected Trabalho(Long id, Localizacao localizacao, String problema, BigDecimal pagamento, String descricao,
                        LocalDateTime dataHoraAberta, LocalDateTime dataHoraFinalizada, StatusTrabalho status,
                        Long idUsuario, Long idProfissional, CategoriaEnum categoria,  String caminhoImagem) {
@@ -35,8 +35,8 @@ public class Trabalho {
         this.pagamento = pagamento;
         this.descricao = descricao;
         this.dataHoraAberta = dataHoraAberta;
-        this.dataHoraFinalizada = dataHoraFinalizada; // Agora bate com a posição 7
-        this.status = status;                         // Agora bate com a posição 8
+        this.dataHoraFinalizada = dataHoraFinalizada;
+        this.status = status;
         this.idUsuario = idUsuario;
         this.idProfissional = idProfissional;
         this.categoria = categoria;

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@Setter // Adicionado para permitir marcar como avaliado no Service
+@Setter
 public class TrabalhoDTO {
     private Long id;
     private LocalizacaoDTO localizacao;

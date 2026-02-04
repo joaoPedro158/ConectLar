@@ -1,6 +1,5 @@
--- -----------------------------------------------------
--- 1. Tabela USUARIO
--- -----------------------------------------------------
+
+
 CREATE TABLE IF NOT EXISTS usuario (
                                        id BIGSERIAL PRIMARY KEY,
                                        nome VARCHAR(150) NOT NULL,
@@ -19,9 +18,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     complemento VARCHAR(50)
     );
 
--- -----------------------------------------------------
--- 2. Tabela PROFISSIONAL
--- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS profissional (
                                             id BIGSERIAL PRIMARY KEY,
                                             nome VARCHAR(150) NOT NULL,
@@ -42,9 +39,6 @@ CREATE TABLE IF NOT EXISTS profissional (
 
     );
 
--- -----------------------------------------------------
--- 3. Tabela ADM
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS adm (
                                    id BIGSERIAL PRIMARY KEY,
                                    nome VARCHAR(150) NOT NULL,
@@ -53,9 +47,6 @@ CREATE TABLE IF NOT EXISTS adm (
     role VARCHAR(50) NOT NULL
     );
 
--- -----------------------------------------------------
--- 4. Tabela TRABALHO
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS trabalho (
                                         id BIGSERIAL PRIMARY KEY,
                                         problema VARCHAR(250) NOT NULL,
@@ -88,9 +79,6 @@ CREATE TABLE IF NOT EXISTS trabalho (
     FOREIGN KEY (id_profissional) REFERENCES profissional (id)
     );
 
--- -----------------------------------------------------
--- 5. Tabela AVALIACAO
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS avaliacao (
                                          id BIGSERIAL PRIMARY KEY,
                     nota INT NOT NULL,
