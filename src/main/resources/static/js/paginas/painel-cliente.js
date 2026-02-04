@@ -15,6 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formNovoTrabalho) {
         formNovoTrabalho.addEventListener('submit', enviarNovoTrabalho);
     }
+
+    const cepInput = document.getElementById('cepServico');
+    if (cepInput) {
+        cepInput.addEventListener('blur', buscarEnderecoPorCep);
+        cepInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '')
+                .replace(/^(\d{5})(\d)/, '$1-$2')
+                .replace(/(-\d{3})\d+?$/, '$1');
+        });
+    }
 });
 
 function abrirModalDetalhes(pedido) {
@@ -167,12 +177,9 @@ window.responderSolicitacao = async function(idTrabalho, resposta) {
 
 async function carregarPedidos() {
     try {
-
-        const servicos = await requisicao('/trabalho/list', 'GET');
-
-
-        renderizarListaTrabalhos(servicos);
-
+        const servicos = await requisicao('/usuario/historico', 'GET');
+        const servicosAtivos = servicos.filter(servico => servico.status !== 'CONCLUIDO');
+        renderizarListaTrabalhos(servicosAtivos);
     } catch (error) {
         console.error('Erro ao carregar:', error);
         const lista = document.getElementById('listaMeusPedidos');
@@ -274,7 +281,32 @@ function fecharModal() {
 }
 
 
-function renderizarListaTrabalhos(listaDeTrabalhos) {
+async function buscarDadosProfissional(idProfissional) {
+    try {
+        const dadosPerfil = await requisicao('/profissional/meusdados', 'GET');
+        const dadosEstatisticas = await requisicao('/profissional/dadosProfissional', 'GET');
+        
+        return {
+            mediaAvaliacao: dadosEstatisticas && dadosEstatisticas.mediaAvaliacao ? parseFloat(dadosEstatisticas.mediaAvaliacao).toFixed(1) : null,
+            fotoPerfil: dadosPerfil && dadosPerfil.fotoPerfil ? dadosPerfil.fotoPerfil : null
+        };
+    } catch (error) {
+        try {
+            const dados = await requisicao('/profissional/dadosProfissional', 'GET');
+            return {
+                mediaAvaliacao: dados && dados.mediaAvaliacao ? parseFloat(dados.mediaAvaliacao).toFixed(1) : null,
+                fotoPerfil: null
+            };
+        } catch (error2) {
+            return {
+                mediaAvaliacao: null,
+                fotoPerfil: null
+            };
+        }
+    }
+}
+
+async function renderizarListaTrabalhos(listaDeTrabalhos) {
     let lista = document.getElementById('listaMeusPedidos');
 
     if (!lista) {
@@ -299,7 +331,13 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
         return;
     }
 
-    listaDeTrabalhos.forEach(p => {
+    listaDeTrabalhos.forEach(async (p) => {
+        let dadosProfissional = null;
+        
+        if (p.idProfissional) {
+            dadosProfissional = await buscarDadosProfissional(p.idProfissional);
+        }
+
         const card = document.createElement('div');
         card.className = 'card-pedido';
 
@@ -337,6 +375,13 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
                 </div>`;
         }
 
+        const mediaAvaliacoes = dadosProfissional ? dadosProfissional.mediaAvaliacao : null;
+        const fotoProfissional = dadosProfissional?.fotoPerfil || p.caminhoImagem || null;
+        
+        const estrelasHtml = mediaAvaliacoes ? 
+            '★'.repeat(Math.round(mediaAvaliacoes)) + '☆'.repeat(5 - Math.round(mediaAvaliacoes)) : 
+            '☆☆☆☆☆';
+
         card.innerHTML = `
             <div class="info-card">
                 <h3>${p.problema || 'Sem título'}</h3>
@@ -345,9 +390,20 @@ function renderizarListaTrabalhos(listaDeTrabalhos) {
                     <span style="color: #00e0ff;">🔧 ${p.categoria || 'Geral'}</span>
                     <span>💰 ${valorFormatado}</span>
                 </div>
-                ${p.nomeProfissional ? `<div class="profissional-nome" style="font-size: 0.85rem; color: #888; margin-top: 5px;">Profissional: ${p.nomeProfissional}</div>` : ''}
+                ${p.nomeProfissional ? `
+                    <div class="profissional-info">
+                        <img src="${fotoProfissional ? resolverSrcFoto(fotoProfissional) : '/assets/avatar-padrao.png'}" alt="Foto do profissional" class="profissional-foto" onerror="this.src='/assets/avatar-padrao.png'">
+                        <div class="profissional-dados">
+                            <div class="profissional-nome">${p.nomeProfissional}</div>
+                            <div class="profissional-avaliacoes">
+                                <span class="estrelas-avaliacao">${estrelasHtml}</span>
+                                ${mediaAvaliacoes ? `<span class="nota-numerica">(${mediaAvaliacoes}/5)</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
                 ${avaliacaoHtml} </div>
-            <span class="status-badge" style="border-color: #00e0ff; color: #00e0ff;">
+            <span class="status-badge">
                 ${statusFormatado}
             </span>
         `;
@@ -404,3 +460,34 @@ window.finalizarTrabalho = async function(idTrabalho) {
         alert('Erro ao finalizar trabalho. Tente novamente.');
     }
 };
+
+async function buscarEnderecoPorCep() {
+    const cepInput = document.getElementById('cepServico');
+    const cep = cepInput.value.replace(/\D/g, '');
+    
+    if (cep.length !== 8) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await response.json();
+        
+        if (data.erro) {
+            alert('CEP não encontrado. Por favor, verifique o CEP digitado.');
+            return;
+        }
+
+        document.getElementById('ruaServico').value = data.logradouro || '';
+        document.getElementById('bairroServico').value = data.bairro || '';
+        document.getElementById('cidadeServico').value = data.localidade || '';
+        document.getElementById('estadoServico').value = data.uf || '';
+        document.getElementById('complementoServico').value = data.complemento || '';
+        
+        document.getElementById('numeroServico').focus();
+        
+    } catch (error) {
+        console.error('Erro ao buscar CEP:', error);
+        alert('Erro ao buscar CEP. Por favor, preencha o endereço manualmente.');
+    }
+}
