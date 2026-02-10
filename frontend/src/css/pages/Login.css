@@ -1,0 +1,210 @@
+/* src/pages/Login.css */
+
+/* Reset reused from original */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212;
+    color: #ffffff;
+    overflow: hidden;
+    position: relative;
+    width: 100vw;
+}
+
+@keyframes pulsar {
+    0% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.2); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 0.3; }
+}
+
+.decoracao-fundo-1, .decoracao-fundo-2 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    z-index: 1;
+    animation: pulsar 6s infinite ease-in-out;
+}
+
+.decoracao-fundo-1 {
+    width: 300px;
+    height: 300px;
+    background: #00e0ff;
+    top: -50px;
+    left: -50px;
+}
+
+.decoracao-fundo-2 {
+    width: 400px;
+    height: 400px;
+    background: #008b99;
+    bottom: -50px;
+    right: -50px;
+    animation-delay: 3s;
+}
+
+.painel-acesso {
+    background: rgba(30, 30, 30, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px; /* Mobile responsive width */
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    overflow-y: auto;
+}
+
+.logo-sistema {
+    display: block;
+    margin: 0 auto 24px auto;
+    max-width: 180px;
+    height: auto;
+}
+
+.secao-selecao-tipo {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.botao-selecao {
+    flex: 1;
+    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ccc;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.botao-selecao.selecionado {
+    background: #00e0ff;
+    color: #121212;
+    font-weight: bold;
+    border-color: #00e0ff;
+}
+
+.input-dados {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.input-dados:focus {
+    outline: none;
+    border-color: #00e0ff;
+}
+
+.botao-principal {
+    width: 100%;
+    padding: 12px;
+    background: #00e0ff;
+    color: #121212;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    transition: 0.2s;
+    margin-top: 10px;
+}
+
+.botao-principal:hover {
+    background: #00b8cc;
+    transform: translateY(-2px);
+}
+
+.texto-alternar {
+    text-align: center;
+    margin-top: 20px;
+    color: #bbb;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.texto-alternar:hover {
+    color: #fff;
+}
+
+.titulo-login {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.campo-upload-container {
+    margin-bottom: 15px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 16px 12px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    transition: border 0.2s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.label-upload {
+    display: block;
+    margin-bottom: 8px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    padding-left: 2px;
+}
+
+.input-arquivo {
+    width: 100%;
+    padding: 10px 8px;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 0;
+    transition: border 0.2s;
+    cursor: pointer;
+}
+.input-arquivo::-webkit-file-upload-button {
+    background: #00e0ff;
+    color: #222;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.input-arquivo:hover::-webkit-file-upload-button {
+    background: #00b3c6;
+}
+.input-arquivo::file-selector-button {
+    background: #00e0ff;
+    color: #222;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.input-arquivo:hover::file-selector-button {
+    background: #00b3c6;
+}
+

@@ -1,0 +1,56 @@
+.container-busca {
+  margin-bottom: 24px;
+}
+
+.form-busca {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 4px 4px 4px 16px;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-busca:focus-within {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #00e0ff;
+  box-shadow: 0 0 0 3px rgba(0, 224, 255, 0.15);
+}
+
+.icon-busca {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input-busca {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 15px;
+  padding: 10px;
+}
+
+.input-busca::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-pesquisar {
+  background: linear-gradient(135deg, #7b2ff7, #5a1fb3);
+  border: none;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-pesquisar:hover {
+  background: linear-gradient(135deg, #8e4dff, #6a2bc4);
+  transform: scale(1.05);
+}

@@ -1,0 +1,42 @@
+.caixa-estatisticas {
+  margin-bottom: 24px;
+}
+
+.estatisticas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.estatistica-card {
+  background: linear-gradient(135deg, rgba(123, 47, 247, 0.15), rgba(90, 31, 179, 0.1));
+  border: 1px solid rgba(123, 47, 247, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.estatistica-card:hover {
+  background: linear-gradient(135deg, rgba(123, 47, 247, 0.25), rgba(90, 31, 179, 0.15));
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(123, 47, 247, 0.2);
+}
+
+.estatistica-card p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.estatistica-card h2 {
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00e0ff, #7b2ff7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

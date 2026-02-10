@@ -1,0 +1,81 @@
+.cabecalho-top {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img {
+  height: 38px;
+}
+
+.badge-pro {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #00e0ff, #00a8cc);
+  color: #000;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.menu-pro {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.menu-pro button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu-pro button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #00e0ff;
+  transform: translateY(-2px);
+}
+
+.badge-contador {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #00e0ff;
+  color: #000;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.botao-sair {
+  background: linear-gradient(135deg, #ff4757, #c23b49) !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+
+.botao-sair:hover {
+  background: linear-gradient(135deg, #ff6b7a, #d94e5c) !important;
+  transform: translateY(-2px);
+}

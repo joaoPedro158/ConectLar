@@ -1,0 +1,136 @@
+.modal-avaliacao-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-avaliacao-content {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 480px;
+  width: 90%;
+  animation: slideUp 0.3s ease;
+}
+
+.modal-avaliacao-content h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #00e0ff, #7b2ff7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal-avaliacao-content > p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.estrelas-selecao {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.estrelas-selecao input {
+  display: none;
+}
+
+.estrelas-selecao label {
+  font-size: 40px;
+  color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.estrelas-selecao label:hover,
+.estrelas-selecao label.selecionada {
+  color: #ffd700;
+  transform: scale(1.2);
+}
+
+.modal-avaliacao-content textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 24px;
+}
+
+.modal-avaliacao-content textarea:focus {
+  outline: none;
+  border-color: #00e0ff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.modal-acoes {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-cancelar,
+.btn-confirmar {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancelar {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.btn-cancelar:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-confirmar {
+  background: linear-gradient(135deg, #7b2ff7, #5a1fb3);
+  color: #fff;
+}
+
+.btn-confirmar:hover {
+  background: linear-gradient(135deg, #8e4dff, #6a2bc4);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

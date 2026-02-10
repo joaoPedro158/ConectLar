@@ -1,0 +1,195 @@
+.loading,
+.erro {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.header-detalhes {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.titulo-problema {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #00e0ff, #7b2ff7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.categoria-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(0, 224, 255, 0.15);
+  border: 1px solid rgba(0, 224, 255, 0.3);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #00e0ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-aberto {
+  background: linear-gradient(135deg, #00e0ff, #00a8cc);
+  color: #000;
+}
+
+.status-em_andamento {
+  background: linear-gradient(135deg, #ffa502, #ff6348);
+  color: #fff;
+}
+
+.status-concluido {
+  background: linear-gradient(135deg, #26de81, #20bf6b);
+  color: #000;
+}
+
+.status-cancelado {
+  background: linear-gradient(135deg, #ff4757, #c23b49);
+  color: #fff;
+}
+
+.grid-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.info-box h3 {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.valor-destaque {
+  font-size: 36px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #00e0ff, #7b2ff7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.info-box p {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.descricao-box {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.descricao-texto {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.endereco-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.subtitulo-secao {
+  color: #888;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.endereco-formatado {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.endereco-formatado p {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.endereco-formatado p:last-child {
+  margin-bottom: 0;
+}
+
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.imagem-galeria {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.imagem-galeria:hover {
+  border-color: #00e0ff;
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 224, 255, 0.3);
+}
+
+.btn-voltar {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #7b2ff7, #5a1fb3);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-voltar:hover {
+  background: linear-gradient(135deg, #8e4dff, #6a2bc4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(123, 47, 247, 0.3);
+}

@@ -1,0 +1,143 @@
+.form-perfil {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.perfil-topo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.perfil-avatar-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.foto-perfil-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.img-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #00e0ff;
+  box-shadow: 0 0 20px rgba(0, 224, 255, 0.3);
+}
+
+.btn-trocar-foto {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #7b2ff7;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #121212;
+}
+
+.btn-trocar-foto:hover {
+  transform: scale(1.1);
+  background: #00e0ff;
+}
+
+.btn-trocar-foto img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+.badge-tipo {
+  padding: 6px 16px;
+  background: rgba(0, 224, 255, 0.15);
+  border: 1px solid rgba(0, 224, 255, 0.3);
+  border-radius: 999px;
+  color: #00e0ff;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.grid-perfil {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.form-grupo label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.campinho-texto {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px;
+  color: #fff;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.campinho-texto:focus {
+  outline: none;
+  border-color: #00e0ff;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 224, 255, 0.1);
+}
+
+.campinho-texto.readonly {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.form-grupo-flex {
+  display: flex;
+  gap: 20px;
+}
+
+.form-grupo-flex .form-grupo {
+  flex: 1;
+}
+
+.botaozao-roxo {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #7b2ff7, #5a1fb3);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+}
+
+.botaozao-roxo:hover {
+  background: linear-gradient(135deg, #8e4dff, #6a2bc4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(123, 47, 247, 0.3);
+}
