@@ -1,6 +1,6 @@
 import { CardPedido } from './CardPedido';
 
-export function ListaPedidos({ pedidos, loading, onCancelar }) {
+export function ListaPedidos({ pedidos, loading, onCancelar, onVerDetalhes }) {
   return (
     <div className="secao-servicos">
       <h1 className="titulo-sessao">Caixinha de pedidos</h1>
@@ -13,7 +13,14 @@ export function ListaPedidos({ pedidos, loading, onCancelar }) {
           <p>Você ainda não publicou nenhum pedido. Clique no botão + para começar!</p>
         </div>
       ) : (
-        pedidos.map(p => <CardPedido key={p.id} pedido={p} onCancelar={onCancelar} />)
+        pedidos.map(p => (
+          <CardPedido
+            key={p.id}
+            pedido={p}
+            onCancelar={onCancelar}
+            onVerDetalhes={onVerDetalhes}
+          />
+        ))
       )}
     </div>
   );

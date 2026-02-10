@@ -383,23 +383,25 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    padding: 4px 10px;
-    border: 1px solid;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    background: rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
 }
 
-.status-aberto { background: #ff9800; color: #fff; }
-.status-andamento { background: #2196f3; color: #fff; }
-.status-concluido { background: #4caf50; color: #fff; }
-.status-cancelado { background: #f44336; color: #fff; }
-.status-candidatado { background: #9c27b0; color: #fff; }
-.status-aceito { background: #00bcd4; color: #fff; }
-.status-recusado { background: #607d8b; color: #fff; }
-.status-pendente { background: #666; color: #fff; }
+.status-aberto { background: linear-gradient(135deg, #ffb74d, #ff9800); color: #000; }
+.status-em_andamento, .status-andamento { background: linear-gradient(135deg, #64b5f6, #2196f3); color: #fff; }
+.status-concluido { background: linear-gradient(135deg, #66bb6a, #43a047); color: #000; }
+.status-cancelado { background: linear-gradient(135deg, #ef5350, #e53935); color: #fff; }
+.status-em_espera, .status-pendente { background: linear-gradient(135deg, #bdbdbd, #757575); color: #fff; }
+.status-candidatado { background: linear-gradient(135deg, #ba68c8, #9c27b0); color: #fff; }
+.status-aceito { background: linear-gradient(135deg, #4dd0e1, #00acc1); color: #000; }
+.status-recusado { background: linear-gradient(135deg, #90a4ae, #607d8b); color: #fff; }
 
 .historico-corpo {
     margin-bottom: 15px;
@@ -975,6 +977,38 @@ body {
 .botao-full {
     width: 100%;
     margin-top: 10px;
+}
+.painel-usuario-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.painel-usuario-foto {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00e0ff;
+}
+
+.painel-usuario-nome {
+    font-weight: 700;
+}
+
+.badge-historico {
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #00e0ff;
+    color: #000;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.form-grupo-uf {
+    width: 80px;
 }
 .container-busca {
     margin-bottom: 30px;

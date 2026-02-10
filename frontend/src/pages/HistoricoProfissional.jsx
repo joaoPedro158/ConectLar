@@ -17,7 +17,7 @@ export default function HistoricoProfissional() {
 
   const carregarHistorico = async () => {
     try {
-      const dados = await requisicao('/usuario/historico', 'GET');
+      const dados = await requisicao('/profissional/historico', 'GET');
       setServicos(dados || []);
       calcularEstatisticas(dados || []);
     } catch (error) {
@@ -31,11 +31,6 @@ export default function HistoricoProfissional() {
     const lucroTotal = servicos
       .filter(s => s.status === 'CONCLUIDO')
       .reduce((acc, s) => acc + (s.pagamento || 0), 0);
-    
-    const avaliacoes = servicos.filter(s => s.avaliacao).map(s => s.avaliacao);
-    const mediaAvaliacao = avaliacoes.length > 0
-      ? (avaliacoes.reduce((a, b) => a + b, 0) / avaliacoes.length).toFixed(1)
-      : '0.0';
 
     setStats({
       totalLabel: 'Total de Serviços',
@@ -44,7 +39,7 @@ export default function HistoricoProfissional() {
       concluidos,
       valorLabel: 'Lucro Total',
       valor: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(lucroTotal),
-      avaliacao: mediaAvaliacao
+      avaliacao: '0.0'
     });
   };
 

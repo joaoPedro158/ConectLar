@@ -49,11 +49,6 @@ public class Usuario {
             throw new IllegalArgumentException("O nome do usuário é obrigatório e deve ter pelo menos 3 letras.");
         }
 
-        if (this.localizacao == null) {
-            throw new IllegalArgumentException("A localização (endereço) é obrigatória para o cadastro.");
-        }
-
-
         if (this.email == null || this.email.isBlank()) {
             throw new IllegalArgumentException("O e-mail é obrigatório.");
         }

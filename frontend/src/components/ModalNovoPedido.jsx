@@ -15,15 +15,66 @@ export function ModalNovoPedido({ aoFechar, aoEnviar }) {
     complemento: ''
   });
 
+  const [arquivoImagem, setArquivoImagem] = useState(null);
+
+  const formatarCep = (valor) => {
+    if (!valor) return '';
+    const digitos = valor.replace(/\D/g, '').slice(0, 8);
+    if (digitos.length <= 5) return digitos;
+    return `${digitos.slice(0, 5)}-${digitos.slice(5)}`;
+  };
+
+  const buscarCep = async (cepLimpo) => {
+    try {
+      const resp = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      if (data.erro) return;
+      setFormData((prev) => ({
+        ...prev,
+        cep: formatarCep(cepLimpo),
+        rua: data.logradouro || prev.rua,
+        bairro: data.bairro || prev.bairro,
+        cidade: data.localidade || prev.cidade,
+        estado: data.uf || prev.estado,
+      }));
+    } catch (e) {
+      console.error('Erro ao buscar CEP via ViaCEP', e);
+    }
+  };
+
+  const formatarMoeda = (valor) => {
+    const digitos = (valor || '').toString().replace(/\D/g, '');
+    if (!digitos) return '';
+    const numero = parseInt(digitos, 10);
+    return (numero / 100).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  };
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     const campo = id.replace('Servico', '');
-    setFormData(prev => ({ ...prev, [campo]: value }));
+
+    if (id === 'cepServico') {
+      const mascarado = formatarCep(value);
+      setFormData((prev) => ({ ...prev, [campo]: mascarado }));
+      const digitos = value.replace(/\D/g, '');
+      if (digitos.length === 8) {
+        buscarCep(digitos);
+      }
+    } else if (id === 'pagamentoServico') {
+      const formatado = formatarMoeda(value);
+      setFormData((prev) => ({ ...prev, [campo]: formatado }));
+    } else {
+      setFormData(prev => ({ ...prev, [campo]: value }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    aoEnviar(formData);
+    aoEnviar({ ...formData, arquivo: arquivoImagem });
   };
 
   return (
@@ -57,7 +108,15 @@ export function ModalNovoPedido({ aoFechar, aoEnviar }) {
             </div>
             <div className="form-grupo">
               <label>Valor Orçamento (R$)</label>
-              <input type="number" id="pagamentoServico" className="input-dark" placeholder="100.00" min="1" step="0.01" value={formData.pagamento} onChange={handleInputChange} required />
+              <input
+                type="text"
+                id="pagamentoServico"
+                className="input-dark"
+                placeholder="R$ 100,00"
+                value={formData.pagamento}
+                onChange={handleInputChange}
+                required
+              />
             </div>
           </div>
 
@@ -70,7 +129,7 @@ export function ModalNovoPedido({ aoFechar, aoEnviar }) {
               <label>Cidade</label>
               <input type="text" id="cidadeServico" className="input-dark" value={formData.cidade} onChange={handleInputChange} required />
             </div>
-            <div className="form-grupo" style={{ width: '80px' }}>
+            <div className="form-grupo form-grupo-uf">
               <label>UF</label>
               <input type="text" id="estadoServico" className="input-dark" value={formData.estado} onChange={handleInputChange} required />
             </div>
@@ -95,6 +154,17 @@ export function ModalNovoPedido({ aoFechar, aoEnviar }) {
           <div className="form-grupo">
             <label>Complemento</label>
             <input type="text" id="complementoServico" className="input-dark" value={formData.complemento} onChange={handleInputChange} />
+          </div>
+
+          <div className="form-grupo">
+            <label>Imagem do problema (opcional)</label>
+            <input
+              type="file"
+              accept="image/*"
+              id="imagemServico"
+              className="input-dark"
+              onChange={(e) => setArquivoImagem(e.target.files[0] || null)}
+            />
           </div>
 
           <div className="form-grupo">

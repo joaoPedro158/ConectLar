@@ -33,11 +33,6 @@ export default function HistoricoCliente() {
     const gastoTotal = pedidos
       .filter(p => p.status === 'CONCLUIDO')
       .reduce((acc, p) => acc + (p.pagamento || 0), 0);
-    
-    const avaliacoes = pedidos.filter(p => p.avaliacao).map(p => p.avaliacao);
-    const mediaAvaliacao = avaliacoes.length > 0
-      ? (avaliacoes.reduce((a, b) => a + b, 0) / avaliacoes.length).toFixed(1)
-      : '0.0';
 
     setStats({
       totalLabel: 'Total de Pedidos',
@@ -46,8 +41,31 @@ export default function HistoricoCliente() {
       concluidos,
       valorLabel: 'Gasto Total',
       valor: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(gastoTotal),
-      avaliacao: mediaAvaliacao
+      avaliacao: '-' // igual ao legado, que não calcula média aqui
     });
+  };
+
+  const concluirServico = async (idServico) => {
+    if (!window.confirm('Confirmar que o serviço foi finalizado pelo profissional?')) return;
+    try {
+      await requisicao(`/trabalho/${idServico}/concluir`, 'POST');
+      alert('Serviço concluído com sucesso!');
+      carregarHistorico();
+      setModalAvaliacao(idServico);
+    } catch (error) {
+      alert('Não foi possível concluir o serviço.');
+    }
+  };
+
+  const cancelarTrabalho = async (idTrabalho) => {
+    if (!window.confirm('Deseja realmente cancelar este pedido?')) return;
+    try {
+      await requisicao(`/trabalho/${idTrabalho}/cancelar`, 'POST');
+      alert('Pedido cancelado.');
+      carregarHistorico();
+    } catch (error) {
+      alert('Erro ao cancelar pedido.');
+    }
   };
 
   const handleAvaliar = (pedidoId) => {
@@ -56,7 +74,7 @@ export default function HistoricoCliente() {
 
   const enviarAvaliacao = async ({ estrelas, comentario }) => {
     try {
-      await requisicao(`/trabalho/${modalAvaliacao}/avaliar`, 'POST', {
+      await requisicao(`/avaliacao/avaliar/${modalAvaliacao}`, 'POST', {
         nota: estrelas,
         comentario
       });
@@ -91,8 +109,10 @@ export default function HistoricoCliente() {
                   <CardPedido
                     key={p.id}
                     pedido={p}
-                    mostrarAvaliar={p.status === 'CONCLUIDO' && !p.avaliacao}
-                    onAvaliar={() => handleAvaliar(p.id)}
+                    onConcluir={concluirServico}
+                    onCancelar={cancelarTrabalho}
+                    mostrarAvaliar={p.status === 'CONCLUIDO' && !p.avaliado}
+                    onAvaliar={handleAvaliar}
                     onVerDetalhes={() => navigate(`/detalhes-trabalho?id=${p.id}`)}
                   />
                 ))}

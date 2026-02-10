@@ -1,6 +1,6 @@
 import '../css/components/CardTrabalho.css';
 
-export function CardTrabalho({ trabalho, onVerDetalhes }) {
+export function CardTrabalho({ trabalho, onVerDetalhes, onCandidatar }) {
   const formatarValor = (valor) => {
     return new Intl.NumberFormat('pt-BR', { 
       style: 'currency', 
@@ -23,28 +23,49 @@ export function CardTrabalho({ trabalho, onVerDetalhes }) {
   };
 
   const catInfo = mapearCategoria(trabalho.categoria);
+  const cidade = trabalho.localizacao?.cidade || 'Não informada';
+  const estado = trabalho.localizacao?.estado || 'RN';
+  const valorFormatado = trabalho.pagamento ? formatarValor(trabalho.pagamento) : 'A combinar';
+
+  const handleCardClick = () => {
+    if (onVerDetalhes) {
+      onVerDetalhes(trabalho);
+    }
+  };
+
+  const handleCandidatarClick = (e) => {
+    e.stopPropagation();
+    if (onCandidatar) {
+      onCandidatar(trabalho);
+    }
+  };
 
   return (
-    <div className="card-trabalho">
-      <div className="card-trabalho-header">
-        <div className="categoria-badge">
-          <span className="categoria-icon">{catInfo.icon}</span>
-          {catInfo.label}
+    <div className="card-trabalho" onClick={handleCardClick}>
+      <div className="info-trabalho">
+        <h3>{trabalho.problema || 'Sem título'}</h3>
+        <p className="descricao">{trabalho.descricao || 'Sem descrição'}</p>
+
+        <div className="detalhes">
+          <span>
+            📍 {cidade} - {estado}
+          </span>
+          <span>
+            <span>{catInfo.icon}</span>
+            {catInfo.label}
+          </span>
+          <span>
+            💰 {valorFormatado}
+          </span>
         </div>
-        <div className="valor-badge">{formatarValor(trabalho.pagamento)}</div>
       </div>
-
-      <h3 className="trabalho-titulo">{trabalho.problema}</h3>
-      <p className="trabalho-descricao">{trabalho.descricao}</p>
-
-      <div className="trabalho-localizacao">
-        <span className="icon-localizacao">📍</span>
-        {trabalho.localizacao?.cidade}, {trabalho.localizacao?.estado}
+      <div className="acoes">
+        {onCandidatar && (
+          <button className="btn-solicitar" onClick={handleCandidatarClick}>
+            Candidatar-se
+          </button>
+        )}
       </div>
-
-      <button className="btn-ver-detalhes" onClick={() => onVerDetalhes(trabalho)}>
-        Ver Detalhes
-      </button>
     </div>
   );
 }

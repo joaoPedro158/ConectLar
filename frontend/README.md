@@ -42,3 +42,15 @@ Este projeto foi migrado para React com Vite, focado em alta performance e respo
 - O código antigo (static/js) usava manipulação direta do DOM. O novo código usa o estado do React (`useState`) para gerenciar a interface.
 - A configuração do Vite (`vite.config.js`) já possui um proxy para redirecionar chamadas `/api` e outras rotas para `http://localhost:8080`, evitando problemas de CORS durante o desenvolvimento.
 
+## Build para produção com Spring Boot
+
+Para gerar o build do React e copiá-lo para `src/main/resources/static` do backend:
+
+```bash
+cd frontend
+chmod +x build-prod.sh
+./build-prod.sh
+```
+
+Depois, gere o `.jar` normalmente com Maven (`./mvnw package`) e suba apenas a aplicação Spring Boot.
+

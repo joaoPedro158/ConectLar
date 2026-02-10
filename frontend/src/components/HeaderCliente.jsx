@@ -18,7 +18,7 @@ export function HeaderCliente({ historicoCont }) {
         <button onClick={() => navigate('/painel-cliente')}>Home</button>
         <button onClick={() => navigate('/historico-cliente')}>
           Histórico{' '}
-          <span style={{ marginLeft: '6px', padding: '2px 8px', borderRadius: '999px', background: '#00e0ff', color: '#000', fontWeight: '700', fontSize: '12px' }}>
+          <span className="badge-historico">
             {historicoCont}
           </span>
         </button>

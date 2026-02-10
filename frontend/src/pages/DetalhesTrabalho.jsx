@@ -34,8 +34,24 @@ export default function DetalhesTrabalho() {
     }).format(valor);
   };
 
-  const formatarData = (data) => {
-    return new Date(data).toLocaleString('pt-BR', {
+  const formatarData = (trabalho) => {
+    const dataCrua =
+      trabalho.dataHoraAberta ||
+      trabalho.dataHoraAbertura ||
+      trabalho.dataCriacao ||
+      trabalho.data;
+
+    if (!dataCrua) {
+      return 'Data não informada';
+    }
+
+    const dataObj = new Date(dataCrua);
+
+    if (isNaN(dataObj.getTime())) {
+      return 'Data inválida';
+    }
+
+    return dataObj.toLocaleString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -53,6 +69,32 @@ export default function DetalhesTrabalho() {
     };
     return mapa[status] || status;
   };
+
+  const valorOrcamento = trabalho?.pagamento
+    ? formatarValor(trabalho.pagamento)
+    : 'A Combinar';
+
+  const localizacao = trabalho?.localizacao || {};
+  const itensEndereco = [
+    localizacao.rua ? `Rua: ${localizacao.rua}` : null,
+    localizacao.numero ? `Nº: ${localizacao.numero}` : null,
+    localizacao.bairro ? `Bairro: ${localizacao.bairro}` : null,
+    localizacao.cidade ? `Cidade: ${localizacao.cidade}` : null,
+    localizacao.estado ? `UF: ${localizacao.estado}` : null,
+    localizacao.cep ? `CEP: ${localizacao.cep}` : null,
+    localizacao.complemento ? `Ref: ${localizacao.complemento}` : null
+  ].filter(Boolean);
+
+  let listaImagens = [];
+  if (Array.isArray(trabalho?.imagens)) {
+    listaImagens = trabalho.imagens;
+  } else if (trabalho?.caminhoImagem) {
+    listaImagens = [trabalho.caminhoImagem];
+  } else if (trabalho?.imagem) {
+    listaImagens = [trabalho.imagem];
+  } else if (trabalho?.foto) {
+    listaImagens = [trabalho.foto];
+  }
 
   if (loading) {
     return (
@@ -98,11 +140,11 @@ export default function DetalhesTrabalho() {
           <div className="grid-info">
             <div className="info-box">
               <h3>Valor do Orçamento</h3>
-              <p className="valor-destaque">{formatarValor(trabalho.pagamento)}</p>
+              <p className="valor-destaque">{valorOrcamento}</p>
             </div>
             <div className="info-box">
               <h3>Data de Abertura</h3>
-              <p>{formatarData(trabalho.dataCriacao)}</p>
+              <p>{formatarData(trabalho)}</p>
             </div>
           </div>
 
@@ -113,31 +155,46 @@ export default function DetalhesTrabalho() {
             </div>
           </div>
 
-          {trabalho.localizacao && (
-            <div className="endereco-box">
-              <h3 className="subtitulo-secao">Localização do Serviço</h3>
-              <div className="endereco-formatado">
-                <p>{trabalho.localizacao.rua}, {trabalho.localizacao.numero}</p>
-                {trabalho.localizacao.complemento && (
-                  <p>Complemento: {trabalho.localizacao.complemento}</p>
-                )}
-                <p>{trabalho.localizacao.bairro}</p>
-                <p>{trabalho.localizacao.cidade} - {trabalho.localizacao.estado}</p>
-                <p>CEP: {trabalho.localizacao.cep}</p>
-              </div>
+          <div className="endereco-box">
+            <h3 className="subtitulo-secao">Localização do Serviço</h3>
+            <div className="endereco-formatado">
+              {itensEndereco.length > 0 ? (
+                itensEndereco.map((item, idx) => (
+                  <div key={idx} className="item-end">{item}</div>
+                ))
+              ) : (
+                <span className="sem-endereco">Endereço não informado.</span>
+              )}
             </div>
-          )}
+          </div>
 
-          {trabalho.imagens && trabalho.imagens.length > 0 && (
-            <div className="info-box">
-              <h3>Imagens Anexadas</h3>
+          <div className="info-box">
+            <h3>Imagens Anexadas</h3>
+            {listaImagens.length > 0 ? (
               <div className="galeria">
-                {trabalho.imagens.map((img, idx) => (
-                  <img key={idx} src={img} alt={`Imagem ${idx + 1}`} className="imagem-galeria" />
-                ))}
+                {listaImagens.map((img, idx) => {
+                  if (!img) return null;
+                  const src =
+                    img.startsWith('http') || img.startsWith('/')
+                      ? img
+                      : `/upload/${img}`;
+                  const handleClick = () => window.open(src, '_blank');
+                  return (
+                    <img
+                      key={idx}
+                      src={src}
+                      alt={`Imagem ${idx + 1}`}
+                      className="img-detalhe"
+                      onClick={handleClick}
+                      title="Clique para ampliar"
+                    />
+                  );
+                })}
               </div>
-            </div>
-          )}
+            ) : (
+              <span className="sem-imagem">Nenhuma imagem anexada.</span>
+            )}
+          </div>
 
           <button onClick={() => window.history.back()} className="btn-voltar">
             ← Voltar

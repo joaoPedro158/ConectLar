@@ -26,9 +26,27 @@ export default function Login() {
     foto: null
   });
 
+  const formatarTelefone = (valor) => {
+    if (!valor) return '';
+    const digitos = valor.replace(/\D/g, '').slice(0, 11);
+    if (digitos.length <= 2) return digitos;
+    if (digitos.length <= 6) {
+      return `(${digitos.slice(0, 2)}) ${digitos.slice(2)}`;
+    }
+    if (digitos.length <= 10) {
+      return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 6)}-${digitos.slice(6)}`;
+    }
+    return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7, 11)}`;
+  };
+
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
+    if (id === 'telefone') {
+      const mascarado = formatarTelefone(value);
+      setFormData(prev => ({ ...prev, [id]: mascarado }));
+    } else {
+      setFormData(prev => ({ ...prev, [id]: value }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -48,15 +66,24 @@ export default function Login() {
     setError('');
 
     try {
+      const emailLimpo = (formData.email || '').trim();
       const data = await requisicao('/auth/login', 'POST', {
-        login: formData.email,
+        login: emailLimpo,
         senha: formData.senha
       });
 
       if (data && data.token) {
         authService.setToken(data.token);
-        const usuario = await requisicao('/usuario/meusdados', 'GET');
-        if (usuario && usuario.tipo === 'PROFISSIONAL') {
+        // guarda também infos básicas decodificadas do token (igual legado)
+        const info = authService.getUserInfo();
+        if (info) {
+          localStorage.setItem('usuario_email', info.email || emailLimpo);
+          if (info.role) localStorage.setItem('usuario_role', info.role);
+          if (info.id != null) localStorage.setItem('usuario_id', String(info.id));
+        }
+
+        const role = info?.role;
+        if (role === 'PROFISSIONAL') {
           navigate('/feed-trabalhador');
         } else {
           navigate('/painel-cliente');

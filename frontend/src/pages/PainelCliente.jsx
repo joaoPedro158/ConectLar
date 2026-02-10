@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { requisicao } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { requisicao, authService } from '../services/api';
 import { HeaderCliente } from '../components/HeaderCliente';
 import { BarraBusca } from '../components/BarraBusca';
 import { SecaoCategorias } from '../components/SecaoCategorias';
@@ -8,6 +9,7 @@ import { ModalNovoPedido } from '../components/ModalNovoPedido';
 import '../css/pages/PainelCliente.css';
 
 export default function PainelCliente() {
+  const navigate = useNavigate();
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalAberto, setModalAberto] = useState(false);
@@ -17,10 +19,41 @@ export default function PainelCliente() {
     carregarDados();
   }, []);
 
+  const resolverSrcFoto = (foto) => {
+    if (!foto) return '/assets/avatar-padrao.png';
+    if (foto.startsWith('http://') || foto.startsWith('https://') || foto.startsWith('/')) return foto;
+    return `/upload/${foto}`;
+  };
+
   const carregarDados = async () => {
     try {
-      const dadosUsuario = await requisicao('/usuario/meusdados', 'GET');
-      setUsuario(dadosUsuario);
+      const info = authService.getUserInfo();
+
+      let usuarioAtual = null;
+      if (info?.id) {
+        const listaUsuarios = await requisicao('/usuario/list', 'GET');
+        if (Array.isArray(listaUsuarios)) {
+          usuarioAtual = listaUsuarios.find(u => u.id === info.id) || null;
+        }
+      }
+
+      if (usuarioAtual) {
+        const ajustado = {
+          ...usuarioAtual,
+          fotoPerfil: resolverSrcFoto(usuarioAtual.fotoPerfil),
+        };
+
+        setUsuario(ajustado);
+
+        if (usuarioAtual.nome) {
+          localStorage.setItem('usuario_nome', usuarioAtual.nome);
+        }
+        if (usuarioAtual.fotoPerfil) {
+          localStorage.setItem('usuario_foto', usuarioAtual.fotoPerfil);
+        }
+      } else {
+        setUsuario({ nome: info?.email || 'Cliente' });
+      }
       carregarPedidos();
     } catch (error) {
       console.error(error);
@@ -40,27 +73,40 @@ export default function PainelCliente() {
     }
   };
 
+  const normalizarValorMoeda = (valor) => {
+    if (!valor) return 0;
+    const digitos = valor.toString().replace(/\D/g, '');
+    if (!digitos) return 0;
+    return parseFloat(digitos) / 100;
+  };
+
   const handleCriarPedido = async (formData) => {
     try {
+      const { arquivo, ...dadosCampos } = formData;
+
       const dadosTrabalho = {
-        problema: formData.problema,
-        descricao: formData.descricao,
-        categoria: formData.categoria,
-        pagamento: parseFloat(formData.pagamento) || 0,
+        problema: dadosCampos.problema,
+        descricao: dadosCampos.descricao,
+        categoria: dadosCampos.categoria,
+        pagamento: normalizarValorMoeda(dadosCampos.pagamento),
         status: 'ABERTO',
         localizacao: {
-          cep: formData.cep,
-          cidade: formData.cidade,
-          estado: formData.estado,
-          bairro: formData.bairro,
-          rua: formData.rua,
-          numero: formData.numero,
-          complemento: formData.complemento || ''
+          cep: dadosCampos.cep,
+          cidade: dadosCampos.cidade,
+          estado: dadosCampos.estado,
+          bairro: dadosCampos.bairro,
+          rua: dadosCampos.rua,
+          numero: dadosCampos.numero,
+          complemento: dadosCampos.complemento || ''
         }
       };
 
       const payload = new FormData();
       payload.append('dados', new Blob([JSON.stringify(dadosTrabalho)], { type: 'application/json' }));
+
+      if (arquivo) {
+        payload.append('imagen', arquivo);
+      }
 
       await requisicao('/trabalho/cadastrar', 'POST', payload, true);
 
@@ -82,19 +128,23 @@ export default function PainelCliente() {
     }
   };
 
+  const handleVerDetalhes = (pedido) => {
+    navigate(`/detalhes-trabalho?id=${pedido.id}`);
+  };
+
   return (
     <>
       <HeaderCliente historicoCont={pedidos.length} />
 
       <main className="container-principal">
         <section className="painel-conteudo">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+          <div className="painel-usuario-header">
             <img
               src={usuario?.fotoPerfil || '/assets/avatar-padrao.png'}
               alt="Foto do usuário"
-              style={{ width: '46px', height: '46px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #00e0ff' }}
+              className="painel-usuario-foto"
             />
-            <div style={{ fontWeight: '700' }}>
+            <div className="painel-usuario-nome">
               Olá, <span>{usuario?.nome || 'Cliente'}</span>
             </div>
           </div>
@@ -102,7 +152,12 @@ export default function PainelCliente() {
           <BarraBusca />
           <SecaoCategorias />
           <hr className="divisor" />
-          <ListaPedidos pedidos={pedidos} loading={loading} onCancelar={cancelarPedido} />
+          <ListaPedidos
+            pedidos={pedidos}
+            loading={loading}
+            onCancelar={cancelarPedido}
+            onVerDetalhes={handleVerDetalhes}
+          />
 
           <button className="fab-botao" onClick={() => setModalAberto(true)}>+</button>
         </section>

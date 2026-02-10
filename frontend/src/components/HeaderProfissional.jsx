@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/auth';
+import { authService } from '../services/api';
 import '../css/components/HeaderProfissional.css';
 
 export function HeaderProfissional({ historicoCont = 0 }) {

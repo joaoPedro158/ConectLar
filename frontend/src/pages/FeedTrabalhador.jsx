@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { requisicao } from '../services/api';
+import { requisicao, authService } from '../services/api';
 import { HeaderProfissional } from '../components/HeaderProfissional';
 import { SecaoCategorias } from '../components/SecaoCategorias';
 import { CardTrabalho } from '../components/CardTrabalho';
@@ -20,20 +20,48 @@ export default function FeedTrabalhador() {
     carregarDados();
   }, []);
 
+  const resolverSrcFoto = (foto) => {
+    if (!foto) return '/assets/avatar-padrao.png';
+    if (foto.startsWith('http://') || foto.startsWith('https://') || foto.startsWith('/')) return foto;
+    return `/upload/${foto}`;
+  };
+
   const carregarDados = async () => {
     try {
-      const dadosUsuario = await requisicao('/usuario/meusdados', 'GET');
-      setUsuario(dadosUsuario);
+      const info = authService.getUserInfo();
 
-      const historico = await requisicao('/usuario/historico', 'GET');
-      setHistoricoCont(historico?.length || 0);
-
-      const notifs = await requisicao('/notificacao/minhas', 'GET');
-      if (notifs) {
-        const pendentes = notifs.filter(n => n.status === 'PENDENTE').length;
-        const aceitas = notifs.filter(n => n.status === 'ACEITO').length;
-        setNotificacoes({ pendentes, aceitas });
+      // busca dados completos do profissional a partir do id do token
+      let profissionalAtual = null;
+      if (info?.id) {
+        const listaProf = await requisicao('/profissional/list', 'GET');
+        if (Array.isArray(listaProf)) {
+          profissionalAtual = listaProf.find(p => p.id === info.id) || null;
+        }
       }
+
+      if (profissionalAtual) {
+        setUsuario({
+          ...profissionalAtual,
+          fotoPerfil: resolverSrcFoto(profissionalAtual.fotoPerfil),
+        });
+
+        if (profissionalAtual.nome) {
+          localStorage.setItem('usuario_nome', profissionalAtual.nome);
+        }
+        if (profissionalAtual.fotoPerfil) {
+          localStorage.setItem('usuario_foto', profissionalAtual.fotoPerfil);
+        }
+      } else {
+        setUsuario({ nome: info?.email || 'Profissional' });
+      }
+
+      const historico = await requisicao('/profissional/historico', 'GET');
+      const lista = Array.isArray(historico) ? historico : [];
+      setHistoricoCont(lista.length || 0);
+
+      const pendentes = lista.filter(t => t && t.status === 'EM_ESPERA').length;
+      const aceitas = lista.filter(t => t && t.status === 'EM_ANDAMENTO').length;
+      setNotificacoes({ pendentes, aceitas });
 
       carregarTrabalhos();
     } catch (error) {
@@ -41,11 +69,22 @@ export default function FeedTrabalhador() {
     }
   };
 
+  const candidatar = async (trabalhoId) => {
+    try {
+      await requisicao(`/trabalho/${trabalhoId}/candidatar`, 'POST');
+      alert('Candidatura enviada com sucesso!');
+      carregarTrabalhos();
+    } catch (error) {
+      alert('Erro ao se candidatar: ' + error.message);
+    }
+  };
+
   const carregarTrabalhos = async () => {
     try {
       setLoading(true);
-      const dados = await requisicao('/trabalho/disponiveis', 'GET');
-      setTrabalhos(dados || []);
+      const dados = await requisicao('/trabalho/list', 'GET');
+      const disponiveis = dados ? dados.filter(t => t.status === 'ABERTO') : [];
+      setTrabalhos(disponiveis);
     } catch (error) {
       console.error(error);
     } finally {
@@ -56,8 +95,9 @@ export default function FeedTrabalhador() {
   const buscarVagas = async () => {
     try {
       setLoading(true);
-      const dados = await requisicao(`/trabalho/buscar?q=${busca}`, 'GET');
-      setTrabalhos(dados || []);
+      const dados = await requisicao(`/trabalho/busca?termo=${encodeURIComponent(busca)}`, 'GET');
+      const disponiveis = dados ? dados.filter(t => t.status === 'ABERTO') : [];
+      setTrabalhos(disponiveis);
     } catch (error) {
       console.error(error);
     } finally {
@@ -123,7 +163,12 @@ export default function FeedTrabalhador() {
             ) : (
               <div className="lista-trabalhos">
                 {trabalhos.map(t => (
-                  <CardTrabalho key={t.id} trabalho={t} onVerDetalhes={handleVerDetalhes} />
+                  <CardTrabalho
+                    key={t.id}
+                    trabalho={t}
+                    onVerDetalhes={handleVerDetalhes}
+                    onCandidatar={() => candidatar(t.id)}
+                  />
                 ))}
               </div>
             )}
