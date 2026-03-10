@@ -1,0 +1,722 @@
+/* ==========================================
+   1. LAYOUT PRINCIPAL & CABEÇALHOS
+   ========================================== */
+.tela-container {
+  min-height: 100dvh;
+  padding: 24px 20px calc(120px + env(safe-area-inset-bottom)); /* Aumentei o padding inferior para a nova navbar flutuante */
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.tela-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 0;
+  background: var(--cor-fundo);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  z-index: 40;
+}
+
+
+.tela-titulo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+/* ==========================================
+   2. FEED "UBER-LIKE" (HERO E HOME)
+   ========================================== */
+.feed-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Hero Estilo Uber */
+.uber-hero {
+  background: linear-gradient(135deg, #1e1e1e 0%, #0a0a0a 100%);
+  border-radius: 24px;
+  padding: 24px;
+  margin-top: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.uber-hero:active {
+  transform: scale(0.98);
+}
+
+.hero-texto h2 { 
+  font-size: 22px; 
+  font-weight: 800; 
+  margin-bottom: 4px; 
+  color: var(--cor-texto);
+}
+
+.hero-texto p { 
+  color: var(--cor-texto-secundario); 
+  font-size: 14px; 
+  margin-bottom: 24px; 
+}
+
+.hero-busca {
+  background: rgba(255, 255, 255, 0.05);
+  height: 54px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  color: var(--cor-texto);
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-busca svg {
+  color: var(--cor-primaria);
+}
+
+/* Seções da Home */
+.secao-home { 
+  display: flex;
+  flex-direction: column;
+}
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.home-header h3 { 
+  font-size: 18px; 
+  font-weight: 700; 
+  color: var(--cor-texto);
+}
+
+.home-header button { 
+  color: var(--cor-primaria); 
+  font-size: 14px; 
+  font-weight: 600; 
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Grid de Sugestões */
+.categorias-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cat-item:active .cat-icon {
+  transform: scale(0.9);
+}
+
+.cat-icon {
+  width: 100%;
+  aspect-ratio: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-primaria);
+  transition: transform 0.2s ease;
+}
+
+.cat-item span { 
+  font-size: 12px; 
+  font-weight: 600; 
+  color: var(--cor-texto-secundario); 
+}
+
+/* Lista Viva (Atividade Recente) */
+.lista-viva {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Carrossel de Profissionais (Uber-style) */
+.destaques-horizontal {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.destaques-horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+.uber-card-prof {
+  min-width: 160px;
+  background: rgba(30, 30, 30, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  padding-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  scroll-snap-align: start;
+}
+
+.prof-capa { 
+  height: 60px; 
+  background: linear-gradient(135deg, rgba(0, 224, 255, 0.15) 0%, rgba(0, 122, 204, 0.3) 100%); 
+  position: relative;
+}
+
+.selo-v {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--cor-primaria);
+}
+
+.prof-avatar-main {
+  width: 64px;
+  height: 64px;
+  margin: -32px auto 12px;
+  border-radius: 50%;
+  border: 4px solid var(--cor-fundo);
+  background: var(--cor-fundo);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prof-avatar-main img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
+
+.avatar-fake {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, #007acc 100%);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.prof-dados { 
+  text-align: center; 
+  padding: 0 12px;
+}
+
+.p-nome { 
+  font-weight: 700; 
+  font-size: 15px; 
+  display: block; 
+  color: var(--cor-texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.p-rating { 
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--cor-aviso); 
+  font-size: 13px; 
+  font-weight: 800; 
+  margin: 6px 0; 
+  background: rgba(250, 204, 21, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.p-cat { 
+  display: block;
+  font-size: 11px; 
+  color: var(--cor-texto-secundario); 
+  text-transform: uppercase; 
+  font-weight: 700; 
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================
+   3. PERFIL DO USUÁRIO (TELA DE PERFIL)
+   ========================================== */
+.perfil-cabecalho {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  margin: 16px 0 32px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+}
+
+.perfil-avatar {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, #007acc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 224, 255, 0.25);
+  padding: 2px;
+}
+
+.perfil-avatar > svg,
+.perfil-avatar > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #121214;
+  object-fit: cover;
+  border: 2px solid #121214;
+}
+
+.perfil-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.perfil-nome {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cor-texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.3px;
+}
+
+.perfil-email {
+  color: var(--cor-texto-secundario);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.perfil-profissional-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 224, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 12px;
+  margin-top: 6px;
+  border: 1px solid rgba(0, 224, 255, 0.2);
+  width: fit-content;
+}
+
+.perfil-categoria {
+  color: var(--cor-primaria);
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.perfil-nota {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--cor-aviso);
+  font-size: 14px;
+  font-weight: 700;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 12px;
+}
+
+/* ==========================================
+   4. FILTROS HORIZONTAIS
+   ========================================== */
+.filtros-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 0 16px 0;
+  margin-bottom: 8px;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filtros-container::-webkit-scrollbar {
+  display: none;
+}
+
+.filtro-botao {
+  padding: 10px 20px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--cor-texto-secundario);
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 14px;
+  scroll-snap-align: start;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filtro-botao:active {
+  transform: scale(0.95);
+}
+
+.filtro-botao.ativo {
+  background: var(--cor-primaria);
+  color: #000000;
+  border-color: var(--cor-primaria);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 224, 255, 0.3);
+}
+
+/* ==========================================
+   5. DASHBOARD ESTATÍSTICAS
+   ========================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dashboard-card {
+  text-align: center;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  transition: transform 0.3s ease;
+}
+
+.dashboard-label {
+  color: var(--cor-texto-secundario);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.dashboard-valor {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--cor-sucesso);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-valor.aviso {
+  color: var(--cor-aviso);
+}
+
+.dashboard-valor.primaria {
+  color: var(--cor-primaria);
+}
+
+.dashboard-valor.gasto {
+  color: var(--cor-erro);
+}
+
+.dashboard-valor.ganho {
+  color: var(--cor-primaria);
+}
+
+/* ==========================================
+   6. LISTAS E ESTADOS VAZIOS
+   ========================================== */
+.lista-titulo {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--cor-texto);
+  letter-spacing: -0.3px;
+}
+
+.lista-vazia {
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  padding: 64px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  margin-top: 16px;
+}
+
+.tela-container--pb-80 {
+  padding-bottom: 80px;
+}
+
+.tela-container--pb-100 {
+  padding-bottom: 100px;
+}
+
+.tela-cabecalho--compacto {
+  margin-bottom: 8px;
+}
+
+.tela-cabecalho--medio {
+  margin-bottom: 16px;
+}
+
+.feed-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.feed-header-button {
+  color: var(--cor-texto);
+}
+
+.pull-refresh-indicator {
+  padding: 12px 0;
+}
+
+.dashboard-valor--spaced {
+  gap: 8px;
+}
+
+.dashboard-valor-texto {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.filtros-container--bloco {
+  margin: 16px 0;
+}
+
+.lista-titulo--resultado {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: var(--cor-texto-secundario);
+}
+
+.feed-empty-card {
+  margin-top: 16px;
+}
+
+.feed-empty-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.nova-proposta-content {
+  padding-bottom: 80px;
+}
+
+.nova-proposta-submit {
+  width: 100%;
+  padding: 16px;
+  font-size: 1rem;
+}
+
+.perfil-avatar--clickable {
+  cursor: pointer;
+}
+
+.perfil-avatar--disabled {
+  cursor: default;
+}
+
+.perfil-avatar--uploading {
+  opacity: 0.7;
+}
+
+.perfil-label {
+  font-weight: bold;
+  color: var(--cor-texto);
+}
+
+.perfil-value {
+  color: var(--cor-texto-secundario);
+}
+
+.perfil-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.perfil-avatar-fallback {
+  color: #121214;
+}
+
+.perfil-section-card {
+  margin-bottom: 24px;
+  padding: 24px 20px;
+}
+
+.perfil-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.perfil-section-title {
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--cor-texto);
+}
+
+.perfil-portfolio-empty {
+  color: var(--cor-texto-secundario);
+  line-height: 1.6;
+}
+
+.perfil-portfolio-placeholder {
+  color: var(--cor-texto-secundario);
+  font-size: 0.9rem;
+}
+
+.perfil-form-field {
+  position: relative;
+}
+
+.perfil-form-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.perfil-form-message--erro {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.perfil-form-message--sucesso {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+}
+
+.perfil-logout-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+/* ==========================================
+   7. NAVEGAÇÃO INFERIOR (BOTTOM NAV)
+   ========================================== */
+.nav-inferior-wrapper {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: env(safe-area-inset-bottom);
+  width: calc(100% - 32px);
+  max-width: 800px;
+  z-index: 100;
+  padding-bottom: 12px;
+}
+
+.nav-inferior-separador {
+  margin: 0 0 8px 0;
+}
+
+.nav-inferior {
+  background: rgba(25, 25, 28, 0.85); /* Fundo um pouco mais sólido para leitura */
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 12px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--cor-texto-secundario);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 10px 16px;
+  border-radius: 16px;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+.nav-item.ativo {
+  color: var(--cor-primaria);
+  background: rgba(0, 224, 255, 0.1); /* Fundo neon suave para o ativo */
+}
+
+.nav-item.ativo svg {
+  filter: drop-shadow(0 0 6px rgba(0, 224, 255, 0.6));
+}

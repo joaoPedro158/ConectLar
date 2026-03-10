@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 .env
+
+# Android release
+android/key.properties
+android/*.jks
+android/*.keystore
