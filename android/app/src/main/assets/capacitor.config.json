@@ -1,0 +1,15 @@
+{
+	"appId": "br.com.conectlar",
+	"appName": "ConectLar",
+	"webDir": "dist",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 500,
+			"launchAutoHide": true,
+			"showSpinner": false,
+			"spinnerColor": "#12C7F8",
+			"androidSpinnerStyle": "large",
+			"backgroundColor": "#000000"
+		}
+	}
+}
