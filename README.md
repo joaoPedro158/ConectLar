@@ -69,8 +69,9 @@ android/app/build/outputs/apk/release/app-release.apk
 - Envie um Pull Request
 
 ## Contato
-- Email: seuemail@dominio.com
-- GitHub: github.com/seuusuario
+- Nome: Carl0s33
+- Email: carloseduardosantosvitor4@gmail.com
+- GitHub: github.com/Carl0s33
 
 ---
 
