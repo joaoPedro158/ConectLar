@@ -1,0 +1,101 @@
+:root {
+  /* Cores de Fundo e Texto */
+  --cor-fundo: #0a0a0a;
+  --cor-fundo-secundario: #121214;
+  --cor-texto: #ffffff;
+  --cor-texto-secundario: #a3a3a3;
+  
+  /* Paleta Principal (Neon/Moderna) */
+  --cor-primaria: #00e0ff;
+  --cor-primaria-hover: #00b8d4;
+  --cor-gradiente-primario: linear-gradient(135deg, #00e0ff 0%, #007acc 100%);
+  
+  /* Status */
+  --cor-sucesso: #4ade80;
+  --cor-aviso: #facc15;
+  --cor-erro: #f87171;
+  
+  /* Efeito Glassmorphism & Bordas */
+  --cor-superficie: rgba(30, 30, 30, 0.65);
+  --cor-borda: rgba(255, 255, 255, 0.08);
+  --sombra-glass: 0 10px 40px rgba(0, 0, 0, 0.5);
+  --sombra-neon: 0 4px 15px rgba(0, 224, 255, 0.25);
+  --blur-glass: blur(20px);
+  
+  /* Formas e Transições */
+  --raio-borda-padrao: 16px;
+  --raio-borda-redondo: 50px;
+  --transicao-padrao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Remove flash azul de clique no mobile */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh; /* Altura 100% perfeita para navegadores mobile (safari/chrome) */
+  overflow-x: hidden;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Personalização global da Scrollbar para visual "App" */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Animações Globais Otimizadas */
+.animacao-esmaecer {
+  animation: esmaecer 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes esmaecer {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

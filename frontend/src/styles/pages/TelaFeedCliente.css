@@ -1,0 +1,246 @@
+:root {
+  --uber-branco: #ffffff;
+  --uber-preto: #000000;
+  --uber-cinza-fundo: #f6f6f6;
+  --uber-cinza-texto: #545454;
+  --uber-borda: #eeeeee;
+  --sombra-uber: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --uber-branco: #121212;
+    --uber-preto: #ffffff;
+    --uber-cinza-fundo: #000000;
+    --uber-cinza-texto: #afafaf;
+    --uber-borda: #222222;
+  }
+}
+
+.recipiente-feed-cliente {
+  min-height: 100vh;
+  background-color: var(--uber-branco);
+  padding-bottom: 100px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.animacao-entrada {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.recipiente-carregamento-feed-cliente {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--uber-branco);
+}
+
+.cabecalho-principal-cliente {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 20px 10px 20px;
+}
+
+.texto-saudacao {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--uber-preto);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.texto-sub-saudacao {
+  font-size: 16px;
+  color: var(--uber-cinza-texto);
+  margin: 4px 0 0 0;
+}
+
+.botao-atalho-historico {
+  background: var(--uber-cinza-fundo);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--uber-preto);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.barra-pesquisa-falsa {
+  margin: 20px;
+  background-color: var(--uber-cinza-fundo);
+  padding: 16px 20px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--uber-cinza-texto);
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--uber-borda);
+  transition: all 0.2s;
+}
+
+.barra-pesquisa-falsa:active {
+  transform: scale(0.98);
+}
+
+.icone-pesquisa {
+  color: var(--uber-preto);
+}
+
+.titulo-secao-cliente {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin: 24px 0 16px 0;
+}
+
+.titulo-secao-cliente h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--uber-preto);
+  margin: 0;
+}
+
+.titulo-secao-cliente span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--uber-cinza-texto);
+}
+
+.carrossel-profissionais {
+  display: flex;
+  gap: 16px;
+  padding: 0 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.carrossel-profissionais::-webkit-scrollbar { display: none; }
+
+.item-carrossel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  text-align: center;
+}
+
+.avatar-carrossel {
+  width: 70px;
+  height: 70px;
+  background: var(--uber-cinza-fundo);
+  border-radius: 16px;
+  position: relative;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border: 1px solid var(--uber-borda);
+}
+
+.avatar-carrossel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nota-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: var(--uber-preto);
+  color: var(--uber-branco);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nome-carrossel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--uber-preto);
+  white-space: nowrap;
+}
+
+.cat-carrossel {
+  font-size: 11px;
+  color: var(--uber-cinza-texto);
+  text-transform: capitalize;
+}
+
+.lista-pedidos-uber {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cartao-feed-vazio-cliente {
+  margin: 20px;
+  padding: 40px 20px;
+  background: var(--uber-cinza-fundo);
+  border-radius: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.cartao-feed-vazio-cliente p {
+  color: var(--uber-cinza-texto);
+  font-weight: 500;
+}
+
+.cartao-feed-vazio-cliente button {
+  background: var(--uber-preto);
+  color: var(--uber-branco);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.fab-novo-pedido {
+  position: fixed;
+  bottom: 85px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: var(--uber-preto);
+  color: var(--uber-branco);
+  border: none;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 100;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.fab-novo-pedido:active {
+  transform: scale(0.9);
+}
+
+.refresh-ptr {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}

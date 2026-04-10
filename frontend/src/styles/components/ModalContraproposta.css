@@ -1,0 +1,173 @@
+:root {
+  --cor-fundo-contraproposta: #ffffff;
+  --cor-fundo-secundario-contraproposta: #f6f6f6;
+  --cor-texto-principal-contraproposta: #000000;
+  --cor-texto-secundario-contraproposta: #5e5e5e;
+  --cor-borda-contraproposta: #e2e2e2;
+  --cor-botao-bg-contraproposta: #000000;
+  --cor-botao-texto-contraproposta: #ffffff;
+  --cor-erro-contraproposta: #e11d48;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo-contraproposta: #121212;
+    --cor-fundo-secundario-contraproposta: #1e1e1e;
+    --cor-texto-principal-contraproposta: #ffffff;
+    --cor-texto-secundario-contraproposta: #a0a0a0;
+    --cor-borda-contraproposta: #333333;
+    --cor-botao-bg-contraproposta: #ffffff;
+    --cor-botao-texto-contraproposta: #000000;
+    --cor-erro-contraproposta: #f43f5e;
+  }
+}
+
+.cabecalho-contraproposta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.titulo-contraproposta {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cor-texto-principal-contraproposta);
+  margin: 0;
+}
+
+.botao-fechar-contraproposta {
+  background: none;
+  border: none;
+  color: var(--cor-texto-principal-contraproposta);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.botao-fechar-contraproposta:active {
+  background-color: var(--cor-fundo-secundario-contraproposta);
+}
+
+.cartao-info-contraproposta {
+  background-color: var(--cor-fundo-secundario-contraproposta);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.info-linha-contraproposta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.info-label-contraproposta {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cor-texto-secundario-contraproposta);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-valor-contraproposta {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cor-texto-principal-contraproposta);
+}
+
+.info-texto-contraproposta {
+  font-size: 14px;
+  color: var(--cor-texto-secundario-contraproposta);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.grupo-input-contraproposta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.label-contraproposta {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cor-texto-principal-contraproposta);
+}
+
+.campo-icone-contraproposta {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icone-contraproposta {
+  position: absolute;
+  left: 16px;
+  color: var(--cor-texto-secundario-contraproposta);
+}
+
+.input-contraproposta {
+  width: 100%;
+  background-color: var(--cor-fundo-secundario-contraproposta);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 16px 16px 16px 48px;
+  font-size: 16px;
+  color: var(--cor-texto-principal-contraproposta);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.input-contraproposta:focus {
+  outline: none;
+  border-color: var(--cor-texto-principal-contraproposta);
+}
+
+.input-contraproposta::placeholder {
+  color: var(--cor-texto-secundario-contraproposta);
+}
+
+.dica-erro-contraproposta {
+  color: var(--cor-erro-contraproposta);
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.botao-enviar-contraproposta {
+  background-color: var(--cor-botao-bg-contraproposta);
+  color: var(--cor-botao-texto-contraproposta);
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.2s;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.botao-enviar-contraproposta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.botao-enviar-contraproposta:active {
+  opacity: 0.8;
+}

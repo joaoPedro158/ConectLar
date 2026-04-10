@@ -1,0 +1,99 @@
+    :root {
+  --cor-fundo-cabecalho: #ffffff;
+  --cor-texto-principal: #000000;
+  --cor-texto-secundario: #5e5e5e;
+  --cor-avatar-bg: #e2e2e2;
+  --cor-borda-separador: #f6f6f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo-cabecalho: #121212;
+    --cor-texto-principal: #ffffff;
+    --cor-texto-secundario: #a0a0a0;
+    --cor-avatar-bg: #333333;
+    --cor-borda-separador: #1e1e1e;
+  }
+}
+
+.cabecalho-perfil {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: var(--cor-fundo-cabecalho);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.cabecalho-conteudo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cabecalho-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--cor-avatar-bg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cabecalho-imagem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cabecalho-avatar-vazio {
+  width: 100%;
+  height: 100%;
+  background-color: var(--cor-avatar-bg);
+}
+
+.cabecalho-textos {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cabecalho-saudacao {
+  font-size: 14px;
+  color: var(--cor-texto-secundario);
+  font-weight: 500;
+}
+
+.cabecalho-nome {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cor-texto-principal);
+  line-height: 1.2;
+}
+
+.cabecalho-sair {
+  background: none;
+  border: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-texto-principal);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.cabecalho-sair:active {
+  background-color: var(--cor-borda-separador);
+  opacity: 0.8;
+}
+
+.barra-separadora {
+  height: 8px;
+  width: 100%;
+  background-color: var(--cor-borda-separador);
+}

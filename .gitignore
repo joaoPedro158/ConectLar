@@ -1,3 +1,4 @@
+### Java / Spring (master)
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -29,11 +30,39 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-# Frontend 
+### Frontend legado (master)
 ConectLarFront/node_modules/
 ConectLarFront/dist/
 ConectLarFront/.env
 
+### Node / Vite (frontend/)
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-### VS Code ###
-.vscode/
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+
+### Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+.env
+
+### Android release
+frontend/android/key.properties
+frontend/android/*.jks
+frontend/android/*.keystore

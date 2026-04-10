@@ -1,0 +1,152 @@
+:root {
+  --cor-fundo: #ffffff;
+  --cor-fundo-input: #f6f6f6;
+  --cor-texto: #000000;
+  --cor-texto-secundario: #5e5e5e;
+  --cor-borda: #e2e2e2;
+  --cor-botao-bg: #000000;
+  --cor-botao-texto: #ffffff;
+  --cor-erro: #e11d48;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #121212;
+    --cor-fundo-input: #1e1e1e;
+    --cor-texto: #ffffff;
+    --cor-texto-secundario: #a0a0a0;
+    --cor-borda: #333333;
+    --cor-botao-bg: #ffffff;
+    --cor-botao-texto: #000000;
+    --cor-erro: #f43f5e;
+  }
+}
+
+.container-dados {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  padding: 24px;
+  font-family: system-ui, -apple-system, sans-serif;
+  border-radius: 12px;
+}
+
+.titulo-secao {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  line-height: 1.2;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.grupo-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label-padrao {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.campo-com-icone {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icone-input {
+  position: absolute;
+  left: 16px;
+  color: var(--cor-texto-secundario);
+}
+
+.input-padrao {
+  width: 100%;
+  background-color: var(--cor-fundo-input);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 16px 16px 16px 44px;
+  font-size: 16px;
+  color: var(--cor-texto);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.input-padrao:focus {
+  outline: none;
+  border-color: var(--cor-texto);
+}
+
+.input-padrao::placeholder {
+  color: var(--cor-texto-secundario);
+}
+
+.campo-arquivo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-arquivo {
+  font-size: 14px;
+  color: var(--cor-texto-secundario);
+}
+
+.input-arquivo::file-selector-button {
+  background-color: var(--cor-fundo-input);
+  color: var(--cor-texto);
+  border: 1px solid var(--cor-borda);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 12px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.input-arquivo::file-selector-button:hover {
+  background-color: var(--cor-borda);
+}
+
+.preview-audio {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  outline: none;
+}
+
+.mensagem-erro {
+  color: var(--cor-erro);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.botao-salvar {
+  background-color: var(--cor-botao-bg);
+  color: var(--cor-botao-texto);
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 8px;
+}
+
+.botao-salvar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.botao-salvar:active {
+  opacity: 0.8;
+}

@@ -1,0 +1,36 @@
+:root {
+  --cor-fundo-indicador: transparent;
+  --cor-trilha-indicador: #e2e2e2;
+  --cor-traco-indicador: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-trilha-indicador: #333333;
+    --cor-traco-indicador: #ffffff;
+  }
+}
+
+.recipiente-carregamento {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background-color: var(--cor-fundo-indicador);
+}
+
+.animacao-carregamento {
+  width: var(--tamanho-indicador, 42px);
+  height: var(--tamanho-indicador, 42px);
+  border: 3px solid var(--cor-trilha-indicador);
+  border-top-color: var(--cor-traco-indicador);
+  border-radius: 50%;
+  animation: girar-indicador 0.8s linear infinite;
+  will-change: transform;
+}
+
+@keyframes girar-indicador {
+  to {
+    transform: rotate(360deg);
+  }
+}

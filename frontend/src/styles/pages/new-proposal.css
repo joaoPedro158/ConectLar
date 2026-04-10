@@ -1,0 +1,75 @@
+/* ==========================================
+   FORMULÁRIO DE NOVA PROPOSTA (NOVO PEDIDO)
+   ========================================== */
+
+/* Texto indicativo das etapas do formulário */
+.nova-proposta-etapa-texto {
+  color: var(--cor-texto-secundario);
+  font-size: 13px;
+  margin-bottom: 12px;
+  margin-top: 24px; /* Mais respiro entre os blocos */
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Detalhe visual (tracinho neon) antes do título da etapa */
+.nova-proposta-etapa-texto::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 3px;
+  background: var(--cor-primaria);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 224, 255, 0.4);
+}
+
+/* O primeiro título não precisa de margem no topo */
+.nova-proposta-etapa-texto:first-of-type {
+  margin-top: 0;
+}
+
+/* Container Glassmorphism para agrupar os inputs */
+.nova-proposta-glass {
+  background: rgba(30, 30, 30, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 20px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Container dos botões de ação na base do formulário */
+.nova-proposta-botoes {
+  display: flex;
+  flex-direction: row; /* Mantém lado a lado no celular padrão */
+  gap: 12px;
+  margin-top: 32px;
+  /* Garante que não cole na barra inferior do iPhone */
+  padding-bottom: env(safe-area-inset-bottom); 
+}
+
+/* Força os botões a terem um tamanho excelente para o dedo (Touch Target) */
+.nova-proposta-botoes button {
+  flex: 1; /* Divide o espaço exatamente em 50% para cada */
+  min-height: 52px; 
+  font-size: 15px;
+  border-radius: 16px;
+}
+
+/* Tratamento para celulares com telas muito estreitas (ex: Galaxy Fold fechado ou iPhone SE) */
+@media (max-width: 350px) {
+  .nova-proposta-botoes {
+    flex-direction: column-reverse; /* Empilha: Botão de Cancelar fica embaixo, Confirmar em cima */
+    gap: 8px;
+  }
+  
+  .nova-proposta-botoes button {
+    width: 100%;
+  }
+}
