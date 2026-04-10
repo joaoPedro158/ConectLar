@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Wrench, MapPin, DollarSign, FileText, LocateFixed } from 'lucide-react';
-import { bancoDeDados, storage, ID, ID_DO_BANCO, ID_COLECAO_PROPOSTAS, conta, ID_BUCKET_IMAGENS_PROBLEMA } from '../services/appwrite';
+import { criarTrabalho, getToken, getMe } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import '../styles/pages/TelaNovaProposta.css';
 import IndicadorCarregamento from '../components/IndicadorCarregamento';
@@ -33,15 +33,19 @@ const TelaNovaProposta = () => {
   useEffect(() => {
     const buscarUsuario = async () => {
       try {
-        const usuario = await conta.get();
-        definirClienteId(usuario.$id);
+        const token = getToken();
+        if (!token) throw new Error('No token');
+        const me = await getMe(token);
+        const usuario = me?.usuario || null;
+        if (!usuario) throw new Error('No user');
+        definirClienteId(usuario.$id || usuario.id || usuario.$id);
       } catch (err) {
         navegar('/login');
       } finally {
         definirCarregandoUsuario(false);
       }
     };
-    
+
     buscarUsuario();
   }, [navegar]);
 
@@ -62,35 +66,17 @@ const TelaNovaProposta = () => {
     definirErro('');
 
     try {
-      let imagemProblemaUrl = '';
-      let imagemProblemaFileId = '';
-      if (imagemProblema) {
-        try {
-          const upload = await storage.createFile(ID_BUCKET_IMAGENS_PROBLEMA, ID.unique(), imagemProblema);
-          imagemProblemaFileId = upload.$id;
-          const viewUrl = storage.getFileView(ID_BUCKET_IMAGENS_PROBLEMA, upload.$id);
-          imagemProblemaUrl = typeof viewUrl === 'string' ? viewUrl : viewUrl?.toString?.() || '';
-        } catch (uploadErr) {}
-      }
-
+      const token = getToken();
       const payload = {
-        titulo: formulario.titulo,
+        problema: formulario.titulo,
         descricao: formulario.descricao,
         categoria: formulario.categoria,
         localizacao: formulario.localizacao,
-        clienteId: clienteId,
+        pagamento: formulario.valorEstimado ? Number(formulario.valorEstimado) : null,
         status: 'ABERTO',
-        valorEstimado: parseFloat(formulario.valorEstimado),
-        dataCriacao: new Date().toISOString(),
-        ...(imagemProblemaUrl ? { imagemProblemaUrl, imagemProblemaFileId } : {})
       };
 
-      await bancoDeDados.createDocument(
-        ID_DO_BANCO,
-        ID_COLECAO_PROPOSTAS,
-        ID.unique(),
-        payload
-      );
+      await criarTrabalho({ token, ...payload }, imagemProblema);
       
       navegar('/feed-cliente');
       

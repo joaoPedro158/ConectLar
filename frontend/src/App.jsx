@@ -1,6 +1,7 @@
 import React from 'react';
-import AppWrapper from './AppWrapper';
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ProvedorAutenticacao } from './context/AuthContext';
 import TelaLogin from './pages/TelaLogin';
 import TelaCadastro from './pages/TelaCadastro';
 import TelaFeedCliente from './pages/TelaFeedCliente';
@@ -13,7 +14,7 @@ import './App.css';
 
 const App = () => {
   return (
-    <AppWrapper>
+    <ProvedorAutenticacao>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
@@ -66,7 +67,7 @@ const App = () => {
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
-    </AppWrapper>
+    </ProvedorAutenticacao>
   );
 };
 

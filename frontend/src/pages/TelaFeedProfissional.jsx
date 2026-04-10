@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, History, Sparkles } from 'lucide-react';
-import { bancoDeDados, cliente, ID_DO_BANCO, ID_COLECAO_PROPOSTAS, conta, ID_COLECAO_USUARIOS } from '../services/appwrite';
+import { getToken, getMe, listTrabalhos, clearToken } from '../services/api';
 import CardProposta from '../components/CardProposta';
-import { Query } from 'appwrite';
 import { useNavigate } from 'react-router-dom';
 import '../styles/pages/TelaFeedProfissional.css';
 import BarraNavegacao from '../components/NavBar';
@@ -54,58 +53,28 @@ const TelaFeedProfissional = () => {
     };
   }, []);
 
+  // Realtime subscriptions were provided by Appwrite. Using REST API,
+  // we fall back to polling on refresh and when component mounts.
   useEffect(() => {
-    if (!usuarioAtual || !perfilUsuario) return;
-
-    const canal = `databases.${ID_DO_BANCO}.collections.${ID_COLECAO_PROPOSTAS}.documents`;
-
-    subscriptionRef.current?.();
-    subscriptionRef.current = cliente.subscribe(canal, (response) => {
-      const documento = response?.payload;
-      const eventos = response?.events || [];
-      if (!documento?.$id) return;
-      if (!eventos.some((evento) => evento.includes('.create'))) return;
-      if (documento.status !== 'ABERTO') return;
-      if (filtroCategoria && documento.categoria !== filtroCategoria) return;
-
-      if (!realtimeProntoRef.current) return;
-      if (propostasConhecidasRef.current.has(documento.$id)) return;
-
-      propostasConhecidasRef.current.add(documento.$id);
-      definirPropostas((anteriores) => [documento, ...anteriores.filter((item) => item.$id !== documento.$id)]);
-
-      if (audioNotificacaoRef.current) {
-        audioNotificacaoRef.current.currentTime = 0;
-        audioNotificacaoRef.current.loop = true;
-        audioNotificacaoRef.current.play().catch(() => {});
-      }
-
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Nova proposta disponível', {
-          body: documento.titulo || 'Um cliente enviou uma nova proposta.',
-          icon: '/pwa-192x192.png',
-          badge: '/pwa-192x192.png',
-          tag: `proposta-${documento.$id}`,
-        });
-      }
-    });
-
-    return () => {
-      subscriptionRef.current?.();
-      subscriptionRef.current = null;
-    };
+    // noop – realtime removed. proposals are reloaded via pull-to-refresh
+    return () => {};
   }, [usuarioAtual, perfilUsuario, filtroCategoria]);
 
   const carregarUsuario = async () => {
     try {
-      const user = await conta.get();
+      const token = getToken();
+      if (!token) throw new Error('No token');
+      const me = await getMe(token);
+      const tipo = me?.tipoPerfil;
+      const user = me?.usuario || null;
+      if (!user) throw new Error('No user');
+      if (!user.$id && user.id) user.$id = user.id;
       definirUsuarioAtual(user);
-      const perfil = await bancoDeDados.getDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, user.$id);
-      if (perfil.tipoPerfil !== 'PROFISSIONAL') {
+      if (tipo !== 'PROFISSIONAL') {
         navigate('/feed-cliente');
         return;
       }
-      definirPerfilUsuario(perfil);
+      definirPerfilUsuario(user);
     } catch (err) {
       navigate('/login');
     }
@@ -114,26 +83,33 @@ const TelaFeedProfissional = () => {
   const carregarPropostas = async ({ mostrarLoading = true } = {}) => {
     try {
       if (mostrarLoading) definirCarregando(true);
-      const consultas = [
-        Query.orderDesc('$createdAt'),
-        Query.equal('status', 'ABERTO')
-      ];
-      
-      if (filtroCategoria) {
-        consultas.push(Query.equal('categoria', filtroCategoria));
-      }
+      const resp = await listTrabalhos();
+      const lista = Array.isArray(resp) ? resp : (resp?.documents || resp || []);
+      const mapped = (lista || [])
+        .map((t) => ({
+          $id: t.id || t.$id,
+          titulo: t.problema || t.titulo || '',
+          descricao: t.descricao || '',
+          valorEstimado: t.pagamento ?? t.valorEstimado ?? 0,
+          categoria: t.categoria || null,
+          localizacao: t.localizacao ? (typeof t.localizacao === 'string' ? t.localizacao : JSON.stringify(t.localizacao)) : (t.localizacao || ''),
+          enderecoCompleto: t.enderecoCompleto || null,
+          telefoneContato: t.telefoneContato || null,
+          dataCriacao: t.dataHoraAberta || t.dataCriacao || new Date().toISOString(),
+          imagemProblemaUrl: t.caminhoImagem ? `/upload/${t.caminhoImagem}` : (t.imagemProblemaUrl || null),
+          clienteId: t.idUsuario || t.clienteId || t.idUsuario,
+          profissionalAceitoId: t.idProfissional || t.profissionalAceitoId || t.idProfissional,
+          status: t.status || 'ABERTO',
+        }))
+        .filter((item) => item.status === 'ABERTO');
 
-      const resposta = await bancoDeDados.listDocuments(
-        ID_DO_BANCO,
-        ID_COLECAO_PROPOSTAS,
-        consultas
-      );
-      propostasConhecidasRef.current = new Set(resposta.documents.map((documento) => documento.$id));
-      definirPropostas(resposta.documents);
+      const filtrados = filtroCategoria ? mapped.filter((m) => String(m.categoria || '').toLowerCase() === String(filtroCategoria).toLowerCase()) : mapped;
+      propostasConhecidasRef.current = new Set(filtrados.map((d) => d.$id));
+      definirPropostas(filtrados);
       realtimeProntoRef.current = true;
 
       // Parar áudio se não houver propostas abertas
-      if (audioNotificacaoRef.current && resposta.documents.length === 0) {
+      if (audioNotificacaoRef.current && filtrados.length === 0) {
         audioNotificacaoRef.current.pause();
         audioNotificacaoRef.current.currentTime = 0;
       }
@@ -149,7 +125,7 @@ const TelaFeedProfissional = () => {
       audioNotificacaoRef.current.pause();
       audioNotificacaoRef.current.currentTime = 0;
     }
-    await conta.deleteSession('current');
+    clearToken();
     navigate('/login');
   };
 

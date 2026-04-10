@@ -21,7 +21,7 @@ function mascaraMoeda(valor) {
 }
 import React, { useEffect, useState } from 'react';
 import { X, Wrench, FileText, MapPin, DollarSign, LocateFixed, MapPinned, Phone, Plus, Trash2, ListChecks } from 'lucide-react';
-import { bancoDeDados, storage, ID, ID_DO_BANCO, ID_COLECAO_PROPOSTAS, ID_BUCKET_IMAGENS_PROBLEMA } from '../services/appwrite';
+import { criarTrabalho, getToken } from '../services/api';
 import PainelInferior from './PainelInferior';
 import '../styles/components/ModalCriarProposta.css';
 
@@ -49,22 +49,7 @@ const ModalCriarProposta = ({ aoFechar, aoCriar, clienteId }) => {
     return m?.[1] || '';
   };
 
-  const criarPropostaComRetry = async ({ dataBase, maxTentativas = 3 }) => {
-    const data = { ...dataBase };
-    for (let tentativa = 1; tentativa <= maxTentativas; tentativa += 1) {
-      try {
-        return await bancoDeDados.createDocument(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, ID.unique(), data);
-      } catch (err) {
-        const atributo = extrairAtributoDesconhecido(err?.message);
-        if (atributo && Object.prototype.hasOwnProperty.call(data, atributo)) {
-          delete data[atributo];
-          continue;
-        }
-        throw err;
-      }
-    }
-    throw new Error('Erro ao criar proposta.');
-  };
+  // We'll create the trabalho via REST endpoint using `criarTrabalho`.
 
   useEffect(() => {
     return () => {
@@ -146,32 +131,19 @@ const ModalCriarProposta = ({ aoFechar, aoCriar, clienteId }) => {
     definirErro('');
 
     try {
-      let imagemProblemaUrl = '';
-      let imagemProblemaFileId = '';
-      if (imagemProblema) {
-        try {
-          const upload = await storage.createFile(ID_BUCKET_IMAGENS_PROBLEMA, ID.unique(), imagemProblema);
-          imagemProblemaFileId = upload.$id;
-          const viewUrl = storage.getFileView(ID_BUCKET_IMAGENS_PROBLEMA, upload.$id);
-          imagemProblemaUrl = typeof viewUrl === 'string' ? viewUrl : viewUrl?.toString?.() || '';
-        } catch (uploadErr) {
-          console.error('Erro ao enviar imagem do problema', uploadErr);
-        }
-      }
+      const token = getToken();
+      const payload = {
+        problema: formulario.titulo,
+        descricao: formulario.descricao,
+        categoria: formulario.categoria,
+        localizacao: formulario.localizacao,
+        pagamento: formulario.valorEstimado ? Number(formulario.valorEstimado) : null,
+        enderecoCompleto: formulario.enderecoCompleto || undefined,
+        telefoneContato: formulario.telefoneContato || undefined,
+        itensLista: itens.length > 0 ? itens.join('\n') : undefined,
+      };
 
-      await criarPropostaComRetry({
-        dataBase: {
-          ...formulario,
-          clienteId,
-          status: 'ABERTO',
-          valorEstimado: parseFloat(formulario.valorEstimado),
-          dataCriacao: new Date().toISOString(),
-          ...(itens.length > 0 ? { itensLista: itens.join('\n') } : {}),
-          ...(imagemProblemaUrl ? { imagemProblemaUrl, imagemProblemaFileId } : {}),
-          ...(formulario.enderecoCompleto ? { enderecoCompleto: formulario.enderecoCompleto } : {}),
-          ...(formulario.telefoneContato ? { telefoneContato: formulario.telefoneContato } : {})
-        }
-      });
+      await criarTrabalho({ token, ...payload }, imagemProblema);
       aoCriar();
     } catch (err) {
       definirErro('Erro ao criar proposta. Tente novamente.');

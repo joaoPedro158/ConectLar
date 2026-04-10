@@ -45,15 +45,32 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 frontend/node_modules/
+
+# Builds
 frontend/dist/
 frontend/dist-ssr/
+
+# Vite cache
+frontend/.vite/
+
+# Env files
+frontend/.env
+frontend/.env.*
+!.env.example
+
+
 frontend/*.local
 
 ### Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
@@ -61,6 +78,8 @@ frontend/*.local
 *.sw?
 
 .env
+.env.*
+!.env.example
 
 ### Android release
 frontend/android/key.properties

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { bancoDeDados, ID_DO_BANCO, ID_COLECAO_PROPOSTAS, conta, ID_COLECAO_USUARIOS } from '../services/appwrite';
-import { Query } from 'appwrite';
+import { getToken, getMe, getHistorico, cancelarTrabalho } from '../services/api';
 import CardProposta from '../components/CardProposta';
 import { Activity, DollarSign, Star, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -47,26 +46,39 @@ const TelaHistorico = () => {
   const carregarUsuarioEHistorico = async () => {
     try {
       definirCarregando(true);
-      const usuarioLogado = await conta.get();
+      const token = getToken();
+      if (!token) throw new Error('No token');
+      const me = await getMe(token);
+      const tipoPerfil = me?.tipoPerfil;
+      const usuarioLogado = me?.usuario || null;
+      if (!usuarioLogado) throw new Error('No user');
+      if (!usuarioLogado.$id && usuarioLogado.id) usuarioLogado.$id = usuarioLogado.id;
       definirUsuarioAtual(usuarioLogado);
-      
-      const perfil = await bancoDeDados.getDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, usuarioLogado.$id);
-      definirPerfilUsuario(perfil);
+      definirPerfilUsuario(usuarioLogado);
 
-      let consultas = [Query.orderDesc('$createdAt')];
-      
-      if (perfil.tipoPerfil === 'USUARIO') {
-        consultas.push(Query.equal('clienteId', usuarioLogado.$id));
-      } else {
-        consultas.push(Query.equal('profissionalAceitoId', usuarioLogado.$id));
-      }
+      // fetch histórico do backend
+      const historicoResp = await getHistorico({ tipoPerfil: tipoPerfil, token });
+      const lista = Array.isArray(historicoResp) ? historicoResp : (historicoResp?.documents || historicoResp || []);
+      const mapped = (lista || []).map((t) => ({
+        $id: t.id || t.$id,
+        titulo: t.problema || t.titulo || '',
+        descricao: t.descricao || '',
+        valorEstimado: t.pagamento ?? t.valorEstimado ?? 0,
+        categoria: t.categoria || null,
+        localizacao: t.localizacao ? (typeof t.localizacao === 'string' ? t.localizacao : JSON.stringify(t.localizacao)) : (t.localizacao || ''),
+        enderecoCompleto: t.enderecoCompleto || null,
+        telefoneContato: t.telefoneContato || null,
+        dataCriacao: t.dataHoraAberta || t.dataCriacao || new Date().toISOString(),
+        imagemProblemaUrl: t.caminhoImagem ? `/upload/${t.caminhoImagem}` : (t.imagemProblemaUrl || null),
+        clienteId: t.idUsuario || t.clienteId || t.idUsuario,
+        profissionalAceitoId: t.idProfissional || t.profissionalAceitoId || t.idProfissional,
+        status: t.status || 'ABERTO',
+      }));
 
-      const resposta = await bancoDeDados.listDocuments(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, consultas);
+      definirHistoricoCompleto(mapped);
 
-      definirHistoricoCompleto(resposta.documents);
-
-      const concluidas = resposta.documents.filter(p => p.status === 'CONCLUIDO');
-      const total = concluidas.reduce((acc, curr) => acc + (parseFloat(curr.valorEstimado) || 0), 0);
+      const concluidas = mapped.filter(p => p.status === 'CONCLUIDO');
+      const total = concluidas.reduce((acc, curr) => acc + (Number(curr.valorEstimado) || 0), 0);
       definirTotalFinancas(total);
 
     } catch (err) {
@@ -82,7 +94,8 @@ const TelaHistorico = () => {
 
   const cancelarPropostaViaSwipe = async (propostaId) => {
     try {
-      await bancoDeDados.updateDocument(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, propostaId, { status: 'CANCELADO' });
+      const token = getToken();
+      await cancelarTrabalho({ token, idTrabalho: propostaId });
       definirHistoricoCompleto((anterior) =>
         anterior.map((p) => (p.$id === propostaId ? { ...p, status: 'CANCELADO' } : p))
       );

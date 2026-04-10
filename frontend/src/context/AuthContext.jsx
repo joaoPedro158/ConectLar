@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { conta } from '../services/appwrite';
+import { clearToken, getMe, getToken, login, setToken } from '../services/api';
 
 const ContextoAutenticacao = createContext();
 
@@ -9,16 +9,31 @@ export function usarAutenticacao() {
 
 export function ProvedorAutenticacao({ children }) {
   const [usuario, definirUsuario] = useState(null);
+  const [tipoPerfil, definirTipoPerfil] = useState(null);
+  const [token, definirToken] = useState(getToken());
   const [carregando, definirCarregando] = useState(true);
 
   useEffect(() => {
     async function validarSessao() {
       definirCarregando(true);
       try {
-        const usuarioLogado = await conta.get();
-        definirUsuario(usuarioLogado);
+        const stored = getToken();
+        if (!stored) {
+          definirUsuario(null);
+          definirTipoPerfil(null);
+          definirToken('');
+          return;
+        }
+
+        const me = await getMe(stored);
+        definirUsuario(me.usuario);
+        definirTipoPerfil(me.tipoPerfil);
+        definirToken(stored);
       } catch {
         definirUsuario(null);
+        definirTipoPerfil(null);
+        definirToken('');
+        clearToken();
       } finally {
         definirCarregando(false);
       }
@@ -29,15 +44,21 @@ export function ProvedorAutenticacao({ children }) {
   async function entrar(email, senha) {
     definirCarregando(true);
     try {
-      try {
-        await conta.deleteSession('current');
-      } catch {}
-      await conta.createEmailPasswordSession(email, senha);
-      const usuarioLogado = await conta.get();
-      definirUsuario(usuarioLogado);
+      const resp = await login({ login: email, senha });
+      const nextToken = resp?.token;
+      if (!nextToken) throw new Error('Token não retornado pelo servidor.');
+
+      setToken(nextToken);
+      const me = await getMe(nextToken);
+      definirUsuario(me.usuario);
+      definirTipoPerfil(me.tipoPerfil);
+      definirToken(nextToken);
       return { sucesso: true };
     } catch (erro) {
       definirUsuario(null);
+      definirTipoPerfil(null);
+      definirToken('');
+      clearToken();
       let mensagem = 'E-mail ou senha incorretos.';
       if (erro && erro.message) {
         mensagem += ` (${erro.message})`;
@@ -51,16 +72,17 @@ export function ProvedorAutenticacao({ children }) {
   async function sair() {
     definirCarregando(true);
     try {
-      await conta.deleteSession('current');
       definirUsuario(null);
-      localStorage.removeItem('conectlar-session');
+      definirTipoPerfil(null);
+      definirToken('');
+      clearToken();
     } finally {
       definirCarregando(false);
     }
   }
 
   return (
-    <ContextoAutenticacao.Provider value={{ usuario, carregando, entrar, sair }}>
+    <ContextoAutenticacao.Provider value={{ usuario, tipoPerfil, token, carregando, entrar, sair }}>
       {children}
     </ContextoAutenticacao.Provider>
   );

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, AlertCircle, History, Star, Search } from 'lucide-react';
-import { bancoDeDados, ID_DO_BANCO, ID_COLECAO_PROPOSTAS, conta, ID_COLECAO_USUARIOS } from '../services/appwrite';
+import React, { useState, useEffect, useRef } from 'react';
+import { Plus, AlertCircle, History, Star, Search, User } from 'lucide-react';
+import { getToken, getMe, listTrabalhos, listProfissionais, clearToken } from '../services/api';
 import ModalCriarProposta from '../components/ModalCriarProposta';
 import CardProposta from '../components/CardProposta';
-import { Query } from 'appwrite';
 import { useNavigate } from 'react-router-dom';
 import BarraNavegacao from '../components/BarraNavegacao';
 import HeaderPerfil from '../components/HeaderPerfil';
@@ -47,14 +46,20 @@ const TelaFeedCliente = () => {
 
   const carregarUsuario = async () => {
     try {
-      const usuario = await conta.get();
+      const token = getToken();
+      if (!token) throw new Error('No token');
+      const me = await getMe(token);
+      const tipo = me?.tipoPerfil;
+      const usuario = me?.usuario || null;
+      if (!usuario) throw new Error('No user');
+      // normalize id field
+      if (!usuario.$id && usuario.id) usuario.$id = usuario.id;
       definirUsuarioAtual(usuario);
-      const perfil = await bancoDeDados.getDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, usuario.$id);
-      if (perfil.tipoPerfil !== 'USUARIO') {
+      if (tipo !== 'USUARIO') {
         navegar('/feed-profissional');
         return;
       }
-      definirPerfilUsuario(perfil);
+      definirPerfilUsuario(usuario);
       carregarProfissionaisDestaque();
     } catch (erro) {
       navegar('/login');
@@ -64,16 +69,16 @@ const TelaFeedCliente = () => {
   const carregarProfissionaisDestaque = async () => {
     try {
       definirCarregandoDestaque(true);
-      const resposta = await bancoDeDados.listDocuments(
-        ID_DO_BANCO,
-        ID_COLECAO_USUARIOS,
-        [
-          Query.equal('tipoPerfil', 'PROFISSIONAL'),
-          Query.orderDesc('mediaAvaliacoes'),
-          Query.limit(10)
-        ]
-      );
-      definirProfissionaisDestaque(resposta.documents || []);
+      const resp = await listProfissionais();
+      const lista = Array.isArray(resp) ? resp : (resp?.documents || resp || []);
+      const top = lista.slice(0, 10).map((p) => ({
+        ...p,
+        $id: p.id || p.$id,
+        nome: p.nome || p.nome,
+        foto: p.fotoPerfil || p.foto || p.fotoPerfil,
+        mediaAvaliacoes: p.mediaAvaliacoes ?? null,
+      }));
+      definirProfissionaisDestaque(top);
     } catch (erro) {
       definirProfissionaisDestaque([]);
     } finally {
@@ -84,12 +89,24 @@ const TelaFeedCliente = () => {
   const carregarPropostas = async ({ mostrarLoading = true } = {}) => {
     try {
       if (mostrarLoading) definirCarregando(true);
-      const consultas = [
-        Query.orderDesc('$createdAt'),
-        Query.equal('clienteId', usuarioAtual.$id)
-      ];
-      const resposta = await bancoDeDados.listDocuments(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, consultas);
-      const filtrados = resposta.documents.filter(p => p.status !== 'CONCLUIDO' && p.status !== 'CANCELADO');
+      const resp = await listTrabalhos();
+      const lista = Array.isArray(resp) ? resp : (resp?.documents || resp || []);
+      const mapped = (lista || []).map((t) => ({
+        $id: t.id || t.$id,
+        titulo: t.problema || t.titulo || '',
+        descricao: t.descricao || '',
+        valorEstimado: t.pagamento ?? t.valorEstimado ?? 0,
+        categoria: t.categoria || null,
+        localizacao: t.localizacao ? (typeof t.localizacao === 'string' ? t.localizacao : JSON.stringify(t.localizacao)) : (t.localizacao || ''),
+        enderecoCompleto: t.enderecoCompleto || null,
+        telefoneContato: t.telefoneContato || null,
+        dataCriacao: t.dataHoraAberta || t.dataCriacao || new Date().toISOString(),
+        imagemProblemaUrl: t.caminhoImagem ? `/upload/${t.caminhoImagem}` : (t.imagemProblemaUrl || null),
+        clienteId: t.idUsuario || t.clienteId || t.idUsuario,
+        profissionalAceitoId: t.idProfissional || t.profissionalAceitoId || t.idProfissional,
+        status: t.status || 'ABERTO',
+      }));
+      const filtrados = mapped.filter(p => String(p.clienteId) === String(usuarioAtual.$id) && p.status !== 'CONCLUIDO' && p.status !== 'CANCELADO');
       definirPropostas(filtrados);
 
       // Toca áudio se houver propostas abertas
@@ -120,7 +137,7 @@ const TelaFeedCliente = () => {
       audioNotificacaoRef.current.pause();
       audioNotificacaoRef.current.currentTime = 0;
     }
-    await conta.deleteSession('current');
+    clearToken();
     navegar('/login');
   };
 

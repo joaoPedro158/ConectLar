@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Clock, CheckCircle, UserPlus, Star, X, CheckSquare, Tag, MessageCircle, MapPinned, Phone, BadgeDollarSign } from 'lucide-react';
-import { bancoDeDados, ID, ID_DO_BANCO, ID_COLECAO_PROPOSTAS, ID_COLECAO_CANDIDATURAS, ID_COLECAO_USUARIOS, ID_COLECAO_AVALIACOES } from '../services/appwrite';
-import { Query } from 'appwrite';
+import { getToken, apiRequest, candidatarTrabalho, responderCandidato, cancelarTrabalho, concluirTrabalho, avaliarTrabalho } from '../services/api';
 import ModalAvaliar from './ModalAvaliar';
 import ModalContraproposta from './ModalContraproposta';
 import { useNavigate } from 'react-router-dom';
@@ -44,24 +43,40 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
     return m?.[1] || '';
   };
 
+  const buscarPerfilPorId = async (id) => {
+    if (!id) return null;
+    try {
+      // try profissionais first
+      const profs = await apiRequest('/profissional/list', { method: 'GET' });
+      const listaProfs = Array.isArray(profs) ? profs : (profs?.documents || profs || []);
+      const encontradoProf = listaProfs.find(p => String(p.id || p.$id) === String(id));
+      if (encontradoProf) return encontradoProf;
+
+      const users = await apiRequest('/usuario/list', { method: 'GET' });
+      const listaUsers = Array.isArray(users) ? users : (users?.documents || users || []);
+      return listaUsers.find(u => String(u.id || u.$id) === String(id)) || null;
+    } catch (e) {
+      console.error('buscarPerfilPorId error', e);
+      return null;
+    }
+  };
+
   const carregarCandidaturas = async () => {
     try {
-      const resp = await bancoDeDados.listDocuments(
-        ID_DO_BANCO,
-        ID_COLECAO_CANDIDATURAS,
-        [Query.equal('propostaId', proposta.$id)]
-      );
-      
-      const candidaturasComPerfil = await Promise.all(resp.documents.map(async (cand) => {
-        const perfilProfissional = await bancoDeDados.getDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, cand.profissionalId);
-        return { ...cand, perfilProfissional };
-      }));
-      
-      definirCandidaturas(candidaturasComPerfil);
-      
+      // Backend models a single profissional request per trabalho (solicitarTrabalho).
+      // Fetch trabalho details and expose a single-item candidaturas list if present.
+      const trabalho = await apiRequest(`/trabalho/${proposta.$id}`, { method: 'GET' });
+      const candidatos = [];
+      const profissionalId = trabalho?.idProfissional || trabalho?.profissionalId || trabalho?.profissionalAceitoId;
+      if (profissionalId) {
+        const perfilProfissional = await buscarPerfilPorId(profissionalId);
+        candidatos.push({ $id: `cand-${profissionalId}`, profissionalId, perfilProfissional, status: trabalho?.status === 'EM_ESPERA' ? 'PENDENTE' : trabalho?.status });
+      }
+
+      definirCandidaturas(candidatos);
       if (perfilUsuario.tipoPerfil === 'PROFISSIONAL') {
-        const candidatou = resp.documents.some(c => c.profissionalId === usuarioAtual.$id);
-        definirJaCandidatou(candidatou);
+        const candidatou = String(profissionalId) === String(usuarioAtual?.$id || usuarioAtual?.id);
+        definirJaCandidatou(!!candidatou);
       }
     } catch (error) {
       console.error(error);
@@ -70,7 +85,8 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
 
   const carregarPerfilProfissionalAceito = async () => {
     try {
-      const perfil = await bancoDeDados.getDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, proposta.profissionalAceitoId);
+      const id = proposta.profissionalAceitoId || proposta.idProfissional || proposta.profissionalId;
+      const perfil = await buscarPerfilPorId(id);
       definirPerfilProfissionalAceito(perfil);
     } catch (error) {
       console.error(error);
@@ -79,7 +95,8 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
 
   const carregarPerfilCliente = async () => {
     try {
-      const perfil = await bancoDeDados.getDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, proposta.clienteId);
+      const id = proposta.clienteId || proposta.idUsuario || proposta.idCliente;
+      const perfil = await buscarPerfilPorId(id);
       definirPerfilCliente(perfil);
     } catch (error) {
       console.error(error);
@@ -88,12 +105,13 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
 
   const verificarAvaliacao = async () => {
     try {
-      const resp = await bancoDeDados.listDocuments(
-        ID_DO_BANCO,
-        ID_COLECAO_AVALIACOES,
-        [Query.equal('propostaId', proposta.$id)]
-      );
-      definirAvaliacoes(resp.documents);
+      try {
+        const resp = await apiRequest(`/avaliacao/list?propostaId=${encodeURIComponent(proposta.$id)}`, { method: 'GET' });
+        const docs = Array.isArray(resp) ? resp : (resp?.documents || resp || []);
+        definirAvaliacoes(docs);
+      } catch (e) {
+        definirAvaliacoes([]);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -102,31 +120,9 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
   const lidarComCandidatura = async (valorProposto = null) => {
     definirCarregandoAcao(true);
     try {
-      const data = {
-        propostaId: proposta.$id,
-        profissionalId: usuarioAtual.$id,
-        ...(Number.isFinite(Number(valorProposto)) ? { valorProposto: Number(valorProposto) } : {}),
-        status: 'PENDENTE',
-        dataCandidatura: new Date().toISOString()
-      };
-
-      try {
-        await bancoDeDados.createDocument(ID_DO_BANCO, ID_COLECAO_CANDIDATURAS, ID.unique(), data);
-      } catch (err) {
-        const atributo = extrairAtributoDesconhecido(err?.message);
-        if (atributo && Object.prototype.hasOwnProperty.call(data, atributo)) {
-          delete data[atributo];
-          await bancoDeDados.createDocument(ID_DO_BANCO, ID_COLECAO_CANDIDATURAS, ID.unique(), data);
-        } else {
-          throw err;
-        }
-      }
-      
-      if (proposta.status === 'ABERTO') {
-        await bancoDeDados.updateDocument(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, proposta.$id, {
-          status: 'EM_ESPERA'
-        });
-      }
+      const token = getToken();
+      await candidatarTrabalho({ token, idTrabalho: proposta.$id });
+      // backend sets status EM_ESPERA and associates profissional
       aoAtualizar();
     } catch (error) {
       console.error(error);
@@ -142,11 +138,8 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
   const lidarComAceite = async (candidaturaId, profissionalId) => {
     definirCarregandoAcao(true);
     try {
-      await bancoDeDados.updateDocument(ID_DO_BANCO, ID_COLECAO_CANDIDATURAS, candidaturaId, { status: 'ACEITO' });
-      await bancoDeDados.updateDocument(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, proposta.$id, {
-        status: 'EM_ANDAMENTO',
-        profissionalAceitoId: profissionalId
-      });
+      const token = getToken();
+      await responderCandidato({ token, idTrabalho: proposta.$id, resposta: true });
       aoAtualizar();
     } catch (error) {
       console.error(error);
@@ -158,7 +151,8 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
   const lidarComCancelamento = async () => {
     definirCarregandoAcao(true);
     try {
-      await bancoDeDados.updateDocument(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, proposta.$id, { status: 'CANCELADO' });
+      const token = getToken();
+      await cancelarTrabalho({ token, idTrabalho: proposta.$id });
       aoAtualizar();
     } catch (error) {
       console.error(error);
@@ -170,7 +164,8 @@ const CardProposta = ({ proposta, usuarioAtual, perfilUsuario, aoAtualizar, modo
   const lidarComConclusao = async () => {
     definirCarregandoAcao(true);
     try {
-      await bancoDeDados.updateDocument(ID_DO_BANCO, ID_COLECAO_PROPOSTAS, proposta.$id, { status: 'CONCLUIDO' });
+      const token = getToken();
+      await concluirTrabalho({ token, idTrabalho: proposta.$id });
       aoAtualizar();
     } catch (error) {
       console.error(error);

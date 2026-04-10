@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Mail, Lock, User, Eye, EyeOff, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { conta, bancoDeDados, storage, ID, ID_DO_BANCO, ID_COLECAO_USUARIOS, ID_BUCKET_FOTOS } from '../services/appwrite';
+import { cadastrarUsuario, cadastrarProfissional, login, setToken } from '../services/api';
 import '../styles/pages/TelaCadastro.css';
 
 const TelaCadastro = () => {
@@ -34,30 +34,7 @@ const TelaCadastro = () => {
     return encontrado?.[1] || '';
   };
 
-  const criarDocumentoPerfil = async (documentId, dataBase) => {
-    const data = { ...dataBase };
-
-    for (let tentativa = 1; tentativa <= 3; tentativa += 1) {
-      try {
-        return await bancoDeDados.createDocument(
-          ID_DO_BANCO,
-          ID_COLECAO_USUARIOS,
-          documentId,
-          data
-        );
-      } catch (err) {
-        const atributo = extrairAtributoDesconhecido(err?.message);
-        if (atributo && Object.prototype.hasOwnProperty.call(data, atributo)) {
-          delete data[atributo];
-          continue;
-        }
-        throw err;
-      }
-    }
-
-    throw new Error('Não foi possível criar o perfil do usuário.');
-  };
-
+  
   const lidarComCadastro = async (e) => {
     e.preventDefault();
     definirErro('');
@@ -81,39 +58,28 @@ const TelaCadastro = () => {
     definirCarregando(true);
 
     try {
-      try {
-        await conta.deleteSession('current');
-      } catch {}
-
-      const novaConta = await conta.create(ID.unique(), email.trim(), senha, nome.trim());
-
-      let fotoUrl = '';
-      let fotoFileId = '';
-
-      if (foto) {
-        try {
-          const upload = await storage.createFile(ID_BUCKET_FOTOS, ID.unique(), foto);
-          const viewUrl = storage.getFileView(ID_BUCKET_FOTOS, upload.$id);
-          fotoUrl = typeof viewUrl === 'string' ? viewUrl : viewUrl?.toString?.() || '';
-          fotoFileId = upload.$id;
-        } catch (uploadErr) {
-          console.error('Erro ao enviar foto do cadastro', uploadErr);
-          definirErro('Conta criada, mas não foi possível enviar a foto. Tente novamente depois no perfil.');
-        }
-      }
-
-      await criarDocumentoPerfil(novaConta.$id, {
+      
+      const dados = {
         nome: nome.trim(),
         email: email.trim(),
+        senha,
         telefone: '',
         tipoPerfil,
         categoria: tipoPerfil === 'PROFISSIONAL' ? categoria : '',
-        foto: fotoUrl,
-        fotoFileId,
-        dataCriacao: new Date().toISOString()
-      });
+        dataCriacao: new Date().toISOString(),
+      };
 
-      await conta.createEmailPasswordSession(email.trim(), senha);
+      let criado;
+      if (tipoPerfil === 'PROFISSIONAL') {
+        criado = await cadastrarProfissional(dados, foto);
+      } else {
+        criado = await cadastrarUsuario(dados, foto);
+      }
+
+      
+      const respLogin = await login({ login: email.trim(), senha });
+      const nextToken = respLogin?.token;
+      if (nextToken) setToken(nextToken);
       definirMensagem('Conta criada com sucesso.');
       setTimeout(() => navigate(tipoPerfil === 'PROFISSIONAL' ? '/feed-profissional' : '/feed-cliente'), 700);
     } catch (err) {

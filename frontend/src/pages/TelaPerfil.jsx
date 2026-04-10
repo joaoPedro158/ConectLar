@@ -21,7 +21,7 @@ function mascaraMoeda(valor) {
 }
 import React, { useRef, useState, useEffect } from 'react';
 import { User, Phone, MapPin, LogOut, Star, CheckCircle, ImagePlus, Trash2 } from 'lucide-react';
-import { bancoDeDados, conta, storage, ID, ID_DO_BANCO, ID_COLECAO_USUARIOS, ID_BUCKET_FOTOS, ID_BUCKET_IMAGENS_PROBLEMA } from '../services/appwrite';
+import { getToken, getMe, atualizarPerfil, apiRequest } from '../services/api';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import BarraNavegacao from '../components/NavBar';
 import IndicadorCarregamento from '../components/IndicadorCarregamento';
@@ -67,9 +67,11 @@ const TelaPerfil = () => {
 
   const atualizarPerfilComRetry = async ({ dataBase, maxTentativas = 3 }) => {
     const data = { ...dataBase };
+    const token = getToken();
+    const tipo = perfilUsuario?.tipoPerfil === 'PROFISSIONAL' ? 'PROFISSIONAL' : 'USUARIO';
     for (let tentativa = 1; tentativa <= maxTentativas; tentativa += 1) {
       try {
-        return await bancoDeDados.updateDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, perfilUsuario.$id, data);
+        return await atualizarPerfil({ tipoPerfil: tipo, token, patch: data }, null);
       } catch (err) {
         const atributo = extrairAtributoDesconhecido(err?.message);
         if (atributo && Object.prototype.hasOwnProperty.call(data, atributo)) {
@@ -89,11 +91,23 @@ const TelaPerfil = () => {
   const carregarPerfil = async () => {
     try {
       definirCarregando(true);
-      const usuarioLogado = await conta.get();
+      const token = getToken();
+      let usuarioLogado = null;
+      if (token) {
+        const me = await getMe(token);
+        usuarioLogado = me?.usuario || null;
+      }
       definirUsuarioAtual(usuarioLogado);
 
-      const idPerfil = uid || usuarioLogado.$id;
-      const perfil = await bancoDeDados.getDocument(ID_DO_BANCO, ID_COLECAO_USUARIOS, idPerfil);
+      const idPerfil = uid || usuarioLogado?.$id || usuarioLogado?.id;
+      let perfil = null;
+      if (!uid || (usuarioLogado && String(idPerfil) === String(usuarioLogado.$id || usuarioLogado.id))) {
+        perfil = usuarioLogado;
+      } else {
+        const lista = await apiRequest('/usuario/list', { method: 'GET' });
+        const docs = Array.isArray(lista) ? lista : (lista?.documents || lista || []);
+        perfil = docs.find((d) => String(d.$id || d.id) === String(idPerfil)) || null;
+      }
 
       definirPerfilUsuario(perfil);
       definirPerfilVisualizado(perfil);
@@ -105,17 +119,17 @@ const TelaPerfil = () => {
       } catch {
         definirPortfolioFileIds([]);
       }
-      
+
       definirFormulario({
-        nome: perfil.nome || usuarioLogado.name || '',
-        email: perfil.email || usuarioLogado.email || '',
-        telefone: perfil.telefone || '',
-        logradouro: perfil.logradouro || '',
-        numero: perfil.numero || '',
-        bairro: perfil.bairro || '',
-        cidade: perfil.cidade || '',
-        estado: perfil.estado || '',
-        cep: perfil.cep || '',
+        nome: perfil?.nome || usuarioLogado?.name || '',
+        email: perfil?.email || usuarioLogado?.email || '',
+        telefone: perfil?.telefone || '',
+        logradouro: perfil?.logradouro || '',
+        numero: perfil?.numero || '',
+        bairro: perfil?.bairro || '',
+        cidade: perfil?.cidade || '',
+        estado: perfil?.estado || '',
+        cep: perfil?.cep || '',
       });
     } catch (err) {
       navegar('/login');
@@ -172,26 +186,18 @@ const TelaPerfil = () => {
     definirMensagem('');
 
     try {
-      const upload = await storage.createFile(ID_BUCKET_FOTOS, ID.unique(), arquivo);
-      const viewUrl = storage.getFileView(ID_BUCKET_FOTOS, upload.$id);
-      const fotoUrl = typeof viewUrl === 'string' ? viewUrl : viewUrl?.toString?.() || '';
+      const token = getToken();
+      const tipo = perfilUsuario?.tipoPerfil === 'PROFISSIONAL' ? 'PROFISSIONAL' : 'USUARIO';
+      const atualizado = await atualizarPerfil({ tipoPerfil: tipo, token, patch: {} }, arquivo);
 
-      try {
-        await atualizarPerfilComRetry({
-          dataBase: {
-            foto: fotoUrl,
-            fotoFileId: upload.$id
-          }
-        });
-      } catch (err) {
+      if (atualizado) {
+        definirPerfilUsuario(atualizado);
+        definirPerfilVisualizado(atualizado);
+        definirMensagem('Foto atualizada com sucesso!');
+        setTimeout(() => definirMensagem(''), 2500);
+      } else {
         definirMensagem('Erro ao salvar foto no banco de dados.');
-        return;
       }
-
-      definirPerfilUsuario((prev) => ({ ...prev, foto: fotoUrl, fotoFileId: upload.$id }));
-      definirPerfilVisualizado((prev) => ({ ...prev, foto: fotoUrl, fotoFileId: upload.$id }));
-      definirMensagem('Foto atualizada com sucesso!');
-      setTimeout(() => definirMensagem(''), 2500);
     } catch (err) {
       definirMensagem('Erro ao atualizar foto. Tente novamente.');
     } finally {
@@ -202,8 +208,7 @@ const TelaPerfil = () => {
 
   const obterUrlPortfolio = (fileId) => {
     try {
-      const viewUrl = storage.getFileView(ID_BUCKET_IMAGENS_PROBLEMA, fileId);
-      return typeof viewUrl === 'string' ? viewUrl : viewUrl?.toString?.() || '';
+      return `/upload/${fileId}`;
     } catch {
       return '';
     }
@@ -219,31 +224,12 @@ const TelaPerfil = () => {
   };
 
   const lidarComUploadPortfolio = async (arquivos) => {
-    if (modoLeitura) return;
-    if (!arquivos?.length || !perfilUsuario) return;
-
-    definirEnviandoPortfolio(true);
-    definirMensagem('');
-
-    try {
-      const novosIds = [];
-      for (const arquivo of Array.from(arquivos)) {
-        const upload = await storage.createFile(ID_BUCKET_IMAGENS_PROBLEMA, ID.unique(), arquivo);
-        novosIds.push(upload.$id);
-      }
-
-      const atualizado = [...portfolioFileIds, ...novosIds].slice(0, 30);
-      definirPortfolioFileIds(atualizado);
-      await salvarPortfolioNoPerfil(atualizado);
-
-      definirMensagem('Portfólio atualizado!');
-      setTimeout(() => definirMensagem(''), 2500);
-    } catch (err) {
-      definirMensagem('Erro ao enviar fotos do portfólio.');
-    } finally {
-      definirEnviandoPortfolio(false);
-      if (inputPortfolioRef.current) inputPortfolioRef.current.value = '';
-    }
+    // Portfolio upload requires a dedicated backend endpoint to accept
+    // multiple files and return stored identifiers. The current REST API
+    // supports profile photo upload via `atualizarPerfil`, but does not
+    // provide a public upload endpoint for arbitrary portfolio files.
+    // To proceed we need an endpoint like POST /upload that returns file ids.
+    definirMensagem('Upload de portfólio não suportado sem endpoint de upload no servidor.');
   };
 
   const lidarComRemoverPortfolio = async (fileId) => {
@@ -253,10 +239,6 @@ const TelaPerfil = () => {
     definirEnviandoPortfolio(true);
     definirMensagem('');
     try {
-      try {
-        await storage.deleteFile(ID_BUCKET_IMAGENS_PROBLEMA, fileId);
-      } catch (err) {}
-
       const atualizado = portfolioFileIds.filter((id) => id !== fileId);
       definirPortfolioFileIds(atualizado);
       await salvarPortfolioNoPerfil(atualizado);

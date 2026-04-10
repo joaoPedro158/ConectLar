@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Star } from 'lucide-react';
-import { bancoDeDados, ID, ID_DO_BANCO, ID_COLECAO_AVALIACOES, ID_COLECAO_USUARIOS } from '../services/appwrite';
+import { getToken, avaliarTrabalho } from '../services/api';
 import PainelInferior from './PainelInferior';
 import '../styles/components/ModalAvaliar.css';
 
@@ -35,31 +35,8 @@ const ModalAvaliar = ({
     definirErro('');
 
     try {
-      await bancoDeDados.createDocument(
-        ID_DO_BANCO,
-        ID_COLECAO_AVALIACOES,
-        ID.unique(),
-        {
-          propostaId,
-          clienteId: idAvaliador,
-          profissionalId: idAvaliado,
-          nota,
-          comentario,
-          dataAvaliacao: new Date().toISOString()
-        }
-      );
-
-      const novaMedia = mediaAtual === 0 ? nota : (mediaAtual + nota) / 2;
-
-      await bancoDeDados.updateDocument(
-        ID_DO_BANCO,
-        ID_COLECAO_USUARIOS,
-        idAvaliado,
-        {
-          mediaAvaliacoes: parseFloat(novaMedia.toFixed(1))
-        }
-      );
-
+      const token = getToken();
+      await avaliarTrabalho({ token, idTrabalho: propostaId, nota, comentario });
       aoAvaliar();
     } catch (err) {
       definirErro('Erro ao registrar avaliação.');
