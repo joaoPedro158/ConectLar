@@ -2,7 +2,7 @@ package br.ifrn.conectlar.Service;
 
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
-import br.ifrn.conectlar.Model.dto.UsuarioRecord;
+import br.ifrn.conectlar.Model.dto.Record.UsuarioRecord;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;

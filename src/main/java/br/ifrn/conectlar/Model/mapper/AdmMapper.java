@@ -3,7 +3,7 @@ package br.ifrn.conectlar.Model.mapper;
 import br.ifrn.conectlar.Model.Adm;
 import br.ifrn.conectlar.Repository.Entity.AdmEntity;
 import br.ifrn.conectlar.Model.dto.AdmDTO;
-import br.ifrn.conectlar.Model.dto.AdmRecord;
+import br.ifrn.conectlar.Model.dto.Record.AdmRecord;
 import org.mapstruct.*;
 
 

@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import br.ifrn.conectlar.Model.dto.UsuarioRecord;
+import br.ifrn.conectlar.Model.dto.Record.UsuarioRecord;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;

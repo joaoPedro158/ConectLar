@@ -3,7 +3,7 @@ package br.ifrn.conectlar.Service.Impl;
 import br.ifrn.conectlar.Model.Adm;
 import br.ifrn.conectlar.Repository.Entity.AdmEntity;
 import br.ifrn.conectlar.Model.dto.AdmDTO;
-import br.ifrn.conectlar.Model.dto.AdmRecord;
+import br.ifrn.conectlar.Model.dto.Record.AdmRecord;
 import br.ifrn.conectlar.Model.mapper.AdmMapper;
 import br.ifrn.conectlar.Repository.AdmJpaRepository;
 import br.ifrn.conectlar.Service.AdmService;

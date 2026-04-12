@@ -2,7 +2,7 @@ package br.ifrn.conectlar.Service;
 
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
-import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
+import br.ifrn.conectlar.Model.dto.Record.TrabalhoRecord;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package br.ifrn.conectlar.Service;
 
 
 import br.ifrn.conectlar.Model.dto.AvaliacaoDTO;
-import br.ifrn.conectlar.Model.dto.AvaliacaoRecord;
+import br.ifrn.conectlar.Model.dto.Record.AvaliacaoRecord;
 
 public interface AvaliacaoService {
 

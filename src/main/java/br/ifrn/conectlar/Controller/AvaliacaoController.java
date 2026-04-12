@@ -3,7 +3,7 @@ package br.ifrn.conectlar.Controller;
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Model.dto.AvaliacaoDTO;
-import br.ifrn.conectlar.Model.dto.AvaliacaoRecord;
+import br.ifrn.conectlar.Model.dto.Record.AvaliacaoRecord;
 import br.ifrn.conectlar.Service.AvaliacaoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

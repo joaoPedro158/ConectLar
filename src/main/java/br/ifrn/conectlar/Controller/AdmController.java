@@ -3,13 +3,11 @@ package br.ifrn.conectlar.Controller;
 import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Model.dto.AdmDTO;
-import br.ifrn.conectlar.Model.dto.AdmRecord;
-import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
+import br.ifrn.conectlar.Model.dto.Record.AdmRecord;
 import br.ifrn.conectlar.Service.AdmService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

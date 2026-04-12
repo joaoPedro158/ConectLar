@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Model.dto;
+package br.ifrn.conectlar.Model.dto.Record;
 
 
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;

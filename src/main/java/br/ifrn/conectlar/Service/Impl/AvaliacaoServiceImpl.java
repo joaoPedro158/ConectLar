@@ -2,7 +2,7 @@ package br.ifrn.conectlar.Service.Impl;
 
 import br.ifrn.conectlar.Model.Avaliacao;
 import br.ifrn.conectlar.Model.dto.AvaliacaoDTO;
-import br.ifrn.conectlar.Model.dto.AvaliacaoRecord;
+import br.ifrn.conectlar.Model.dto.Record.AvaliacaoRecord;
 import br.ifrn.conectlar.Model.mapper.AvaliacaoMapper;
 import br.ifrn.conectlar.Repository.AvaliacaoJparepository;
 import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;

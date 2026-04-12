@@ -1,6 +1,4 @@
-package br.ifrn.conectlar.Model.dto;
-
-import java.time.LocalDateTime;
+package br.ifrn.conectlar.Model.dto.Record;
 
 public record AvaliacaoRecord(
         int nota,

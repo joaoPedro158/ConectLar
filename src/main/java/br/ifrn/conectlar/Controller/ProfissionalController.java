@@ -4,7 +4,7 @@ import br.ifrn.conectlar.Controller.Rotas.RotasBases;
 import br.ifrn.conectlar.Controller.Rotas.RotasPrincipais;
 import br.ifrn.conectlar.Model.dto.DadosProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
-import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
+import br.ifrn.conectlar.Model.dto.Record.ProfissionalRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Security.UsuarioDetails;
 import br.ifrn.conectlar.Service.ProfissionalService;

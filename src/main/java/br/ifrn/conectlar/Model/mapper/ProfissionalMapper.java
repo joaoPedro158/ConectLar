@@ -3,7 +3,7 @@ package br.ifrn.conectlar.Model.mapper;
 import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
-import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
+import br.ifrn.conectlar.Model.dto.Record.ProfissionalRecord;
 import org.mapstruct.*;
 
 

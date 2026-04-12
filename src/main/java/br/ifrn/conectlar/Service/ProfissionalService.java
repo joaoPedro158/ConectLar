@@ -2,7 +2,7 @@ package br.ifrn.conectlar.Service;
 
 import br.ifrn.conectlar.Model.dto.DadosProfissionalDTO;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
-import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
+import br.ifrn.conectlar.Model.dto.Record.ProfissionalRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import org.springframework.web.multipart.MultipartFile;
 

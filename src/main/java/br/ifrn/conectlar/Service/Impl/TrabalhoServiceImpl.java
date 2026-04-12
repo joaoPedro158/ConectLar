@@ -8,7 +8,7 @@ import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Trabalho;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
-import br.ifrn.conectlar.Model.dto.TrabalhoRecord;
+import br.ifrn.conectlar.Model.dto.Record.TrabalhoRecord;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;

@@ -5,7 +5,7 @@ import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
-import br.ifrn.conectlar.Model.dto.UsuarioRecord;
+import br.ifrn.conectlar.Model.dto.Record.UsuarioRecord;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
 import br.ifrn.conectlar.Repository.AvaliacaoJparepository;

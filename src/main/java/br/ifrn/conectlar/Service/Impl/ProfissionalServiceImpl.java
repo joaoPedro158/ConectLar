@@ -7,7 +7,7 @@ import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
 import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Model.Profissional;
 import br.ifrn.conectlar.Model.dto.ProfissionalDTO;
-import br.ifrn.conectlar.Model.dto.ProfissionalRecord;
+import br.ifrn.conectlar.Model.dto.Record.ProfissionalRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.mapper.ProfissionalMapper;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
