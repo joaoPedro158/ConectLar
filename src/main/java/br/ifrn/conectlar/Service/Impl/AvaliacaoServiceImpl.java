@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Service;
+package br.ifrn.conectlar.Service.Impl;
 
 import br.ifrn.conectlar.Model.Avaliacao;
 import br.ifrn.conectlar.Model.dto.AvaliacaoDTO;

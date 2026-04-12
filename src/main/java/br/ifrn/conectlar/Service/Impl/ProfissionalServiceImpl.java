@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Service;
+package br.ifrn.conectlar.Service.Impl;
 
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.dto.DadosProfissionalDTO;
@@ -13,6 +13,8 @@ import br.ifrn.conectlar.Model.mapper.ProfissionalMapper;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
+import br.ifrn.conectlar.Service.ProfissionalService;
+import br.ifrn.conectlar.Service.SalvaArquivoService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
-package br.ifrn.conectlar.Service;
+package br.ifrn.conectlar.Service.Impl;
 
+import br.ifrn.conectlar.Service.SalvaArquivoService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,4 +1,4 @@
-package br.ifrn.conectlar.Service;
+package br.ifrn.conectlar.Service.Impl;
 
 
 import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
@@ -13,6 +13,8 @@ import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Repository.ProfissionalJpaRepository;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
 import br.ifrn.conectlar.Repository.UsuarioJpaRepository;
+import br.ifrn.conectlar.Service.SalvaArquivoService;
+import br.ifrn.conectlar.Service.TrabalhoService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
