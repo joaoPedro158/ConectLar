@@ -3,12 +3,14 @@ package br.ifrn.conectlar.Service.Impl;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.Usuario;
+import br.ifrn.conectlar.Model.dto.Record.LocalizacaoRecord;
 import br.ifrn.conectlar.Model.dto.TrabalhoDTO;
 import br.ifrn.conectlar.Model.dto.UsuarioDTO;
 import br.ifrn.conectlar.Model.dto.Record.UsuarioRecord;
 import br.ifrn.conectlar.Model.mapper.TrabalhoMapper;
 import br.ifrn.conectlar.Model.mapper.UsuarioMapper;
 import br.ifrn.conectlar.Repository.AvaliacaoJparepository;
+import br.ifrn.conectlar.Repository.Entity.LocalizacaoEntity;
 import br.ifrn.conectlar.Repository.Entity.TrabalhoEntity;
 import br.ifrn.conectlar.Repository.Entity.UsuarioEntity;
 import br.ifrn.conectlar.Repository.TrabalhoJpaRepository;
@@ -51,6 +53,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuarioRepository.existsByTelefone(usuarioModel.getTelefone())) {
             throw new IllegalArgumentException("Já existe um usuário cadastrado com este telefone.");
         }
+
+
+
+
         UsuarioEntity entityToSave = mapper.toEntity(usuarioModel);
         String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
         entityToSave.setSenha(senhaCriptografada);
@@ -58,6 +64,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (entityToSave.getRole() == null) {
             entityToSave.setRole(UsuarioRole.USUARIO);
         }
+        if (usuarioRecord.localizacao() != null && !usuarioRecord.localizacao().isEmpty()) {
+           // logica para salvar
+        }
+
 
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {

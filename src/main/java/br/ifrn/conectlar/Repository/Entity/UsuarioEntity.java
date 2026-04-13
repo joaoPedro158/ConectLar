@@ -5,6 +5,7 @@ import br.ifrn.conectlar.Model.Localizacao;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,12 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 public class UsuarioEntity extends BaseUsuarioEntity {
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "usuario_localizacao",
             joinColumns        = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_localizacao")
     )
-    private List<LocalizacaoEntity> localizacao;
+    private List<LocalizacaoEntity> localizacao =  new ArrayList<>();
 
 }
