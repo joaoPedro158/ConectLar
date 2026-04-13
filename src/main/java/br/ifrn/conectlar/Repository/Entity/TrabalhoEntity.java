@@ -2,14 +2,11 @@ package br.ifrn.conectlar.Repository.Entity;
 
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
-import br.ifrn.conectlar.Model.Localizacao;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Table(name = "trabalho")
@@ -23,9 +20,6 @@ public class TrabalhoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Embedded
-    private Localizacao localizacao;
 
     @Column(nullable = false, length = 250)
     private String problema;
@@ -65,6 +59,10 @@ public class TrabalhoEntity {
 
     @OneToOne(mappedBy = "trabalho")
     private AvaliacaoEntity avaliacao;
+
+    @ManyToOne
+    @JoinColumn(name = "id_endereco", nullable = false)
+    private LocalizacaoEntity localizacao;
 
 
 }

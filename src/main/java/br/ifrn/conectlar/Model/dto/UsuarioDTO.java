@@ -5,6 +5,8 @@ import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class UsuarioDTO {
@@ -13,7 +15,7 @@ public class UsuarioDTO {
     private String nome;
     private String email;
     private String telefone;
-    private LocalizacaoDTO localizacao;
+    private List<LocalizacaoDTO> localizacao;
     private String fotoPerfil;
     private UsuarioRole role;
 }

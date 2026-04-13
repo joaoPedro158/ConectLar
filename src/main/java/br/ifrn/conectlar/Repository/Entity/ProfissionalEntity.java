@@ -4,6 +4,8 @@ import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name= "profissional")
 @Getter
@@ -14,5 +16,13 @@ public class ProfissionalEntity extends BaseUsuarioEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 150)
     private CategoriaEnum categoria;
+
+    @ManyToMany
+    @JoinTable(
+            name = "profissional_localizacao",
+            joinColumns        = @JoinColumn(name = "id_profissional"),
+            inverseJoinColumns = @JoinColumn(name = "id_localizacao")
+    )
+    private List<LocalizacaoEntity> localizacao;
 
 }

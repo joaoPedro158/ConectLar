@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.flywaydb.core.internal.util.StringUtils;
 
+import java.util.List;
+
 @Getter
 @SuperBuilder
 public class Profissional extends Usuario {
     private CategoriaEnum categoria;
 
 
-    protected Profissional(Long id, String nome, String email, String senha, String telefone, Localizacao localizacao,String fotoPerfil, CategoriaEnum categoria, UsuarioRole role) {
+    protected Profissional(Long id, String nome, String email, String senha, String telefone, List<Localizacao> localizacao, String fotoPerfil, CategoriaEnum categoria, UsuarioRole role) {
         super(id, nome, email, senha, telefone, localizacao,fotoPerfil,role);
 
         this.categoria = categoria;

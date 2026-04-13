@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -17,7 +18,7 @@ public class Usuario {
     private String email;
     private String senha;
     private String telefone;
-    private Localizacao localizacao;
+    private List<Localizacao> localizacao;
     private String fotoPerfil;
     private UsuarioRole role;
 
@@ -27,7 +28,7 @@ public class Usuario {
     private static final int MIN_PASSWORD_LENGTH = 8;
 
 
-    protected Usuario(Long id, String nome, String email, String senha,String telefone,Localizacao localizacao, String fotoPerfil,UsuarioRole role) {
+    protected Usuario(Long id, String nome, String email, String senha,String telefone,List<Localizacao> localizacao, String fotoPerfil,UsuarioRole role) {
         this.id = id;
         this.nome = nome;
        this.email = email;
