@@ -1,0 +1,70 @@
+.seletor__gatilho {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #000000;
+  background-color: #ffffff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.seletor__gatilho:focus {
+  box-shadow: 4px 4px 0px 0px #22d3ee;
+  border-color: #000000;
+}
+
+.seletor__gatilho--pequeno { height: 2rem; padding: 0 0.5rem; }
+.seletor__gatilho--padrao { height: 2.5rem; }
+
+.seletor__icone-seta { opacity: 0.5; width: 1rem; height: 1rem; }
+
+.seletor__conteudo {
+  z-index: 50;
+  min-width: 8rem;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 2px solid #000000;
+  background-color: #ffffff;
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.seletor__viewport { padding: 0.25rem; }
+
+.seletor__item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: 0.25rem;
+  padding: 0.375rem 2rem 0.375rem 0.5rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: background-color 0.2s;
+}
+
+.seletor__item:focus {
+  background-color: #22d3ee;
+  color: #000000;
+}
+
+.seletor__item-indicador {
+  position: absolute;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seletor__rotulo { padding: 0.375rem 0.5rem; font-size: 0.75rem; font-weight: 900; color: #78716c; }
+.seletor__separador { height: 2px; background-color: #000; margin: 0.25rem -0.25rem; }
+.seletor__botao-rolar { display: flex; cursor: default; align-items: center; justify-content: center; padding: 0.25rem 0; }

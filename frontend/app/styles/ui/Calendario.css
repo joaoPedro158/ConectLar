@@ -1,0 +1,219 @@
+.calendario {
+  padding: 0.75rem;
+}
+
+.calendario__meses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .calendario__meses {
+    flex-direction: row;
+  }
+}
+
+.calendario__mes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.calendario__legenda {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+  position: relative;
+  align-items: center;
+  width: 100%;
+}
+
+.calendario__legenda-rotulo {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+.calendario__navegacao {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.calendario__navegacao-botao {
+  height: 1.75rem;
+  width: 1.75rem;
+  background-color: transparent;
+  padding: 0;
+  opacity: 0.5;
+  border-width: 1px;
+  border-color: var(--input);
+  border-radius: 0.375rem;
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.calendario__navegacao-botao:hover {
+  opacity: 1;
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.calendario__navegacao-botao--anterior {
+  position: absolute;
+  left: 0.25rem;
+}
+
+.calendario__navegacao-botao--proximo {
+  position: absolute;
+  right: 0.25rem;
+}
+
+.calendario__tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendario__cabecalho-linha {
+  display: flex;
+}
+
+.calendario__cabecalho-celula {
+  color: var(--muted-foreground);
+  border-radius: 0.375rem;
+  width: 2rem;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+.calendario__linha {
+  display: flex;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.calendario__celula {
+  position: relative;
+  padding: 0;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.calendario__celula:focus-within {
+  position: relative;
+  z-index: 20;
+}
+
+.calendario__celula:has([aria-selected]) {
+  background-color: var(--accent);
+}
+
+.calendario__celula:has([aria-selected]) {
+  border-radius: 0.375rem;
+}
+
+.calendario__celula:has([aria-selected].day-range-end) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.calendario__celula--range:has(>.day-range-end) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.calendario__celula--range:has(>.day-range-start) {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.calendario__celula--range:first-child:has([aria-selected]) {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.calendario__celula--range:last-child:has([aria-selected]) {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.calendario__dia {
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+  font-weight: 400;
+  background-color: transparent;
+  transition-property: color, background-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  border-radius: 0.375rem;
+}
+
+.calendario__dia[aria-selected] {
+  opacity: 1;
+}
+
+.calendario__dia:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.calendario__dia--inicio-intervalo[aria-selected] {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.calendario__dia--fim-intervalo[aria-selected] {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.calendario__dia--selecionado {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.calendario__dia--selecionado:hover {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.calendario__dia--selecionado:focus {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.calendario__dia--hoje {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.calendario__dia--fora {
+  color: var(--muted-foreground);
+}
+
+.calendario__dia--fora[aria-selected] {
+  color: var(--muted-foreground);
+}
+
+.calendario__dia--desabilitado {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+.calendario__dia--meio-intervalo[aria-selected] {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.calendario__dia--oculto {
+  visibility: hidden;
+}
+
+.calendario__icone {
+  height: 1rem;
+  width: 1rem;
+}

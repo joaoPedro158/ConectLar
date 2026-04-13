@@ -1,0 +1,84 @@
+.acordeao__item {
+  border-bottom: 2px solid #000000;
+}
+
+.acordeao__item:last-child {
+  border-bottom: none;
+}
+
+.acordeao__cabecalho {
+  display: flex;
+}
+
+.acordeao__gatilho {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.acordeao__gatilho:hover {
+  text-decoration: underline;
+}
+
+.acordeao__gatilho:focus-visible {
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.5);
+}
+
+.acordeao__gatilho:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.acordeao__icone {
+  color: #78716c;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+/* Rotação do ícone quando aberto */
+.acordeao__gatilho[data-state="open"] .acordeao__icone {
+  transform: rotate(180deg);
+  color: #22d3ee;
+}
+
+.acordeao__conteudo {
+  overflow: hidden;
+  font-size: 0.875rem;
+}
+
+/* Animações nativas do Radix */
+.acordeao__conteudo[data-state="open"] {
+  animation: acordeao-abre 0.2s ease-out;
+}
+
+.acordeao__conteudo[data-state="closed"] {
+  animation: acordeao-fecha 0.2s ease-out;
+}
+
+.acordeao__corpo {
+  padding-bottom: 1rem;
+  color: #44403c;
+}
+
+@keyframes acordeao-abre {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes acordeao-fecha {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}

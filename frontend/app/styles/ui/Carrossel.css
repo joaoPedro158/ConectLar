@@ -1,0 +1,72 @@
+.carrossel {
+  position: relative;
+  width: 100%;
+}
+
+.carrossel__conteudo {
+  overflow: hidden;
+}
+
+.carrossel__conteudo-interno {
+  display: flex;
+}
+
+.carrossel__conteudo-interno--horizontal {
+  margin-left: -1rem;
+}
+
+.carrossel__conteudo-interno--vertical {
+  margin-top: -1rem;
+  flex-direction: column;
+}
+
+.carrossel__item {
+  min-width: 0;
+  flex: 0 0 100%;
+  padding-left: 1rem;
+}
+
+.carrossel__item--vertical {
+  padding-top: 1rem;
+}
+
+/* Estilo Neo-Brutalista para os botões de navegação */
+.carrossel__botao-anterior,
+.carrossel__botao-proximo {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #000;
+  background-color: #fff;
+  box-shadow: 2px 2px 0px 0px #000;
+  transition: all 0.2s;
+}
+
+.carrossel__botao-anterior:active,
+.carrossel__botao-proximo:active {
+  box-shadow: 0px 0px 0px 0px #000;
+  transform: translate(2px, 2px);
+}
+
+.carrossel__botao-anterior--horizontal {
+  left: -3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carrossel__botao-proximo--horizontal {
+  right: -3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carrossel__botao-anterior--vertical {
+  top: -3rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(90deg);
+}
+
+.carrossel__botao-proximo--vertical {
+  bottom: -3rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(90deg);
+}

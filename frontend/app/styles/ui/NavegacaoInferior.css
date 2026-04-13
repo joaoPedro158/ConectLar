@@ -1,0 +1,57 @@
+.nav-inferior {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  border-top: 2px solid #000;
+  background: #fff;
+  z-index: 50;
+}
+
+.nav-inferior--escuro {
+  background: #09090b;
+}
+
+.nav-inferior__container {
+  display: flex;
+}
+
+.nav-inferior__botao {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0;
+  position: relative;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+}
+
+.nav-inferior__botao--ativo .nav-inferior__icone {
+  transform: scale(1.05);
+}
+
+.nav-inferior__indicador {
+  position: absolute;
+  top: 0;
+  left: 0.5rem;
+  right: 0.5rem;
+  height: 0.25rem;
+  border-radius: 999px;
+  background: #22d3ee;
+}
+
+.nav-inferior__icone {
+  transition: transform 150ms ease;
+}
+
+.nav-inferior__texto {
+  letter-spacing: 0.06em;
+}

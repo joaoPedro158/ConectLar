@@ -1,0 +1,64 @@
+/* Componente de alternância (toggle) em estilo Neo-Brutalism */
+
+.alternancia {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+	border-radius: 0.5rem;
+	border: 2px solid #000000;
+	background-color: transparent;
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
+	white-space: nowrap;
+	transition: background-color 0.15s ease, color 0.15s ease,
+		box-shadow 0.15s ease, transform 0.05s ease;
+	box-shadow: 2px 2px 0 0 #000000;
+}
+
+.alternancia:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	box-shadow: none;
+}
+
+.alternancia[data-state="on"] {
+	background-color: #22d3ee; /* cyan-400 */
+	color: #000000;
+}
+
+.alternancia:active {
+	transform: translate(1px, 1px);
+	box-shadow: 1px 1px 0 0 #000000;
+}
+
+/* Tamanhos */
+.alternancia--pequena {
+	min-width: 2rem;
+	height: 2rem;
+	padding: 0 0.25rem;
+}
+
+.alternancia--media {
+	min-width: 2.25rem;
+	height: 2.25rem;
+	padding: 0 0.5rem;
+}
+
+.alternancia--grande {
+	min-width: 2.5rem;
+	height: 2.5rem;
+	padding: 0 0.75rem;
+}
+
+/* Variante destrutiva opcional */
+.alternancia--destrutiva[data-state="on"] {
+	background-color: #f97373; /* red-400 */
+	color: #000000;
+}
+
+.alternancia svg {
+	width: 1rem;
+	height: 1rem;
+}

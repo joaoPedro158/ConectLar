@@ -1,0 +1,56 @@
+.caixa-selecao {
+  height: 1rem;
+  width: 1rem;
+  flex-shrink: 0;
+  border-radius: 4px;
+  border-width: 1px;
+  background-color: var(--input-background);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition-property: box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.caixa-selecao:focus-visible {
+  border-color: var(--ring);
+  ring-color: rgb(var(--ring) / 0.5);
+  ring-width: 3px;
+}
+
+.caixa-selecao:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.caixa-selecao[aria-invalid] {
+  border-color: var(--destructive);
+  ring-color: rgb(var(--destructive) / 0.2);
+}
+
+.caixa-selecao[data-state="checked"] {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+:is(.dark .caixa-selecao) {
+  background-color: rgb(var(--input) / 0.3);
+}
+
+:is(.dark .caixa-selecao)[aria-invalid] {
+  ring-color: rgb(var(--destructive) / 0.4);
+}
+
+:is(.dark .caixa-selecao)[data-state="checked"] {
+  background-color: var(--primary);
+}
+
+.caixa-selecao__indicador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  transition: none;
+}

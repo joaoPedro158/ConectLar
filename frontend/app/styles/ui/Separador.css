@@ -1,0 +1,19 @@
+.separador {
+  flex-shrink: 0;
+  background-color: #000000; /* Preto sólido Neo-Brutalista */
+}
+
+.separador--horizontal {
+  height: 2px; /* Linha mais grossa para o estilo do projeto */
+  width: 100%;
+}
+
+.separador--vertical {
+  width: 2px;
+  height: 100%;
+}
+
+/* Ajuste para o Dark Mode */
+.dark .separador {
+  background-color: #22d3ee; /* Ciano vibrante no modo escuro */
+}

@@ -1,0 +1,78 @@
+.tabela-container {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  border: 2px solid #000000;
+  border-radius: 0.5rem;
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.tabela {
+  width: 100%;
+  caption-side: bottom;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+  background-color: #ffffff;
+}
+
+.tabela__cabecalho .tabela__linha {
+  border-bottom: 2px solid #000000;
+  background-color: #f5f5f4;
+}
+
+.tabela__linha {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.2s;
+}
+
+.tabela__linha:hover {
+  background-color: #22d3ee20; /* Ciano com transparência */
+}
+
+.tabela__linha:last-child {
+  border-bottom: 0;
+}
+
+.tabela__celula-cabecalho {
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 900;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.tabela__celula {
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.tabela__rodape {
+  border-top: 2px solid #000000;
+  background-color: #f5f5f4;
+  font-weight: 700;
+}
+
+.tabela__legenda {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #78716c;
+}
+
+/* Dark Mode */
+.dark .tabela-container {
+  border-color: #22d3ee;
+  box-shadow: 4px 4px 0px 0px #22d3ee;
+}
+
+.dark .tabela {
+  background-color: #1c1917;
+  color: #fafaf9;
+}
+
+.dark .tabela__cabecalho .tabela__linha {
+  background-color: #292524;
+  border-bottom-color: #22d3ee;
+}

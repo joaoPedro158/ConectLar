@@ -1,0 +1,73 @@
+.dialogo-alerta__sobreposicao {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.dialogo-alerta__conteudo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  width: 100%;
+  max-width: 32rem;
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border: 4px solid #000000;
+  box-shadow: 8px 8px 0px 0px #000000;
+  border-radius: 0.5rem;
+  outline: none;
+}
+
+.dialogo-alerta__cabecalho {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .dialogo-alerta__cabecalho {
+    text-align: left;
+  }
+}
+
+.dialogo-alerta__titulo {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #000000;
+}
+
+.dialogo-alerta__descricao {
+  font-size: 0.875rem;
+  color: #78716c;
+  line-height: 1.5;
+}
+
+.dialogo-alerta__rodape {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .dialogo-alerta__rodape {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+/* Animações baseadas no Radix */
+.dialogo-alerta__conteudo[data-state="open"] {
+  animation: dialogo-alerta-entra 0.2s ease-out;
+}
+
+@keyframes dialogo-alerta-entra {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}

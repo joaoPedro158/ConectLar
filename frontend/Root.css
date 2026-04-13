@@ -1,0 +1,21 @@
+.root-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 448px; /* max-w-md para simular tela de celular em desktop */
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  background-color: #fafaf9; /* stone-50 */
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1); /* Sombra para destacar o app se aberto num PC */
+}
+
+.root-container--escuro {
+  background-color: #09090b; /* zinc-950 */
+}
+
+.root-conteudo {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  padding-bottom: 6rem; /* pb-24: espaço reservado para a Navegação Inferior não cobrir o conteúdo */
+}
