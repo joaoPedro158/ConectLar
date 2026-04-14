@@ -1,30 +1,68 @@
 import React, { useState } from "react";
-import { Briefcase, Smartphone, Globe, Zap, LogIn } from "lucide-react";
+import { Briefcase, Smartphone, Globe, Zap, LogIn, Camera } from "lucide-react";
 import { useTemaEscuro } from "../context/ContextoTemaEscuro";
+import { useAuth } from "../context/ContextoAutenticacao";
 import "../styles/pages/Login.css";
+import { Abas, AbasLista, AbasGatilho } from "../components/ui/Abas";
 
 export function Login() {
   const { temaEscuro } = useTemaEscuro();
+  const { login } = useAuth();
   const [modoTela, setModoTela] = useState("login"); // "login" | "cadastro" | "esqueci"
 
   const [identificador, setIdentificador] = useState("");
   const [senha, setSenha] = useState("");
+  const [erroLogin, setErroLogin] = useState("");
 
   const [nomeCadastro, setNomeCadastro] = useState("");
   const [emailCadastro, setEmailCadastro] = useState("");
   const [telefoneCadastro, setTelefoneCadastro] = useState("");
   const [senhaCadastro, setSenhaCadastro] = useState("");
+  const [categoriaProfissional, setCategoriaProfissional] = useState("");
+  const [tipoCadastro, setTipoCadastro] = useState("USUARIO");
+  const [fotoArquivo, setFotoArquivo] = useState(null);
+  const [fotoPreview, setFotoPreview] = useState(null);
+
+  // Enum de funções para profissionais
+  const ENUM_FUNCOES_PROFISSIONAIS = [
+    "Eletricista", "Encanador", "Pintor", "Diarista", "Faxineiro(a)", "Montador de Móveis", "Pedreiro", "Gesseiro", "Jardineiro", "Paisagista", "Chaveiro", "Vidraceiro", "Marceneiro", "Passadeira", "Zelador", "Bombeiro Hidráulico", "Cuidador de Animais", "Capinador", "Limpeza de Estofados", "Ajudante de Obras", "Montador de Estruturas", "Instalador de Antena", "Reparador de Eletrodomésticos", "Pintor Automotivo", "Lavador de Carros", "Serralheiro", "Técnico em Informática", "Babá", "Motorista", "Mototaxista", "Entregador"
+  ];
+
+  const lidarComFoto = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFotoArquivo(file);
+      setFotoPreview(URL.createObjectURL(file));
+    }
+  };
 
   const [emailRecuperacao, setEmailRecuperacao] = useState("");
 
-  const confirmarLogin = (e) => {
+  const CATEGORIAS = [
+    "Eletricista", "Encanador", "Pintor", "Diarista", "Faxineiro(a)", "Montador de Móveis", "Pedreiro", "Gesseiro", "Jardineiro", "Paisagista", "Chaveiro", "Vidraceiro", "Marceneiro", "Passadeira", "Zelador", "Bombeiro Hidráulico", "Cuidador de Animais", "Capinador", "Limpeza de Estofados", "Ajudante de Obras", "Montador de Estruturas", "Instalador de Antena", "Reparador de Eletrodomésticos", "Pintor Automotivo", "Lavador de Carros", "Serralheiro", "Técnico em Informática", "Babá", "Motorista", "Mototaxista", "Entregador"
+  ];
+
+  const confirmarLogin = async (e) => {
     e.preventDefault();
-    console.log("A iniciar sessão com:", identificador, senha);
+    setErroLogin("");
+    // MOCK: Simula login real
+    if (!identificador || !senha) {
+      setErroLogin("Preencha todos os campos");
+      return;
+    }
+    // Exemplo: tipoUsuario = profissional se email contém 'prof'
+    const isProfissional = identificador.toLowerCase().includes("prof");
+    login({
+      nome: identificador.split("@")[0] || "Usuário",
+      email: identificador,
+      isProfissional
+    });
   };
 
   const confirmarCadastro = (e) => {
     e.preventDefault();
-    console.log("A registar:", { nomeCadastro, emailCadastro, telefoneCadastro, senhaCadastro });
+    // Aqui você pode chamar a API de cadastro real
+    console.log("A registar:", { nomeCadastro, emailCadastro, telefoneCadastro, senhaCadastro, tipoCadastro, categoriaProfissional });
   };
 
   const confirmarEsqueci = (e) => {
@@ -55,7 +93,8 @@ export function Login() {
               <div className="bento-icone-caixa">
                 <Smartphone size={28} strokeWidth={2.5} />
               </div>
-              <p className="bento-texto">Tudo na App</p>
+              <p className="bento-texto">Tudo no
+               App</p>
             </div>
 
             <div className="bento-card bento-card--trabalho">
@@ -130,6 +169,8 @@ export function Login() {
                   />
                 </div>
 
+                {erroLogin && <div className="login-erro-msg">{erroLogin}</div>}
+
                 <button type="submit" className="login-btn login-btn--ciano">
                   Entrar <LogIn size={18} strokeWidth={3} />
                 </button>
@@ -149,6 +190,61 @@ export function Login() {
 
             {modoTela === "cadastro" && (
               <form className="login-passo" onSubmit={confirmarCadastro}>
+                <div className="login-grupo">
+                  <label>Tipo de conta</label>
+                  <Abas value={tipoCadastro} onValueChange={setTipoCadastro} style={{ marginTop: 8 }}>
+                    <AbasLista style={{ minWidth: 260, height: 48 }}>
+                      <AbasGatilho value="USUARIO" style={{ fontSize: 18, padding: '0.5rem 2.5rem', height: 44 }}>Cliente</AbasGatilho>
+                      <AbasGatilho value="PROFISSIONAL" style={{ fontSize: 18, padding: '0.5rem 2.5rem', height: 44 }}>Profissional</AbasGatilho>
+                    </AbasLista>
+                  </Abas>
+                </div>
+                {/* Campo de foto de perfil estilo WhatsApp */}
+                <div className="login-grupo-foto" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 16 }}>
+                  <label htmlFor="upload-foto" style={{ position: 'relative', cursor: 'pointer', display: 'inline-block' }}>
+                    <span style={{
+                      display: 'inline-block',
+                      width: 88,
+                      height: 88,
+                      borderRadius: '50%',
+                      background: '#e5e7eb',
+                      border: '2.5px solid #22d3ee',
+                      boxShadow: '2px 2px 0 #000',
+                      overflow: 'hidden',
+                      position: 'relative',
+                    }}>
+                      {fotoPreview ? (
+                        <img src={fotoPreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                      ) : (
+                        <Camera size={38} style={{ color: '#a3a3a3', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
+                      )}
+                      <span style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        background: '#22d3ee',
+                        borderRadius: '50%',
+                        border: '2px solid #fff',
+                        width: 32,
+                        height: 32,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '1px 1px 0 #000',
+                      }}>
+                        <Camera size={18} style={{ color: '#000' }} />
+                      </span>
+                    </span>
+                    <input
+                      id="upload-foto"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={lidarComFoto}
+                    />
+                  </label>
+                  <span className="foto-upload-texto" style={{ marginTop: 8, color: '#22d3ee', fontWeight: 600 }}>Adicionar foto</span>
+                </div>
                 <div className="login-grupo">
                   <label>Nome completo</label>
                   <input
@@ -192,6 +288,22 @@ export function Login() {
                     required
                   />
                 </div>
+                {tipoCadastro === 'PROFISSIONAL' && (
+                  <div className="login-grupo">
+                    <label>Função Profissional</label>
+                    <select
+                      className="login-input"
+                      value={categoriaProfissional}
+                      onChange={e => setCategoriaProfissional(e.target.value)}
+                      required
+                    >
+                      <option value="">Selecione...</option>
+                      {ENUM_FUNCOES_PROFISSIONAIS.map(funcao => (
+                        <option key={funcao} value={funcao}>{funcao}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
                 <button type="submit" className="login-btn login-btn--ciano">
                   Criar conta

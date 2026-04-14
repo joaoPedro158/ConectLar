@@ -1,222 +1,229 @@
 import React, { useState } from "react";
 import {
-  Edit3,
-  ChevronRight,
-  LogOut,
-  CreditCard,
-  CheckCircle,
-  Sun,
-  Moon,
-  Zap,
-  Car,
-  Phone,
-  Mail,
-  MapPin,
+  Star, MapPin, Phone, Mail, Edit3, ChevronRight, LogOut,
+  Shield, Bell, CreditCard, HelpCircle, Zap, Car, CheckCircle,
+  Sun, Moon, Repeat // Ícone novo para trocar de modo
 } from "lucide-react";
-const MENU_SECTIONS = [
-  {
-    title: "Conta",
-    items: [
-      { label: "Editar Perfil", icon: Edit3, color: "text-cyan-500" },
-      { label: "Pagamentos", icon: CreditCard, color: "text-yellow-400" },
-    ],
-  },
-  {
-    title: "Preferências",
-    items: [
-      { label: "Modo Escuro", icon: Moon, color: "text-cyan-500", isToggle: true },
-    ],
-  },
-];
 import { useTemaEscuro } from "../context/ContextoTemaEscuro";
+import { useAuth } from "../context/ContextoAutenticacao"; // Puxamos o contexto de Auth!
 import "../styles/pages/Perfil.css";
 
-const AVATAR_URL =
-  "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200";
+const AVATAR_URL = "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200";
 
-const estatisticas = [
-  { rotulo: "Corridas", valor: "124" },
-  { rotulo: "Avaliação", valor: "4.9" },
-  { rotulo: "Membro", valor: "2 anos" },
+// Dados que mudam consoante o modo
+const statsCliente = [
+  { label: "Serviços", value: "24" },
+  { label: "Avaliação", value: "4,9" },
+  { label: "Membro", value: "2 anos" },
 ];
 
-const distintivos = [
-  { rotulo: "Pontual", cor: "amarelo", icone: Zap },
-  { rotulo: "ConectaRide", cor: "ciano", icone: Car },
+const statsProfissional = [
+  { label: "Ganhos", value: "R$ 4K" },
+  { label: "Nota", value: "4,9" },
+  { label: "Corridas", value: "156" },
+];
+
+const badgesProfissional = [
+  { icon: Zap, label: "Elétrica", colorClass: "bg-amarelo" },
+  { icon: Car, label: "ConectaRide", colorClass: "bg-ciano" },
+  { icon: CheckCircle, label: "Verificado", colorClass: "bg-lima" },
+];
+
+const badgesCliente = [
+  { icon: Star, label: "Cliente Top", colorClass: "bg-amarelo" }
 ];
 
 export function Perfil() {
   const { temaEscuro, alternarTema } = useTemaEscuro();
-  const [modoEdicao, setModoEdicao] = useState(false);
-  const [nome, setNome] = useState("Carlos Mendes");
-  const [phone, setPhone] = useState("(84) 99999-0000");
-  const [email, setEmail] = useState("carlos@email.com");
-  const [city, setCity] = useState("Nova Cruz - RN");
-  const [menuSections] = useState(MENU_SECTIONS);
+  
+  // Aqui pegamos o usuário, o modo atual e as funções de logout e troca
+  const { usuario, modoAtivo, alternarModo, logout } = useAuth(); 
+  
+  const [editMode, setEditMode] = useState(false);
+  const [name, setName] = useState(usuario?.nome || "Carlos Mendes");
+  const [phone, setPhone] = useState("(84) 99812-3456");
+  const [email, setEmail] = useState(usuario?.email || "carlos@email.com");
+  const [city, setCity] = useState("Santo Antônio, RN"); // A tua terra, boy!
+
+  // Decide quais dados mostrar consoante o modo
+  const isProfissional = modoAtivo === "profissional";
+  const stats = isProfissional ? statsProfissional : statsCliente;
+  const badges = isProfissional ? badgesProfissional : badgesCliente;
+
+  const menuSections = [
+    {
+      title: "Conta",
+      items: [
+        { icon: Edit3, label: "Editar Perfil", colorClass: "txt-ciano" },
+        { icon: CreditCard, label: "Pagamentos e Carteiras", colorClass: "txt-amarelo" },
+        { icon: Bell, label: "Notificações", colorClass: "txt-laranja" },
+        { icon: Shield, label: "Privacidade e Segurança", colorClass: "txt-lima" },
+      ],
+    },
+    {
+      title: "Preferências",
+      items: [
+        {
+          icon: temaEscuro ? Sun : Moon,
+          label: `Modo ${temaEscuro ? "Claro" : "Escuro"}`,
+          colorClass: "txt-ciano",
+          isToggle: true,
+          onToggle: alternarTema
+        },
+      ],
+    },
+    {
+      title: "Suporte",
+      items: [
+        { icon: HelpCircle, label: "Central de Ajuda", colorClass: "txt-ciano" },
+        { icon: Star, label: "Avalie o ConectaLar", colorClass: "txt-amarelo" },
+      ],
+    },
+  ];
 
   return (
     <div className={`perfil ${temaEscuro ? "perfil--escuro" : ""}`}>
-      {/* TOPO PERFIL - layout inspirado no snippet */}
-      <header
-        className={`perfil-topo ${
-          temaEscuro ? "perfil-topo--escuro" : "perfil-topo--claro"
-        }`}
-      >
-        <div className="perfil-topo__acoes">
-          <span className="perfil-topo__etiqueta">Meu Perfil</span>
-          <div className="perfil-topo__botoes">
-            <button onClick={alternarTema} className="btn-tema">
-              {temaEscuro ? <Sun size={16} /> : <Moon size={16} />}
+      {/* HEADER */}
+      <div className={`perfil-header ${temaEscuro ? "perfil-header--escuro" : "perfil-header--claro"} ${isProfissional ? "perfil-header--pro" : ""}`}>
+        
+        {/* Topo com Etiqueta e Botões */}
+        <div className="perfil-header__topo">
+          <span className="perfil-header__etiqueta">
+            Meu Perfil {isProfissional ? "(Profissional)" : "(Cliente)"}
+          </span>
+          <div className="perfil-header__botoes">
+            <button onClick={alternarTema} className="btn-circulo-header">
+              {temaEscuro ? <Sun size={16} strokeWidth={2} /> : <Moon size={16} strokeWidth={2} />}
             </button>
             <button
-              onClick={() => setModoEdicao((v) => !v)}
-              className={`btn-editar ${modoEdicao ? "btn-editar--salvar" : ""}`}
+              onClick={() => setEditMode(!editMode)}
+              className={`btn-editar-header ${editMode ? "btn-editar-header--ativo" : ""}`}
             >
               <Edit3 size={12} />
-              {modoEdicao ? "Salvar" : "Editar"}
+              {editMode ? "Salvar" : "Editar"}
             </button>
           </div>
         </div>
 
-        <div className="perfil-info">
-          <div className="perfil-info__avatar-container">
-            <img
-              src={AVATAR_URL}
-              alt="Avatar"
-              className="perfil-info__avatar"
-            />
-            <span className="perfil-info__check">
+        {/* Avatar + Info */}
+        <div className="perfil-header__info">
+          <div className="perfil-header__avatar-box">
+            <img src={usuario?.foto || AVATAR_URL} alt="Avatar" className="perfil-header__img" />
+            <span className="perfil-header__status-badge">
               <CheckCircle size={12} strokeWidth={3} />
             </span>
           </div>
-          <div className="perfil-info__dados">
-            {modoEdicao ? (
+          
+          <div className="perfil-header__dados">
+            {editMode ? (
               <input
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                className="input-nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="input-nome-edit"
               />
             ) : (
-              <h2 className="perfil-info__nome">{nome}</h2>
+              <h2 className="perfil-header__nome">{name}</h2>
             )}
-            <div className="perfil-info__distintivos">
-              {distintivos.map((b) => (
-                <span
-                  key={b.rotulo}
-                  className={`badge badge--${b.cor}`}
-                >
-                  <b.icone size={10} strokeWidth={2.5} />
-                  {b.rotulo}
+            
+            <div className="perfil-header__badges">
+              {badges.map((b) => (
+                <span key={b.label} className={`badge-pill ${b.colorClass}`}>
+                  <b.icon size={10} strokeWidth={2.5} /> {b.label}
                 </span>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="grade-estatisticas-perfil">
-          {estatisticas.map((s) => (
-            <div key={s.rotulo} className="estatistica-perfil-item">
-              <span className="valor">{s.valor}</span>
-              <span className="rotulo">{s.rotulo}</span>
+        {/* Estatísticas */}
+        <div className="perfil-header__stats">
+          {stats.map((s) => (
+            <div key={s.label} className="stat-item">
+              <span className="stat-item__valor">{s.value}</span>
+              <span className="stat-item__label">{s.label}</span>
             </div>
           ))}
         </div>
+      </div>
 
-      </header>
-
-      {/* Caixa de Contato */}
-      <div className={`perfil-caixa perfil-caixa--contato ${temaEscuro ? "perfil-caixa--escuro" : "perfil-caixa--claro"}`}>
-        <div className="perfil-caixa__header perfil-caixa__header--contato">
-          <span className="perfil-caixa__header-label">Contato</span>
+      {/* BOTÃO MÁGICO: Alternar Modo */}
+      {usuario?.isProfissional && (
+        <div className="perfil-secao-toggle">
+          <button onClick={alternarModo} className="btn-alternar-modo">
+            <Repeat size={18} strokeWidth={2.5} />
+            Alternar para Modo {isProfissional ? "Cliente" : "Profissional"}
+          </button>
         </div>
-        {[
-          { icon: Phone, value: phone, setter: setPhone, key: "phone" },
-          { icon: Mail, value: email, setter: setEmail, key: "email" },
-          { icon: MapPin, value: city, setter: setCity, key: "city" },
-        ].map((item) => (
-          <div
-            key={item.key}
-            className={`perfil-caixa__linha perfil-caixa__linha--contato ${temaEscuro ? "perfil-caixa__linha--escuro" : "perfil-caixa__linha--claro"}`}
-          >
-            <item.icon size={16} className="text-cyan-500 flex-shrink-0" strokeWidth={2.5} />
-            {modoEdicao ? (
-              <input
-                value={item.value}
-                onChange={(e) => item.setter(e.target.value)}
-                className={`perfil-caixa__input ${temaEscuro ? "perfil-caixa__input--escuro" : "perfil-caixa__input--claro"}`}
-              />
-            ) : (
-              <span className={`perfil-caixa__valor ${temaEscuro ? "perfil-caixa__valor--escuro" : "perfil-caixa__valor--claro"}`}>{item.value}</span>
-            )}
+      )}
+
+      {/* CONTEÚDO SCROLLÁVEL */}
+      <main className="perfil-conteudo">
+        
+        {/* Contato Info */}
+        <div className="perfil-card">
+          <div className="perfil-card__cabecalho perfil-card__cabecalho--destaque">
+            <span>Contato</span>
+          </div>
+          <div className="perfil-card__corpo">
+            {[
+              { icon: Phone, value: phone, setter: setPhone, id: "phone" },
+              { icon: Mail, value: email, setter: setEmail, id: "email" },
+              { icon: MapPin, value: city, setter: setCity, id: "city" },
+            ].map((item) => (
+              <div key={item.id} className="linha-contato">
+                <item.icon size={16} className="txt-ciano shrink-0" strokeWidth={2.5} />
+                {editMode ? (
+                  <input
+                    value={item.value}
+                    onChange={(e) => item.setter(e.target.value)}
+                    className="input-contato-edit"
+                  />
+                ) : (
+                  <span className="texto-contato">{item.value}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Menu Sections */}
+        {menuSections.map((section) => (
+          <div key={section.title} className="perfil-card">
+            <div className="perfil-card__cabecalho">
+              <span>{section.title}</span>
+            </div>
+            <div className="perfil-card__corpo">
+              {section.items.map((item, idx) => (
+                <button
+                  key={item.label}
+                  onClick={item.isToggle ? item.onToggle : undefined}
+                  className={`linha-menu ${idx < section.items.length - 1 ? "com-borda" : ""}`}
+                >
+                  <item.icon size={16} className={item.colorClass} strokeWidth={2.5} />
+                  <span className="linha-menu__label">{item.label}</span>
+                  
+                  {item.isToggle ? (
+                    <div className={`toggle-switch ${temaEscuro ? "ativo" : ""}`}>
+                      <div className="toggle-bolinha" />
+                    </div>
+                  ) : (
+                    <ChevronRight size={14} className="icone-seta" />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         ))}
-      </div>
 
-      {/* Menu Sections */}
-      {menuSections.map((section) => (
-        <div key={section.title} className={`perfil-caixa perfil-caixa--menu ${temaEscuro ? "perfil-caixa--escuro" : "perfil-caixa--claro"}`}>
-          <div className={`perfil-caixa__header ${temaEscuro ? "perfil-caixa__header--escuro" : "perfil-caixa__header--claro"}`}>
-            <span className="perfil-caixa__header-label perfil-caixa__header-label--menu">{section.title}</span>
-          </div>
-          {section.items.map((item, idx) => (
-            <button
-              key={item.label}
-              onClick={"isToggle" in item && item.isToggle ? alternarTema : undefined}
-              className={`perfil-caixa__linha perfil-caixa__linha--menu ${
-                idx < section.items.length - 1
-                  ? temaEscuro
-                    ? "perfil-caixa__linha--escuro"
-                    : "perfil-caixa__linha--claro"
-                  : ""
-              } ${temaEscuro ? "perfil-caixa__linha--hover-escuro" : "perfil-caixa__linha--hover-claro"}`}
-            >
-              <item.icon size={16} className={item.color} strokeWidth={2.5} />
-              <span className={`perfil-caixa__menu-label ${temaEscuro ? "perfil-caixa__menu-label--escuro" : "perfil-caixa__menu-label--claro"}`}>{item.label}</span>
-              {"isToggle" in item && item.isToggle ? (
-                <div className={`perfil-caixa__toggle ${temaEscuro ? "perfil-caixa__toggle--escuro" : "perfil-caixa__toggle--claro"}`}>
-                  <div className={`perfil-caixa__toggle-bola ${temaEscuro ? "perfil-caixa__toggle-bola--escuro" : "perfil-caixa__toggle-bola--claro"}`} />
-                </div>
-              ) : (
-                <ChevronRight size={14} className={temaEscuro ? "text-zinc-500" : "text-stone-400"} />
-              )}
-            </button>
-          ))}
-        </div>
-      ))}
-
-      {/* Logout */}
-      <div className="perfil-caixa perfil-caixa--logout">
-        <button className={`perfil-caixa__logout-btn ${temaEscuro ? "perfil-caixa__logout-btn--escuro" : "perfil-caixa__logout-btn--claro"}`}>
-          <LogOut size={16} className="text-red-500" strokeWidth={2.5} />
-          <span className="perfil-caixa__logout-label">Sair da Conta</span>
+        {/* Logout */}
+        <button onClick={logout} className="btn-logout">
+          <LogOut size={16} strokeWidth={2.5} />
+          <span>Sair da Conta</span>
         </button>
-      </div>
 
-      {/* SEÇÕES DE MENU */}
-      <main className="perfil-menu">
-        <section className="menu-grupo">
-          <div className="menu-grupo__titulo">Conta</div>
-          <button className="menu-item"><Edit3 size={16} className="cor-ciano" /> <span>Editar Perfil</span> <ChevronRight size={14} /></button>
-          <button className="menu-item"><CreditCard size={16} className="cor-amarelo" /> <span>Pagamentos</span> <ChevronRight size={14} /></button>
-        </section>
-
-        <section className="menu-grupo">
-          <div className="menu-grupo__titulo">Preferências</div>
-          <button onClick={alternarTema} className="menu-item">
-            {temaEscuro ? <Sun size={16} className="cor-ciano" /> : <Moon size={16} className="cor-ciano" />}
-            <span className="flex-1">Modo {temaEscuro ? "Claro" : "Escuro"}</span>
-            <div className={`toggle-switch ${temaEscuro ? "toggle-switch--ativo" : ""}`}>
-              <div className="toggle-switch__bola" />
-            </div>
-          </button>
-        </section>
-
-        <button className="btn-sair">
-          <LogOut size={16} /> <span>Sair da Conta</span>
-        </button>
+        {/* Version */}
+        <p className="perfil-versao">ConectaLar v1.0.0</p>
       </main>
-
-      <footer className="perfil-rodape">ConectaLar v1.0.0</footer>
     </div>
   );
 }

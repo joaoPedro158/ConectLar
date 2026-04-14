@@ -1,20 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft,
-  MapPin,
-  Navigation,
-  Bike,
-  Car,
-  Package,
-  Clock,
-  DollarSign,
-  Zap,
-  Plus,
-  Minus,
-  ChevronRight,
-  Sun,
-  Moon,
+  ArrowLeft, MapPin, Navigation, Bike, Car, Package,
+  Clock, DollarSign, Zap, Plus, Minus, ChevronRight, Sun, Moon
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTemaEscuro } from "../context/ContextoTemaEscuro";
@@ -31,27 +19,24 @@ export function ConectaRide() {
   const [veiculo, setVeiculo] = useState("mototaxi");
   const [origem, setOrigem] = useState("");
   const [destino, setDestino] = useState("");
-  const [tarifaCentro, setTarifaCentro] = useState(false);
+  const [tarifa00, setTarifa00] = useState(false);
   const [valorSugerido, setValorSugerido] = useState("");
   const [minutosEspera, setMinutosEspera] = useState(0);
   const [comEncomenda, setComEncomenda] = useState(false);
   const [chamando, setChamando] = useState(false);
 
   const extraEspera = minutosEspera * PRECO_ESPERA_POR_MIN;
-  const sugestaoBase = tarifaCentro ? 10 : SUGESTAO_MINIMA;
-  const valorNegociado = parseFloat(String(valorSugerido).replace(",", "."));
-  const valorCorrida =
-    !isNaN(valorNegociado) && valorNegociado >= sugestaoBase
-      ? valorNegociado
-      : sugestaoBase;
-  const totalEstimado = valorCorrida + extraEspera + (comEncomenda ? 3 : 0);
+  const sugestaoBase = tarifa00 ? 10 : SUGESTAO_MINIMA;
+  
+  // Calcula o total sugerido
+  const valorDigitado = parseFloat(valorSugerido);
+  const valorCorridaBase = !isNaN(valorDigitado) && valorDigitado >= sugestaoBase ? valorDigitado : sugestaoBase;
+  const totalSugerido = valorCorridaBase + extraEspera + (comEncomenda ? 3 : 0);
 
   const ajustarEspera = (direcao) => {
-    const index = OPCOES_ESPERA.indexOf(minutosEspera);
-    if (direcao === "aumentar" && index < OPCOES_ESPERA.length - 1)
-      setMinutosEspera(OPCOES_ESPERA[index + 1]);
-    if (direcao === "diminuir" && index > 0)
-      setMinutosEspera(OPCOES_ESPERA[index - 1]);
+    const idx = OPCOES_ESPERA.indexOf(minutosEspera);
+    if (direcao === "up" && idx < OPCOES_ESPERA.length - 1) setMinutosEspera(OPCOES_ESPERA[idx + 1]);
+    if (direcao === "down" && idx > 0) setMinutosEspera(OPCOES_ESPERA[idx - 1]);
   };
 
   const realizarChamada = () => {
@@ -60,159 +45,136 @@ export function ConectaRide() {
   };
 
   return (
-    <div className={`conectaride ${temaEscuro ? "conectaride--escuro" : ""}`}>
-      {/* CABEÇALHO */}
-      <header className="conectaride-header">
-        <div className="conectaride-header__topo">
-          <div className="conectaride-header__info">
-            <button onClick={() => navigate("/")} className="btn-voltar">
+    <div className={`ride-layout ${temaEscuro ? "ride-layout--escuro" : ""}`}>
+      {/* HEADER */}
+      <header className="ride-header">
+        <div className="ride-header__topo">
+          <div className="ride-header__esq">
+            <button onClick={() => navigate("/")} className="btn-voltar-ride">
               <ArrowLeft size={18} strokeWidth={2.5} />
             </button>
             <div>
-              <h1 className="conectaride-header__titulo">ConectaRide</h1>
-              <p className="conectaride-header__subtitulo">Transporte Nova Cruz</p>
+              <h1 className="ride-header__titulo">ConectaRide</h1>
+              <p className="ride-header__sub">Transporte Local Flexível</p>
             </div>
           </div>
-          <button onClick={alternarTema} className="btn-tema">
-            {temaEscuro ? <Sun size={18} /> : <Moon size={18} />}
+          <button onClick={alternarTema} className="btn-tema-ride">
+            {temaEscuro ? <Sun size={18} strokeWidth={2} /> : <Moon size={18} strokeWidth={2} />}
           </button>
         </div>
 
-        {/* SELETOR DE VEÍCULO */}
-        <div className="seletor-veiculo">
-          <button 
+        <div className="ride-seletor-veiculo">
+          <button
             onClick={() => setVeiculo("mototaxi")}
-            className={`seletor-veiculo__btn ${veiculo === "mototaxi" ? "seletor-veiculo__btn--ativo" : ""}`}
+            className={`btn-veiculo ${veiculo === "mototaxi" ? "btn-veiculo--ativo" : ""}`}
           >
-            <Bike size={18} /> <span>Moto-táxi</span>
+            <Bike size={18} strokeWidth={2.5} />
+            <span>Moto-táxi</span>
           </button>
-          <button 
+          <button
             onClick={() => setVeiculo("taxi")}
-            className={`seletor-veiculo__btn ${veiculo === "taxi" ? "seletor-veiculo__btn--ativo" : ""}`}
+            className={`btn-veiculo ${veiculo === "taxi" ? "btn-veiculo--ativo" : ""}`}
           >
-            <Car size={18} /> <span>Táxi</span>
+            <Car size={18} strokeWidth={2.5} />
+            <span>Táxi</span>
           </button>
         </div>
       </header>
 
-      <main className="conectaride-main">
-        {/* ROTA (Origem / Destino) */}
-        <div className="card-rota">
-          <div className="card-rota__item">
-            <div className="card-rota__icone card-rota__icone--origem">
-              <Navigation size={14} />
-            </div>
+      <main className="ride-main">
+        {/* ROTA */}
+        <div className="ride-card ride-card--rota">
+          <div className="rota-linha">
+            <div className="icone-rota icone-rota--origem"><Navigation size={14} strokeWidth={3} /></div>
             <input
               type="text"
               placeholder="De onde você sai?"
               value={origem}
               onChange={(e) => setOrigem(e.target.value)}
+              className="input-rota"
             />
           </div>
-          <div className="card-rota__item">
-            <div className="card-rota__icone card-rota__icone--destino">
-              <MapPin size={14} />
-            </div>
+          <div className="rota-linha sem-borda">
+            <div className="icone-rota icone-rota--destino"><MapPin size={14} strokeWidth={3} /></div>
             <input
               type="text"
               placeholder="Para onde você vai?"
               value={destino}
               onChange={(e) => setDestino(e.target.value)}
+              className="input-rota"
             />
           </div>
         </div>
 
-        {/* TARIFA 00 - CENTRO */}
+        {/* TARIFA 00 */}
         <button
-          onClick={() => setTarifaCentro(!tarifaCentro)}
-          className={`card-opcao ${tarifaCentro ? "card-opcao--ativo" : ""}`}
+          onClick={() => setTarifa00(!tarifa00)}
+          className={`ride-card-toggle ${tarifa00 ? "ride-card-toggle--ativo-amarelo" : ""}`}
         >
-          <div className="card-opcao__conteudo">
-            <div className="card-opcao__icone-wrapper">
-              <Zap size={18} />
-            </div>
-            <div className="card-opcao__texto">
-              <p className="card-opcao__titulo">Tarifa 00 · Centro</p>
-              <p className="card-opcao__desc">Valor fixo R$ 10,00 — área central</p>
+          <div className="toggle-esq">
+            <div className="icone-caixa bg-preto"><Zap size={18} className="txt-amarelo" strokeWidth={3} /></div>
+            <div className="textos">
+              <p className="titulo">Tarifa 00 · Centro</p>
+              <p className="sub">Valor fixo R$ 10,00 — área central</p>
             </div>
           </div>
-          <div className="card-opcao__checkbox">{tarifaCentro && "✓"}</div>
+          <div className={`caixa-check ${tarifa00 ? "caixa-check--ativo" : ""}`}>
+            {tarifa00 && <span className="txt-amarelo">✓</span>}
+          </div>
         </button>
 
-        {/* NEGOCIAÇÃO DE VALOR */}
-        <div className="card-negociacao">
-          <div className="card-negociacao__header">
-            <div className="card-negociacao__icone-wrapper">
-              <DollarSign size={15} />
-            </div>
+        {/* NEGOCIAÇÃO */}
+        <div className="ride-card">
+          <div className="card-cabecalho">
+            <div className="icone-caixa bg-fucsia"><DollarSign size={15} strokeWidth={3} className="txt-preto"/></div>
             <div>
-              <p className="card-negociacao__titulo">Negociação de Valor</p>
-              <p className="card-negociacao__desc">Sugira quanto quer pagar</p>
+              <p className="titulo">Negociação de Valor</p>
+              <p className="sub">Sugira quanto quer pagar</p>
             </div>
           </div>
-          <div className="card-negociacao__campo-valor">
-            <span className="card-negociacao__prefixo">R$</span>
+          <div className="campo-negociar">
+            <span className="moeda">R$</span>
             <input
               type="number"
               placeholder={`Mín. R$ ${sugestaoBase.toFixed(2)}`}
               value={valorSugerido}
               onChange={(e) => setValorSugerido(e.target.value)}
               min={sugestaoBase}
-              className="card-negociacao__input"
+              className="input-negociar"
             />
           </div>
-          <p className="card-negociacao__dica">
-            💡 O motorista pode aceitar ou fazer uma contraproposta
-          </p>
+          <p className="dica">💡 O motorista pode aceitar ou fazer uma contraproposta</p>
         </div>
 
-        {/* ESPERA DINÂMICA */}
-        <div className="card-espera">
-          <div className="card-espera__header">
-            <div className="card-espera__icone-wrapper">
-              <Clock size={15} />
-            </div>
+        {/* ESPERA */}
+        <div className="ride-card">
+          <div className="card-cabecalho">
+            <div className="icone-caixa bg-laranja"><Clock size={15} strokeWidth={3} className="txt-preto"/></div>
             <div>
-              <p className="card-espera__titulo">Espera Dinâmica</p>
-              <p className="card-espera__desc">O motorista precisa esperar por você?</p>
+              <p className="titulo">Espera Dinâmica</p>
+              <p className="sub">O motorista precisa esperar por você?</p>
             </div>
           </div>
+          
           <div className="controle-espera">
-            <button
-              onClick={() => ajustarEspera("diminuir")}
-              disabled={minutosEspera === 0}
-              className="controle-espera__btn"
-            >
-              <Minus size={16} />
+            <button onClick={() => handleWait("down")} disabled={minutosEspera === 0} className="btn-controle">
+              <Minus size={16} strokeWidth={3} />
             </button>
-            <div className="controle-espera__valor">
-              <span className="valor-minutos">
-                {minutosEspera === 0 ? "Sem espera" : `${minutosEspera} min`}
-              </span>
-              {extraEspera > 0 && (
-                <span className="valor-extra">+ R$ {extraEspera.toFixed(2)}</span>
-              )}
+            <div className="visor-espera">
+              <span className="minutos">{minutosEspera === 0 ? "Sem espera" : `${minutosEspera} min`}</span>
+              {extraEspera > 0 && <span className="extra">+ R$ {extraEspera.toFixed(2)}</span>}
             </div>
-            <button
-              onClick={() => ajustarEspera("aumentar")}
-              disabled={
-                OPCOES_ESPERA.indexOf(minutosEspera) ===
-                OPCOES_ESPERA.length - 1
-              }
-              className="controle-espera__btn"
-            >
-              <Plus size={16} />
+            <button onClick={() => handleWait("up")} disabled={minutosEspera === OPCOES_ESPERA[OPCOES_ESPERA.length - 1]} className="btn-controle">
+              <Plus size={16} strokeWidth={3} />
             </button>
           </div>
-          <div className="controle-espera__opcoes">
+
+          <div className="grid-opcoes-espera">
             {OPCOES_ESPERA.map((min) => (
               <button
                 key={min}
-                type="button"
                 onClick={() => setMinutosEspera(min)}
-                className={`controle-espera__opcao-btn ${
-                  minutosEspera === min ? "controle-espera__opcao-btn--ativo" : ""
-                }`}
+                className={`btn-opcao-espera ${minutosEspera === min ? "btn-opcao-espera--ativo" : ""}`}
               >
                 {min === 0 ? "0" : `${min}'`}
               </button>
@@ -222,91 +184,69 @@ export function ConectaRide() {
 
         {/* ENCOMENDA */}
         <button
-          onClick={() => setComEncomenda(!comEncomenda)}
-          className={`card-opcao card-opcao--encomenda ${
-            comEncomenda ? "card-opcao--ativo-encomenda" : ""
-          }`}
+          onClick={() => setWithPackage(!comEncomenda)}
+          className={`ride-card-toggle ${comEncomenda ? "ride-card-toggle--ativo-lima" : ""}`}
         >
-          <div className="card-opcao__conteudo">
-            <div className="card-opcao__icone-wrapper">
-              <Package size={18} />
-            </div>
-            <div className="card-opcao__texto">
-              <p className="card-opcao__titulo">Leva Eu e a Encomenda</p>
-              <p className="card-opcao__desc">
-                Passageiro + 1 pacote · + R$ 3,00
-              </p>
+          <div className="toggle-esq">
+            <div className="icone-caixa bg-preto"><Package size={18} className="txt-lima" strokeWidth={3} /></div>
+            <div className="textos">
+              <p className="titulo">Leva Eu e a Encomenda</p>
+              <p className="sub">Passageiro + 1 pacote · + R$ 3,00</p>
             </div>
           </div>
-          <div className="card-opcao__checkbox">{comEncomenda && "✓"}</div>
+          <div className={`caixa-check ${comEncomenda ? "caixa-check--ativo" : ""}`}>
+            {comEncomenda && <span className="txt-lima">✓</span>}
+          </div>
         </button>
 
-        {/* RESUMO E BOTÃO */}
-        <div className="resumo-chamada">
-          <div className="resumo-chamada__card">
-            <p className="resumo-chamada__label">Resumo</p>
-            <div className="resumo-chamada__linha">
-              <span className="resumo-chamada__texto">
-                Corrida ({veiculo === "mototaxi" ? "Moto-táxi" : "Táxi"})
-              </span>
-              <span className="resumo-chamada__valor-base">
-                R$ {valorCorrida.toFixed(2)}
-              </span>
-            </div>
-            {extraEspera > 0 && (
-              <div className="resumo-chamada__linha">
-                <span className="resumo-chamada__texto resumo-chamada__texto--secundario">
-                  Espera ({minutosEspera} min)
-                </span>
-                <span className="resumo-chamada__valor-extra">
-                  + R$ {extraEspera.toFixed(2)}
-                </span>
-              </div>
-            )}
-            {comEncomenda && (
-              <div className="resumo-chamada__linha">
-                <span className="resumo-chamada__texto resumo-chamada__texto--secundario">
-                  Encomenda
-                </span>
-                <span className="resumo-chamada__valor-encomenda">+ R$ 3,00</span>
-              </div>
-            )}
-            <div className="resumo-chamada__linha resumo-chamada__linha--total">
-              <span className="resumo-chamada__texto resumo-chamada__texto--total">
-                Estimativa
-              </span>
-              <span className="valor-total">R$ {totalEstimado.toFixed(2)}</span>
-            </div>
+        {/* RESUMO */}
+        <div className="caixa-resumo">
+          <p className="caixa-resumo__label">Resumo</p>
+          <div className="caixa-resumo__linha">
+            <span>Corrida ({veiculo === "mototaxi" ? "Moto-táxi" : "Táxi"})</span>
+            <span className="valor-destaque">R$ {tarifa00 ? "10,00" : sugestaoBase.toFixed(2)}</span>
           </div>
-
-          <motion.button
-            type="button"
-            onClick={realizarChamada}
-            whileTap={{ scale: 0.97, y: 3 }}
-            animate={chamando ? { scale: [1, 1.03, 1] } : {}}
-            transition={{ duration: 0.5, repeat: chamando ? Infinity : 0 }}
-            disabled={chamando || !destino}
-            className={`btn-chamar ${chamando ? "btn-chamar--ativo" : ""}`}
-          >
-            {chamando ? (
-              <>
-                <span className="btn-chamar__ponto" />
-                <span className="btn-chamar__texto">Procurando motorista...</span>
-                <span className="btn-chamar__ponto btn-chamar__ponto--delay" />
-              </>
-            ) : (
-              <>
-                {veiculo === "mototaxi" ? (
-                  <Bike size={20} />
-                ) : (
-                  <Car size={20} />
-                )}
-                <span>Chamar Agora</span>
-                <ChevronRight size={18} />
-              </>
-            )}
-          </motion.button>
+          {extraEspera > 0 && (
+            <div className="caixa-resumo__linha">
+              <span className="texto-opaco">Espera ({minutosEspera} min)</span>
+              <span className="valor-extra-laranja">+ R$ {extraEspera.toFixed(2)}</span>
+            </div>
+          )}
+          {comEncomenda && (
+            <div className="caixa-resumo__linha">
+              <span className="texto-opaco">Encomenda</span>
+              <span className="valor-extra-lima">+ R$ 3,00</span>
+            </div>
+          )}
+          <div className="caixa-resumo__linha caixa-resumo__linha--total">
+            <span>Estimativa</span>
+            <span className="valor-total-ciano">R$ {totalSugerido.toFixed(2)}</span>
+          </div>
         </div>
+
+        {/* BOTÃO CHAMAR */}
+        <motion.button
+          onClick={realizarChamada}
+          whileTap={{ scale: 0.97, y: 3 }}
+          animate={chamando ? { scale: [1, 1.03, 1] } : {}}
+          transition={{ duration: 0.5, repeat: chamando ? Infinity : 0 }}
+          className={`btn-chamar-ride ${chamando ? "btn-chamar-ride--chamando" : ""}`}
+        >
+          {chamando ? (
+            <div className="animacao-chamando">
+              <span className="bolinha-pulo" />
+              <span>Procurando motorista...</span>
+              <span className="bolinha-pulo delay" />
+            </div>
+          ) : (
+            <>
+              {veiculo === "mototaxi" ? <Bike size={20} strokeWidth={3} /> : <Car size={20} strokeWidth={3} />}
+              <span>Chamar Agora</span>
+              <ChevronRight size={18} strokeWidth={3} />
+            </>
+          )}
+        </motion.button>
+
       </main>
     </div>
   );

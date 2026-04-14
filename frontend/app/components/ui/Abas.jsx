@@ -2,7 +2,7 @@
 
 import React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import "./Abas.css";
+import "../../styles/ui/Abas.css";
 
 function Abas({ className, ...props }) {
   return (

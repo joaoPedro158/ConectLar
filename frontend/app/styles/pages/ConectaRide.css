@@ -1,81 +1,97 @@
-.conectaride {
+.ride-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #fafaf9;
+  background-color: #fafaf9; /* stone-50 */
 }
 
-.conectaride--escuro {
-  background-color: #09090b;
+.ride-layout--escuro { background-color: #09090b; }
+
+/* ================= HEADER CLIENTE ================= */
+.ride-header {
+  background-color: #22d3ee; /* cyan-400 */
+  border-bottom: 4px solid #000;
+  padding: 2.5rem 1rem 1.25rem 1rem;
 }
 
-/* Header */
-.conectaride-header {
-  background-color: #22d3ee;
-  border-bottom: 4px solid #000000;
-  padding: 2.5rem 0 1.25rem 0;
-  width: 99vw;
-  margin-left: 50%;
-  transform: translateX(-50%);
+/* ================= HEADER MOTORISTA ================= */
+.ride-header--motorista {
+  background-color: #facc15; /* amarelo */
 }
 
-.conectaride-header__topo {
+.ride-header__topo {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.conectaride-header__info {
+.ride-header__esq {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-.btn-tema {
-  padding: 0.75rem;
-  border: 4px solid #000;
-  border-radius: 999px;
-  background: #22d3ee;
+.btn-voltar-ride {
+  padding: 0.5rem;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: #fff;
   color: #000;
-  font-weight: 900;
-  box-shadow: 4px 4px 0px 0px #000;
   cursor: pointer;
-  transition: box-shadow 0.15s, background 0.15s, color 0.15s, transform 0.1s;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.btn-tema:hover {
-  background: #facc15;
-  color: #000;
-  box-shadow: 2px 2px 0px 0px #000;
-}
-.btn-tema:active {
-  transform: translate(2px,2px);
-  box-shadow: none;
+  transition: background 0.2s;
 }
 
-.conectaride-header__titulo {
+.btn-voltar-ride:hover { background: #facc15; }
+.btn-voltar-ride--moto:hover { background: #22d3ee; }
+
+.ride-header__titulo {
   font-size: 1.25rem;
   font-weight: 900;
   margin: 0;
+  color: #000;
 }
 
-.conectaride-header__subtitulo {
+.ride-header__sub {
   font-size: 0.75rem;
   margin: 0;
-  opacity: 0.8;
+  color: rgba(0,0,0,0.7);
+  font-weight: 700;
 }
 
-/* Seletor Veículo */
-.seletor-veiculo {
+.btn-tema-ride {
+  padding: 0.5rem;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+.btn-status-moto {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border: 2px solid #000;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  background-color: #fff;
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.btn-status-moto.online .bolinha { width: 8px; height: 8px; border-radius: 50%; background: #a3e635; border: 1px solid #000; }
+.btn-status-moto.offline .bolinha { width: 8px; height: 8px; border-radius: 50%; background: #f87171; border: 1px solid #000; }
+
+.ride-seletor-veiculo {
   display: flex;
   gap: 0.75rem;
 }
 
-.seletor-veiculo__btn {
+.btn-veiculo {
   flex: 1;
   display: flex;
   align-items: center;
@@ -85,180 +101,55 @@
   border: 2px solid #000;
   border-radius: 0.75rem;
   background: #fff;
+  color: #000;
   font-weight: 900;
+  font-size: 0.875rem;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
-.seletor-veiculo__btn--ativo {
+.btn-veiculo--ativo {
   background: #000;
   color: #22d3ee;
+  box-shadow: 2px 2px 0 0 rgba(0,0,0,0.3);
 }
 
-/* Cards */
-.conectaride-main {
+.ride-layout--escuro .btn-veiculo { background: #18181b; color: #fff; border-color: #22d3ee; }
+.ride-layout--escuro .btn-veiculo--ativo { background: #22d3ee; color: #000; box-shadow: none; }
+
+/* ================= MAIN CONTENT ================= */
+.ride-main {
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.card-rota, .card-opcao, .card-espera {
-  background: #ffffff;
-  border: 2px solid #000000;
-  border-radius: 1rem;
-  box-shadow: none;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
-
-.card-rota:hover,
-.card-opcao:hover,
-.card-espera:hover {
-  box-shadow: 4px 4px 0px 0px #000000;
-}
-
-.card-rota:active,
-.card-opcao:active,
-.card-espera:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 0 #000000;
-}
-
-.conectaride--escuro .card-rota,
-.conectaride--escuro .card-opcao,
-.conectaride--escuro .card-espera {
-  background: #18181b;
-  border-color: #000000;
-}
-
-/* Negociação de Valor */
-.card-negociacao {
-  background: #ffffff;
-  border: 2px solid #000000;
+.ride-card {
+  background: #fff;
+  border: 2px solid #000;
   border-radius: 1rem;
   padding: 1rem;
-  box-shadow: 4px 4px 0px 0px #000000;
+  box-shadow: 4px 4px 0 0 #000;
 }
 
-.conectaride--escuro .card-negociacao {
-  background: #27272a; /* zinc-800-ish */
-}
-
-.card-negociacao__header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.card-negociacao__icone-wrapper {
-  width: 2rem;
-  height: 2rem;
-  background-color: #e879f9; /* fuchsia-400 */
-  border: 2px solid #000000;
-  border-radius: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-negociacao__titulo {
-  font-size: 0.9rem;
-  font-weight: 900;
-  margin: 0;
-  color: #000000;
-}
-
-.conectaride--escuro .card-negociacao__titulo {
-  color: #fafafa;
-}
-
-.card-negociacao__desc {
-  font-size: 0.75rem;
-  margin: 0;
-  color: #6b7280; /* stone-500 */
-}
-
-.conectaride--escuro .card-negociacao__desc {
-  color: #9ca3af; /* zinc-400 */
-}
-
-.card-negociacao__campo-valor {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.card-negociacao__prefixo {
-  font-size: 1rem;
-  font-weight: 900;
-  padding-right: 0.5rem;
-  border-right: 2px dashed #d4d4d8; /* stone-300 */
-  color: #000000;
-}
-
-.conectaride--escuro .card-negociacao__prefixo {
-  color: #ffffff;
-  border-right-color: #4b5563; /* zinc-600 */
-}
-
-.card-negociacao__input {
-  flex: 1;
-  border: 2px solid #000000;
-  border-radius: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  outline: none;
-  background-color: #fafaf9;
-  color: #000000;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.card-negociacao__input::placeholder {
-  color: #a8a29e;
-}
-
-.card-negociacao__input:focus {
-  border-color: #06b6d4; /* cyan-500 */
-  background-color: #e0f2fe; /* cyan-50-ish */
-}
-
-.conectaride--escuro .card-negociacao__input {
-  background-color: #09090b;
-  color: #fafafa;
-}
-
-.conectaride--escuro .card-negociacao__input::placeholder {
-  color: #71717a; /* zinc-500 */
-}
-
-.conectaride--escuro .card-negociacao__input:focus {
-  background-color: #18181b;
-}
-
-.card-negociacao__dica {
-  margin-top: 0.4rem;
-  font-size: 0.65rem;
-  color: #a8a29e; /* stone-400 */
-}
-
-.conectaride--escuro .card-negociacao__dica {
-  color: #6b7280; /* zinc-500 */
-}
+.ride-layout--escuro .ride-card { background: #27272a; border-color: #22d3ee; box-shadow: 4px 4px 0 0 #22d3ee; }
 
 /* Rota */
-.card-rota__item {
+.ride-card--rota { padding: 0; }
+
+.rota-linha {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-}
-
-.card-rota__item:first-child {
   border-bottom: 2px dashed #e5e7eb;
 }
 
-.card-rota__icone {
+.ride-layout--escuro .rota-linha { border-bottom-color: #3f3f46; }
+.rota-linha.sem-borda { border-bottom: none; }
+
+.icone-rota {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
@@ -266,279 +157,362 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #000;
 }
 
-.card-rota__icone--origem { background: #a3e635; }
-.card-rota__icone--destino { background: #e879f9; }
+.icone-rota--origem { background: #a3e635; }
+.icone-rota--destino { background: #e879f9; }
 
-.card-rota input {
+.input-rota {
   flex: 1;
   border: none;
   background: transparent;
   outline: none;
   font-size: 0.875rem;
+  color: #000;
 }
 
-/* Opções (Tarifa / Encomenda) */
-.card-opcao {
+.texto-rota {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.ride-layout--escuro .input-rota, .ride-layout--escuro .texto-rota { color: #fff; }
+
+/* Toggles (Tarifa 00 e Encomenda) */
+.ride-card-toggle {
+  width: 100%;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
   padding: 0.75rem 1rem;
-  text-align: left;
+  border: 2px solid #000;
+  border-radius: 1rem;
+  background: #fff;
   cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
 }
 
-.card-opcao--ativo { background: #facc15 !important; }
-.card-opcao--ativo-encomenda { background: #a3e635 !important; }
+.ride-layout--escuro .ride-card-toggle { background: #27272a; border-color: #22d3ee; color: #fff; }
 
-.card-opcao__conteudo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
+.ride-card-toggle--ativo-amarelo { background: #facc15 !important; box-shadow: 3px 3px 0 0 #000; }
+.ride-layout--escuro .ride-card-toggle--ativo-amarelo { background: #000 !important; border-color: #facc15; box-shadow: 3px 3px 0 0 #facc15; }
 
-.card-opcao__icone-wrapper {
-  width: 2.25rem;
-  height: 2.25rem;
-  background: #000;
-  color: #fff;
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.ride-card-toggle--ativo-lima { background: #a3e635 !important; box-shadow: 3px 3px 0 0 #000; }
+.ride-layout--escuro .ride-card-toggle--ativo-lima { background: #000 !important; border-color: #a3e635; box-shadow: 3px 3px 0 0 #a3e635; }
 
-.card-opcao__titulo { font-weight: 900; font-size: 0.875rem; margin: 0; }
-.card-opcao__desc { font-size: 0.75rem; margin: 0; opacity: 0.7; }
+.toggle-esq { display: flex; align-items: center; gap: 0.75rem; }
+.icone-caixa { width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+.bg-preto { background: #000; }
+.bg-fucsia { background: #e879f9; }
+.bg-laranja { background: #fb923c; }
 
-.card-opcao__checkbox {
+.txt-amarelo { color: #facc15; }
+.txt-lima { color: #a3e635; }
+.txt-preto { color: #000; }
+
+.textos .titulo { font-size: 0.875rem; font-weight: 900; margin: 0; color: inherit; }
+.textos .sub { font-size: 0.75rem; opacity: 0.7; margin: 0; color: inherit; }
+
+.caixa-check {
   width: 1.25rem;
   height: 1.25rem;
   border: 2px solid #000;
+  border-radius: 0.25rem;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 900;
 }
+.caixa-check--ativo { background: #000; }
 
-/* Espera */
-.card-espera { padding: 1rem; }
-.card-espera__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
- .card-espera__titulo { font-size: 0.875rem; font-weight: 900; margin: 0; }
- .card-espera__desc { font-size: 0.75rem; margin: 0; color: #6b7280; }
- .conectaride--escuro .card-espera__desc { color: #9ca3af; }
+/* Outros Cards */
+.card-cabecalho { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.card-cabecalho .titulo { font-size: 0.875rem; font-weight: 900; margin: 0; color: #000; }
+.ride-layout--escuro .card-cabecalho .titulo { color: #fff; }
+.card-cabecalho .sub { font-size: 0.75rem; color: #78716c; margin: 0; }
 
+.campo-negociar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.moeda { font-size: 1rem; font-weight: 900; padding-right: 0.5rem; border-right: 2px dashed #d4d4d8; color: #000; }
+.ride-layout--escuro .moeda { color: #fff; border-color: #52525b; }
+
+.input-negociar {
+  flex: 1;
+  border: 2px solid #000;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: #fafaf9;
+  outline: none;
+}
+.ride-layout--escuro .input-negociar { background: #18181b; color: #fff; border-color: #52525b; }
+.input-negociar:focus { border-color: #22d3ee; background: #e0f2fe; }
+.ride-layout--escuro .input-negociar:focus { background: #082f49; }
+
+.dica { font-size: 0.65rem; color: #a8a29e; margin-top: 0.5rem; }
+
+/* Controle de Espera */
 .controle-espera {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #e5e7eb; /* stone-200 */
   border: 2px solid #000;
   border-radius: 0.75rem;
+  background: #f5f5f4;
   overflow: hidden;
 }
+.ride-layout--escuro .controle-espera { background: #18181b; border-color: #52525b; }
 
-.controle-espera__btn {
+.btn-controle {
   padding: 0.75rem;
-  background: #ffffff;
+  background: #fff;
   border: none;
-  border-right: 2px solid #000;
   cursor: pointer;
+  color: #000;
 }
+.btn-controle:first-child { border-right: 2px solid #000; }
+.btn-controle:last-child { border-left: 2px solid #000; }
+.ride-layout--escuro .btn-controle { background: #27272a; color: #fff; border-color: #52525b; }
+.btn-controle:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-controle:not(:disabled):hover { background: #facc15; }
 
-.controle-espera__btn:last-child { border-right: none; border-left: 2px solid #000; }
+.visor-espera { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.minutos { font-size: 1.25rem; font-weight: 900; color: #000; }
+.ride-layout--escuro .minutos { color: #fff; }
+.extra { font-size: 0.7rem; font-weight: 900; color: #f97316; }
 
-.controle-espera__valor { text-align: center; display: flex; flex-direction: column; }
-.valor-minutos { font-weight: 900; font-size: 1.1rem; }
-.valor-extra { font-size: 0.7rem; color: #f97316; font-weight: bold; }
-
-/* Opções rápidas de espera (0, 5, 10, 15, 20) */
-.controle-espera__opcoes {
+.grid-opcoes-espera {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.35rem;
   margin-top: 0.5rem;
 }
 
-.controle-espera__opcao-btn {
+.btn-opcao-espera {
   flex: 1;
-  padding: 0.2rem 0.4rem;
+  padding: 0.25rem;
+  border: 2px solid #000;
   border-radius: 0.5rem;
-  border: 2px solid #000000;
-  background-color: #ffffff;
+  background: #fff;
   font-size: 0.7rem;
   font-weight: 900;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
 }
+.ride-layout--escuro .btn-opcao-espera { background: #27272a; color: #fff; border-color: #52525b; }
+.btn-opcao-espera--ativo { background: #fb923c !important; color: #000 !important; border-color: #000 !important; }
 
-.controle-espera__opcao-btn--ativo {
-  background-color: #fb923c; /* orange-400 */
-  color: #000000;
-}
-
-.conectaride--escuro .controle-espera {
-  background: #18181b;
-}
-
-.conectaride--escuro .controle-espera__btn {
-  background: #27272a;
-  color: #fafafa;
-}
-
-.controle-espera__btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.controle-espera__btn:not(:disabled):hover {
-  background-color: #fee2e2; /* red-100 */
-}
-
-.controle-espera__btn:last-child:not(:disabled):hover {
-  background-color: #ecfccb; /* lime-100 */
-}
-
-.conectaride--escuro .controle-espera__btn:not(:disabled):hover {
-  background-color: #f97316;
-}
-
-.conectaride--escuro .controle-espera__opcao-btn {
-  background-color: #3f3f46;
-  color: #e5e7eb;
-}
-
-.conectaride--escuro .controle-espera__opcao-btn:hover {
-  background-color: #fed7aa;
-  color: #000000;
-}
-
-/* Botão Chamar */
-.resumo-chamada {
-  margin-top: auto;
-  padding-bottom: 2rem;
-}
-/* Card de resumo no estilo bloco preto */
-.resumo-chamada__card {
-  background-color: #000000;
-  color: #f9fafb;
-  border: 2px solid #000000;
+/* Resumo */
+.caixa-resumo {
+  background: #000;
+  border: 2px solid #000;
   border-radius: 1rem;
   padding: 1rem;
-  margin-bottom: 0.9rem;
+  color: #fff;
 }
+.ride-layout--escuro .caixa-resumo { border-color: #22d3ee; }
 
-.resumo-chamada__label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  margin-bottom: 0.4rem;
-  color: #a1a1aa;
-}
+.caixa-resumo__label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: #a8a29e; margin: 0 0 0.5rem 0; }
+.caixa-resumo__linha { display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; margin-bottom: 0.25rem; }
+.caixa-resumo__linha--total { border-top: 1px solid #44403c; padding-top: 0.5rem; margin-top: 0.25rem; font-weight: 900; }
 
-.resumo-chamada__linha {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.25rem;
-  font-size: 0.8rem;
-}
+.valor-destaque { font-weight: 900; }
+.texto-opaco { color: #a8a29e; }
+.valor-extra-laranja { font-weight: 900; color: #fb923c; }
+.valor-extra-lima { font-weight: 900; color: #a3e635; }
+.valor-total-ciano { font-size: 1.25rem; font-weight: 900; color: #22d3ee; }
 
-.resumo-chamada__linha--total {
-  border-top: 1px solid #4b5563;
-  padding-top: 0.4rem;
-  margin-top: 0.2rem;
-}
-
-.resumo-chamada__texto {
-  font-weight: 600;
-}
-
-.resumo-chamada__texto--secundario {
-  color: #9ca3af;
-}
-
-.resumo-chamada__texto--total {
-  font-weight: 700;
-}
-
-.resumo-chamada__valor-base {
-  font-weight: 900;
-}
-
-.resumo-chamada__valor-extra {
-  font-weight: 900;
-  color: #fb923c;
-}
-
-.resumo-chamada__valor-encomenda {
-  font-weight: 900;
-  color: #4ade80;
-}
-
-.valor-total {
-  color: #22d3ee;
-  font-size: 1.25rem;
-  font-weight: 900;
-}
-
-.btn-chamar {
+/* Botão Chamar */
+.btn-chamar-ride {
   width: 100%;
   padding: 1rem;
   background: #22d3ee;
   border: 4px solid #000;
   border-radius: 1rem;
+  font-size: 1rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.1rem;
-  box-shadow: 6px 6px 0px 0px #000;
+  letter-spacing: 0.1em;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 6px 6px 0 0 #000;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.15s;
 }
 
-.btn-chamar:active {
-  box-shadow: 0px 0px 0px 0px #000;
-  transform: translate(6px, 6px);
+.btn-chamar-ride:active { transform: translate(6px,6px); box-shadow: 0 0 0 0 #000; }
+.btn-chamar-ride--chamando { background: #a3e635; box-shadow: none; transform: translateY(4px); }
+
+.animacao-chamando { display: flex; align-items: center; gap: 0.5rem; }
+.bolinha-pulo { width: 8px; height: 8px; background: #000; border-radius: 50%; animation: pulo 0.6s infinite alternate; }
+.bolinha-pulo.delay { animation-delay: 0.3s; }
+@keyframes pulo { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+
+/* ================= TELA DO MOTORISTA ================= */
+.caixa-offline {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #e5e7eb;
+  border: 4px dashed #a8a29e;
+  border-radius: 1rem;
+  color: #57534e;
 }
 
+.ride-layout--escuro .caixa-offline { background: #27272a; border-color: #52525b; color: #a1a1aa; }
 
-.btn-chamar:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.btn-tema:disabled {
-  opacity: 1;
-  filter: none;
-  cursor: not-allowed;
+.card-chamada-tocar {
+  background: #fff;
+  border: 4px solid #000;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 8px 8px 0 0 #000;
+  animation: deslizaCima 0.4s ease-out;
 }
 
-/* Estado "chamando" similar ao layout fornecido */
-.btn-chamar--ativo {
-  box-shadow: 0 0 0 0 #000000;
-  transform: translateY(4px);
-  background-color: #a3e635; /* lime-400 */
+.ride-layout--escuro .card-chamada-tocar { background: #18181b; border-color: #facc15; box-shadow: 8px 8px 0 0 #facc15; }
+
+@keyframes deslizaCima {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-chamar__ponto {
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: #000000;
-  border-radius: 999px;
-  animation: btn-chamar-bounce 0.8s infinite alternate;
-}
-
-.btn-chamar__ponto--delay {
-  animation-delay: 0.18s;
-}
-
-.btn-chamar__texto {
+.aviso-tocando {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #facc15;
+  color: #000;
+  padding: 0.5rem;
+  border: 2px solid #000;
+  border-radius: 0.5rem;
   font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
 }
 
-@keyframes btn-chamar-bounce {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-4px);
-  }
+.ponto-pulsante {
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1px solid #000;
+  animation: pulsar 1s infinite;
 }
+
+@keyframes pulsar {
+  0% { transform: scale(0.9); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.info-passageiro {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar-pass {
+  width: 3rem;
+  height: 3rem;
+  background: #e5e7eb;
+  border: 2px solid #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+}
+
+.info-passageiro .nome { font-weight: 900; font-size: 1rem; margin: 0; color: #000; }
+.ride-layout--escuro .info-passageiro .nome { color: #fff; }
+.info-passageiro .nota { font-size: 0.75rem; color: #78716c; margin: 0; font-weight: 700; }
+
+.etiqueta-preco {
+  margin-left: auto;
+  background: #a3e635;
+  border: 2px solid #000;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #000;
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.meta-infos-corrida {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 2px solid #000;
+  border-radius: 0.5rem;
+  background: #f5f5f4;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #000;
+}
+
+.meta-item--lima { background: #a3e635; }
+.ride-layout--escuro .meta-item { background: #27272a; color: #fff; border-color: #52525b; }
+.ride-layout--escuro .meta-item--lima { background: #a3e635; color: #000; border-color: #000; }
+
+.botoes-acao-motorista {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.btn-rejeitar, .btn-contra, .btn-aceitar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.25rem;
+  border: 2px solid #000;
+  border-radius: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.btn-rejeitar:active, .btn-contra:active, .btn-aceitar:active { transform: translate(2px,2px); box-shadow: none; }
+
+.btn-rejeitar { background: #fca5a5; }
+.btn-contra { background: #fff; }
+.btn-aceitar { background: #a3e635; }
+
+.caixa-contraproposta {
+  margin-top: 1.5rem;
+  border-top: 2px dashed #000;
+  padding-top: 1rem;
+}
+
+.caixa-contraproposta p { font-weight: 900; margin-bottom: 0.5rem; color: #000; }
+.ride-layout--escuro .caixa-contraproposta p { color: #fff; }
+
+.mb-3 { margin-bottom: 0.75rem; }
+
+.botoes-acao-dupla { display: flex; gap: 0.5rem; }
+.bg-laranja { background: #fb923c !important; }

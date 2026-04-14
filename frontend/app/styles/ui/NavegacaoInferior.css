@@ -1,21 +1,28 @@
 .nav-inferior {
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  border-top: 2px solid #000;
-  background: #fff;
-  z-index: 50;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border-top: 4px solid #000000;
+  z-index: 9999;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .nav-inferior--escuro {
-  background: #09090b;
+  background-color: #18181b;
+  border-top-color: #22d3ee;
 }
 
 .nav-inferior__container {
   display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 600px; /* Centraliza a barra em telas muito largas */
+  margin: 0 auto;
+  padding: 0.5rem 0.5rem 0.25rem 0.5rem;
+  /* Espaço extra para iPhones com aquela barra inferior (safe-area) */
+  padding-bottom: calc(0.25rem + env(safe-area-inset-bottom)); 
 }
 
 .nav-inferior__botao {
@@ -23,35 +30,57 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 0.25rem;
-  padding: 0.75rem 0;
-  position: relative;
-  font-size: 10px;
-  text-transform: uppercase;
-  font-weight: 600;
-  border: none;
   background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #78716c; /* stone-500 */
+  padding: 0.25rem;
+  transition: all 0.2s ease;
 }
 
-.nav-inferior__botao--ativo .nav-inferior__icone {
-  transform: scale(1.05);
+.nav-inferior--escuro .nav-inferior__botao {
+  color: #71717a; /* zinc-500 */
 }
 
-.nav-inferior__indicador {
-  position: absolute;
-  top: 0;
-  left: 0.5rem;
-  right: 0.5rem;
-  height: 0.25rem;
+.nav-inferior__icone-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 1rem;
   border-radius: 999px;
-  background: #22d3ee;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
 }
 
-.nav-inferior__icone {
-  transition: transform 150ms ease;
+/* ==== ESTADO ATIVO ==== */
+.nav-inferior__botao--ativo {
+  color: #000000;
+}
+
+.nav-inferior--escuro .nav-inferior__botao--ativo {
+  color: #22d3ee;
+}
+
+.nav-inferior__botao--ativo .nav-inferior__icone-wrapper {
+  background-color: #22d3ee;
+  border-color: #000000;
+  color: #000000;
+  box-shadow: 2px 2px 0 0 #000000;
+  transform: translateY(-2px);
+}
+
+.nav-inferior--escuro .nav-inferior__botao--ativo .nav-inferior__icone-wrapper {
+  background-color: #000000;
+  border-color: #22d3ee;
+  color: #22d3ee;
+  box-shadow: 2px 2px 0 0 #22d3ee;
 }
 
 .nav-inferior__texto {
-  letter-spacing: 0.06em;
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
 }
