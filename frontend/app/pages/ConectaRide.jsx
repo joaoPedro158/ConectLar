@@ -157,14 +157,14 @@ export function ConectaRide() {
           </div>
           
           <div className="controle-espera">
-            <button onClick={() => handleWait("down")} disabled={minutosEspera === 0} className="btn-controle">
+            <button onClick={() => ajustarEspera("down")} disabled={minutosEspera === 0} className="btn-controle">
               <Minus size={16} strokeWidth={3} />
             </button>
             <div className="visor-espera">
               <span className="minutos">{minutosEspera === 0 ? "Sem espera" : `${minutosEspera} min`}</span>
               {extraEspera > 0 && <span className="extra">+ R$ {extraEspera.toFixed(2)}</span>}
             </div>
-            <button onClick={() => handleWait("up")} disabled={minutosEspera === OPCOES_ESPERA[OPCOES_ESPERA.length - 1]} className="btn-controle">
+            <button onClick={() => ajustarEspera("up")} disabled={minutosEspera === OPCOES_ESPERA[OPCOES_ESPERA.length - 1]} className="btn-controle">
               <Plus size={16} strokeWidth={3} />
             </button>
           </div>
@@ -184,7 +184,7 @@ export function ConectaRide() {
 
         {/* ENCOMENDA */}
         <button
-          onClick={() => setWithPackage(!comEncomenda)}
+          onClick={() => setComEncomenda(!comEncomenda)}
           className={`ride-card-toggle ${comEncomenda ? "ride-card-toggle--ativo-lima" : ""}`}
         >
           <div className="toggle-esq">

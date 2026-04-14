@@ -30,7 +30,7 @@ const badgesProfissional = [
 ];
 
 const badgesCliente = [
-  { icon: Star, label: "Cliente Top", colorClass: "bg-amarelo" }
+  { icon: Star, label: "Cliente Fodinha", colorClass: "bg-amarelo" }
 ];
 
 export function Perfil() {
@@ -43,7 +43,7 @@ export function Perfil() {
   const [name, setName] = useState(usuario?.nome || "Carlos Mendes");
   const [phone, setPhone] = useState("(84) 99812-3456");
   const [email, setEmail] = useState(usuario?.email || "carlos@email.com");
-  const [city, setCity] = useState("Santo Antônio, RN"); // A tua terra, boy!
+  const [city, setCity] = useState("Alisa Meu Pelo, City"); // A tua terra, boy!
 
   // Decide quais dados mostrar consoante o modo
   const isProfissional = modoAtivo === "profissional";

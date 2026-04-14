@@ -10,6 +10,7 @@
     "test": "echo \"No tests configured for srcdefinito\" && exit 0"
   },
   "dependencies": {
+    "@radix-ui/react-tabs": "^1.1.13",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",
     "react": "^19.0.0",
