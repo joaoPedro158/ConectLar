@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Briefcase, Smartphone, Globe, Zap, LogIn, Camera } from "lucide-react";
 import { useTemaEscuro } from "../context/ContextoTemaEscuro";
 import { useAuth } from "../context/ContextoAutenticacao";
+import api from "../services/api";
 import "../styles/pages/Login.css";
 import { Abas, AbasLista, AbasGatilho } from "../components/ui/Abas";
 
@@ -45,18 +46,23 @@ export function Login() {
   const confirmarLogin = async (e) => {
     e.preventDefault();
     setErroLogin("");
-    // MOCK: Simula login real
+
     if (!identificador || !senha) {
       setErroLogin("Preencha todos os campos");
       return;
     }
-    // Exemplo: tipoUsuario = profissional se email contém 'prof'
-    const isProfissional = identificador.toLowerCase().includes("prof");
-    login({
-      nome: identificador.split("@")[0] || "Usuário",
-      email: identificador,
-      isProfissional
-    });
+
+    try {
+      const resposta = await api.post("/auth/login", {
+        login: identificador.trim(),
+        senha,
+      });
+
+      login(resposta);
+    } catch (error) {
+      const mensagem = error?.message || "Nao foi possivel entrar. Verifique email e senha.";
+      setErroLogin(mensagem);
+    }
   };
 
   const confirmarCadastro = (e) => {

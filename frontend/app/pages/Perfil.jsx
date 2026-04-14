@@ -38,12 +38,16 @@ export function Perfil() {
   
   // Aqui pegamos o usuário, o modo atual e as funções de logout e troca
   const { usuario, modoAtivo, alternarModo, logout } = useAuth(); 
+
+  const enderecoPrincipal = usuario?.localizacao?.[0]
+    ? `${usuario.localizacao[0].rua}, ${usuario.localizacao[0].numero} - ${usuario.localizacao[0].bairro}`
+    : "Endereco nao cadastrado";
   
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState(usuario?.nome || "Carlos Mendes");
-  const [phone, setPhone] = useState("(84) 99812-3456");
+  const [phone, setPhone] = useState(usuario?.telefone || "(84) 99812-3456");
   const [email, setEmail] = useState(usuario?.email || "carlos@email.com");
-  const [city, setCity] = useState("Alisa Meu Pelo, City"); // A tua terra, boy!
+  const [city, setCity] = useState(enderecoPrincipal);
 
   // Decide quais dados mostrar consoante o modo
   const isProfissional = modoAtivo === "profissional";
@@ -108,7 +112,7 @@ export function Perfil() {
         {/* Avatar + Info */}
         <div className="perfil-header__info">
           <div className="perfil-header__avatar-box">
-            <img src={usuario?.foto || AVATAR_URL} alt="Avatar" className="perfil-header__img" />
+            <img src={usuario?.fotoPerfil || AVATAR_URL} alt="Avatar" className="perfil-header__img" />
             <span className="perfil-header__status-badge">
               <CheckCircle size={12} strokeWidth={3} />
             </span>
