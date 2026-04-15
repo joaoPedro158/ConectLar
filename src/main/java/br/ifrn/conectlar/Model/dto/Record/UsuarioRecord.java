@@ -9,7 +9,5 @@ public record UsuarioRecord(
         String nome,
         String email,
         String senha,
-        String telefone,
-        List<LocalizacaoRecord> localizacao,
-        UsuarioRole role) {
+        String telefone) {
 }

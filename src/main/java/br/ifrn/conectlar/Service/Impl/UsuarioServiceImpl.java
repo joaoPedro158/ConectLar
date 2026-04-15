@@ -64,9 +64,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (entityToSave.getRole() == null) {
             entityToSave.setRole(UsuarioRole.USUARIO);
         }
-        if (usuarioRecord.localizacao() != null && !usuarioRecord.localizacao().isEmpty()) {
-           // logica para salvar
-        }
 
 
         try {

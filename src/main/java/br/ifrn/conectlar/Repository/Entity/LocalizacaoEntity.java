@@ -23,7 +23,7 @@ public class LocalizacaoEntity {
     @Column(nullable = false)
     private String cidade;
 
-    @Column(nullable = false, length = 9)
+    @Column(nullable = false, length = 20)
     private String cep;
 
     @Column(nullable = false, length = 50)

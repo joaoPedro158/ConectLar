@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Service.Impl;
 
 import br.ifrn.conectlar.Model.Enum.StatusTrabalho;
+import br.ifrn.conectlar.Model.Enum.UsuarioRole;
 import br.ifrn.conectlar.Model.dto.DadosProfissionalDTO;
 import br.ifrn.conectlar.Repository.Entity.AvaliacaoEntity;
 import br.ifrn.conectlar.Repository.Entity.ProfissionalEntity;
@@ -55,6 +56,8 @@ public class ProfissionalServiceImpl implements ProfissionalService {
         ProfissionalEntity entityToSave = mapper.toEntity(profissionalModel);
         String senhaCriptografada = passwordEncoder.encode(profissionalModel.getSenha());
         entityToSave.setSenha(senhaCriptografada);
+        entityToSave.setRole(UsuarioRole.PROFISSIONAL);
+
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
                 String caminhoFoto = salvaArquivoService.salvaImagem(fotoPerfil);

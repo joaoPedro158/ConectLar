@@ -12,7 +12,6 @@ public record ProfissionalRecord(
         String senha,
         List<LocalizacaoRecord> localizacao,
         String telefone,
-        CategoriaEnum categoria,
-        UsuarioRole role
+        CategoriaEnum categoria
 ){
 }

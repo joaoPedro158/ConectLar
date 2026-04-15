@@ -17,7 +17,7 @@ public class ProfissionalEntity extends BaseUsuarioEntity {
     @Column(length = 150)
     private CategoriaEnum categoria;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "profissional_localizacao",
             joinColumns        = @JoinColumn(name = "id_profissional"),
