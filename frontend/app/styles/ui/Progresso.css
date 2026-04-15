@@ -1,0 +1,16 @@
+.progresso {
+  background-color: rgba(var(--primary-rgb), 0.2);
+  position: relative;
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+}
+
+.progresso__indicador {
+  background-color: var(--primary);
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  transition: all 0.3s ease-in-out;
+}

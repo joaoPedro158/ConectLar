@@ -1,0 +1,518 @@
+.ride-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fafaf9; /* stone-50 */
+}
+
+.ride-layout--escuro { background-color: #09090b; }
+
+/* ================= HEADER CLIENTE ================= */
+.ride-header {
+  background-color: #22d3ee; /* cyan-400 */
+  border-bottom: 4px solid #000;
+  padding: 2.5rem 1rem 1.25rem 1rem;
+}
+
+/* ================= HEADER MOTORISTA ================= */
+.ride-header--motorista {
+  background-color: #facc15; /* amarelo */
+}
+
+.ride-header__topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ride-header__esq {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-voltar-ride {
+  padding: 0.5rem;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-voltar-ride:hover { background: #facc15; }
+.btn-voltar-ride--moto:hover { background: #22d3ee; }
+
+.ride-header__titulo {
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin: 0;
+  color: #000;
+}
+
+.ride-header__sub {
+  font-size: 0.75rem;
+  margin: 0;
+  color: rgba(0,0,0,0.7);
+  font-weight: 700;
+}
+
+.btn-tema-ride {
+  padding: 0.5rem;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+.btn-status-moto {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border: 2px solid #000;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  background-color: #fff;
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.btn-status-moto.online .bolinha { width: 8px; height: 8px; border-radius: 50%; background: #a3e635; border: 1px solid #000; }
+.btn-status-moto.offline .bolinha { width: 8px; height: 8px; border-radius: 50%; background: #f87171; border: 1px solid #000; }
+
+.ride-seletor-veiculo {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-veiculo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  border: 2px solid #000;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #000;
+  font-weight: 900;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-veiculo--ativo {
+  background: #000;
+  color: #22d3ee;
+  box-shadow: 2px 2px 0 0 rgba(0,0,0,0.3);
+}
+
+.ride-layout--escuro .btn-veiculo { background: #18181b; color: #fff; border-color: #22d3ee; }
+.ride-layout--escuro .btn-veiculo--ativo { background: #22d3ee; color: #000; box-shadow: none; }
+
+/* ================= MAIN CONTENT ================= */
+.ride-main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ride-card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+.ride-layout--escuro .ride-card { background: #27272a; border-color: #22d3ee; box-shadow: 4px 4px 0 0 #22d3ee; }
+
+/* Rota */
+.ride-card--rota { padding: 0; }
+
+.rota-linha {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px dashed #e5e7eb;
+}
+
+.ride-layout--escuro .rota-linha { border-bottom-color: #3f3f46; }
+.rota-linha.sem-borda { border-bottom: none; }
+
+.icone-rota {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+}
+
+.icone-rota--origem { background: #a3e635; }
+.icone-rota--destino { background: #e879f9; }
+
+.input-rota {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.875rem;
+  color: #000;
+}
+
+.texto-rota {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.ride-layout--escuro .input-rota, .ride-layout--escuro .texto-rota { color: #fff; }
+
+/* Toggles (Tarifa 00 e Encomenda) */
+.ride-card-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 2px solid #000;
+  border-radius: 1rem;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.ride-layout--escuro .ride-card-toggle { background: #27272a; border-color: #22d3ee; color: #fff; }
+
+.ride-card-toggle--ativo-amarelo { background: #facc15 !important; box-shadow: 3px 3px 0 0 #000; }
+.ride-layout--escuro .ride-card-toggle--ativo-amarelo { background: #000 !important; border-color: #facc15; box-shadow: 3px 3px 0 0 #facc15; }
+
+.ride-card-toggle--ativo-lima { background: #a3e635 !important; box-shadow: 3px 3px 0 0 #000; }
+.ride-layout--escuro .ride-card-toggle--ativo-lima { background: #000 !important; border-color: #a3e635; box-shadow: 3px 3px 0 0 #a3e635; }
+
+.toggle-esq { display: flex; align-items: center; gap: 0.75rem; }
+.icone-caixa { width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+.bg-preto { background: #000; }
+.bg-fucsia { background: #e879f9; }
+.bg-laranja { background: #fb923c; }
+
+.txt-amarelo { color: #facc15; }
+.txt-lima { color: #a3e635; }
+.txt-preto { color: #000; }
+
+.textos .titulo { font-size: 0.875rem; font-weight: 900; margin: 0; color: inherit; }
+.textos .sub { font-size: 0.75rem; opacity: 0.7; margin: 0; color: inherit; }
+
+.caixa-check {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #000;
+  border-radius: 0.25rem;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+.caixa-check--ativo { background: #000; }
+
+/* Outros Cards */
+.card-cabecalho { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.card-cabecalho .titulo { font-size: 0.875rem; font-weight: 900; margin: 0; color: #000; }
+.ride-layout--escuro .card-cabecalho .titulo { color: #fff; }
+.card-cabecalho .sub { font-size: 0.75rem; color: #78716c; margin: 0; }
+
+.campo-negociar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.moeda { font-size: 1rem; font-weight: 900; padding-right: 0.5rem; border-right: 2px dashed #d4d4d8; color: #000; }
+.ride-layout--escuro .moeda { color: #fff; border-color: #52525b; }
+
+.input-negociar {
+  flex: 1;
+  border: 2px solid #000;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: #fafaf9;
+  outline: none;
+}
+.ride-layout--escuro .input-negociar { background: #18181b; color: #fff; border-color: #52525b; }
+.input-negociar:focus { border-color: #22d3ee; background: #e0f2fe; }
+.ride-layout--escuro .input-negociar:focus { background: #082f49; }
+
+.dica { font-size: 0.65rem; color: #a8a29e; margin-top: 0.5rem; }
+
+/* Controle de Espera */
+.controle-espera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px solid #000;
+  border-radius: 0.75rem;
+  background: #f5f5f4;
+  overflow: hidden;
+}
+.ride-layout--escuro .controle-espera { background: #18181b; border-color: #52525b; }
+
+.btn-controle {
+  padding: 0.75rem;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  color: #000;
+}
+.btn-controle:first-child { border-right: 2px solid #000; }
+.btn-controle:last-child { border-left: 2px solid #000; }
+.ride-layout--escuro .btn-controle { background: #27272a; color: #fff; border-color: #52525b; }
+.btn-controle:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-controle:not(:disabled):hover { background: #facc15; }
+
+.visor-espera { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.minutos { font-size: 1.25rem; font-weight: 900; color: #000; }
+.ride-layout--escuro .minutos { color: #fff; }
+.extra { font-size: 0.7rem; font-weight: 900; color: #f97316; }
+
+.grid-opcoes-espera {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.btn-opcao-espera {
+  flex: 1;
+  padding: 0.25rem;
+  border: 2px solid #000;
+  border-radius: 0.5rem;
+  background: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+.ride-layout--escuro .btn-opcao-espera { background: #27272a; color: #fff; border-color: #52525b; }
+.btn-opcao-espera--ativo { background: #fb923c !important; color: #000 !important; border-color: #000 !important; }
+
+/* Resumo */
+.caixa-resumo {
+  background: #000;
+  border: 2px solid #000;
+  border-radius: 1rem;
+  padding: 1rem;
+  color: #fff;
+}
+.ride-layout--escuro .caixa-resumo { border-color: #22d3ee; }
+
+.caixa-resumo__label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: #a8a29e; margin: 0 0 0.5rem 0; }
+.caixa-resumo__linha { display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; margin-bottom: 0.25rem; }
+.caixa-resumo__linha--total { border-top: 1px solid #44403c; padding-top: 0.5rem; margin-top: 0.25rem; font-weight: 900; }
+
+.valor-destaque { font-weight: 900; }
+.texto-opaco { color: #a8a29e; }
+.valor-extra-laranja { font-weight: 900; color: #fb923c; }
+.valor-extra-lima { font-weight: 900; color: #a3e635; }
+.valor-total-ciano { font-size: 1.25rem; font-weight: 900; color: #22d3ee; }
+
+/* Botão Chamar */
+.btn-chamar-ride {
+  width: 100%;
+  padding: 1rem;
+  background: #22d3ee;
+  border: 4px solid #000;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 6px 6px 0 0 #000;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-chamar-ride:active { transform: translate(6px,6px); box-shadow: 0 0 0 0 #000; }
+.btn-chamar-ride--chamando { background: #a3e635; box-shadow: none; transform: translateY(4px); }
+
+.animacao-chamando { display: flex; align-items: center; gap: 0.5rem; }
+.bolinha-pulo { width: 8px; height: 8px; background: #000; border-radius: 50%; animation: pulo 0.6s infinite alternate; }
+.bolinha-pulo.delay { animation-delay: 0.3s; }
+@keyframes pulo { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+
+/* ================= TELA DO MOTORISTA ================= */
+.caixa-offline {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #e5e7eb;
+  border: 4px dashed #a8a29e;
+  border-radius: 1rem;
+  color: #57534e;
+}
+
+.ride-layout--escuro .caixa-offline { background: #27272a; border-color: #52525b; color: #a1a1aa; }
+
+.card-chamada-tocar {
+  background: #fff;
+  border: 4px solid #000;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 8px 8px 0 0 #000;
+  animation: deslizaCima 0.4s ease-out;
+}
+
+.ride-layout--escuro .card-chamada-tocar { background: #18181b; border-color: #facc15; box-shadow: 8px 8px 0 0 #facc15; }
+
+@keyframes deslizaCima {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.aviso-tocando {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #facc15;
+  color: #000;
+  padding: 0.5rem;
+  border: 2px solid #000;
+  border-radius: 0.5rem;
+  font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.ponto-pulsante {
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1px solid #000;
+  animation: pulsar 1s infinite;
+}
+
+@keyframes pulsar {
+  0% { transform: scale(0.9); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.info-passageiro {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar-pass {
+  width: 3rem;
+  height: 3rem;
+  background: #e5e7eb;
+  border: 2px solid #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+}
+
+.info-passageiro .nome { font-weight: 900; font-size: 1rem; margin: 0; color: #000; }
+.ride-layout--escuro .info-passageiro .nome { color: #fff; }
+.info-passageiro .nota { font-size: 0.75rem; color: #78716c; margin: 0; font-weight: 700; }
+
+.etiqueta-preco {
+  margin-left: auto;
+  background: #a3e635;
+  border: 2px solid #000;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #000;
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.meta-infos-corrida {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 2px solid #000;
+  border-radius: 0.5rem;
+  background: #f5f5f4;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #000;
+}
+
+.meta-item--lima { background: #a3e635; }
+.ride-layout--escuro .meta-item { background: #27272a; color: #fff; border-color: #52525b; }
+.ride-layout--escuro .meta-item--lima { background: #a3e635; color: #000; border-color: #000; }
+
+.botoes-acao-motorista {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.btn-rejeitar, .btn-contra, .btn-aceitar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.25rem;
+  border: 2px solid #000;
+  border-radius: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.btn-rejeitar:active, .btn-contra:active, .btn-aceitar:active { transform: translate(2px,2px); box-shadow: none; }
+
+.btn-rejeitar { background: #fca5a5; }
+.btn-contra { background: #fff; }
+.btn-aceitar { background: #a3e635; }
+
+.caixa-contraproposta {
+  margin-top: 1.5rem;
+  border-top: 2px dashed #000;
+  padding-top: 1rem;
+}
+
+.caixa-contraproposta p { font-weight: 900; margin-bottom: 0.5rem; color: #000; }
+.ride-layout--escuro .caixa-contraproposta p { color: #fff; }
+
+.mb-3 { margin-bottom: 0.75rem; }
+
+.botoes-acao-dupla { display: flex; gap: 0.5rem; }
+.bg-laranja { background: #fb923c !important; }

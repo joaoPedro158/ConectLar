@@ -1,0 +1,42 @@
+.dica-flutuante__conteudo {
+  z-index: 50;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: #000000; /* Fundo preto sólido */
+  color: #ffffff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid #22d3ee; /* Borda ciano vibrante */
+  box-shadow: 4px 4px 0px 0px #000000;
+  animation: dica-entra 0.15s ease-out;
+}
+
+.dica-flutuante__seta {
+  fill: #22d3ee;
+  width: 10px;
+  height: 5px;
+}
+
+/* Animações de entrada baseadas no estado do Radix */
+@keyframes dica-entra {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Ajuste para o Dark Mode */
+.dark .dica-flutuante__conteudo {
+  background-color: #22d3ee;
+  color: #000000;
+  border-color: #000000;
+}
+
+.dark .dica-flutuante__seta {
+  fill: #000000;
+}

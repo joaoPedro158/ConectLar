@@ -1,0 +1,73 @@
+.nav-inferior {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 448px; /* max-w-md */
+  border-top: 2px solid #000000;
+  background-color: #ffffff;
+  z-index: 50;
+  transition: background-color 0.3s ease;
+}
+
+.nav-inferior--escuro {
+  background-color: #18181b; /* zinc-900 */
+}
+
+.nav-inferior__container {
+  display: flex;
+}
+
+.nav-inferior__botao {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0;
+  gap: 0.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  color: #a8a29e; /* stone-400 */
+  transition: all 0.2s ease;
+}
+
+.nav-inferior--escuro .nav-inferior__botao {
+  color: #52525b; /* zinc-600 */
+}
+
+.nav-inferior__botao--ativo {
+  color: #000000 !important;
+}
+
+.nav-inferior--escuro .nav-inferior__botao--ativo {
+  color: #ffffff !important;
+}
+
+.nav-inferior__indicador {
+  position: absolute;
+  top: 0;
+  left: 0.5rem;
+  right: 0.5rem;
+  height: 4px;
+  background-color: #22d3ee; /* cyan-400 */
+  border-bottom-left-radius: 9999px;
+  border-bottom-right-radius: 9999px;
+}
+
+.nav-inferior__icone {
+  transition: transform 0.2s ease;
+}
+
+.nav-inferior__botao--ativo .nav-inferior__icone {
+  transform: scale(1.1);
+}
+
+.nav-inferior__texto {
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  text-transform: uppercase;
+}

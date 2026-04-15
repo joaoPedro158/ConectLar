@@ -1,0 +1,333 @@
+.gerenciar-proposta {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fafaf9; /* stone-50 */
+  color: #000;
+}
+
+.gerenciar-proposta--escuro {
+  background-color: #09090b; /* zinc-950 */
+  color: #fff;
+}
+
+/* ================= HEADER ================= */
+.gerenciar-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 1rem 1rem 1rem;
+  background-color: #facc15; /* Amarelo Neo-Brutalist */
+  border-bottom: 4px solid #000;
+}
+
+.gerenciar-proposta--escuro .gerenciar-header {
+  background-color: #18181b;
+  border-bottom-color: #facc15;
+}
+
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 3px solid #000;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 0 #000;
+  transition: all 0.15s;
+}
+
+.btn-voltar:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 #000;
+}
+
+.gerenciar-proposta--escuro .btn-voltar {
+  background-color: #27272a;
+  color: #fff;
+  border-color: #facc15;
+  box-shadow: 2px 2px 0 0 #facc15;
+}
+
+.gerenciar-proposta--escuro .btn-voltar:active {
+  box-shadow: 0 0 0 0 #facc15;
+}
+
+.gerenciar-header__titulo {
+  font-size: 1.25rem;
+  font-weight: 900;
+  margin: 0;
+  color: #000;
+}
+
+.gerenciar-proposta--escuro .gerenciar-header__titulo { color: #fff; }
+
+.gerenciar-header__sub {
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.gerenciar-proposta--escuro .gerenciar-header__sub { color: #a1a1aa; }
+
+/* ================= MAIN CONTENT ================= */
+.gerenciar-main {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* CARD RESUMO PROPOSTA */
+.card-resumo-proposta {
+  background-color: #000;
+  color: #fff;
+  border: 4px solid #000;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 4px 4px 0 0 #22d3ee; /* Sombra ciano */
+}
+
+.gerenciar-proposta--escuro .card-resumo-proposta {
+  border-color: #22d3ee;
+}
+
+.card-resumo-proposta__topo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.tag-categoria, .tag-status {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #000;
+  border: 2px solid #000;
+}
+
+.bg-ciano { background-color: #22d3ee; }
+.bg-amarelo { background-color: #facc15; }
+
+.titulo-proposta {
+  font-size: 1.1rem;
+  font-weight: 900;
+  margin: 0 0 0.5rem 0;
+}
+
+.desc-proposta {
+  font-size: 0.8rem;
+  color: #d4d4d8; /* zinc-300 */
+  line-height: 1.4;
+  margin: 0 0 1rem 0;
+}
+
+.rodape-proposta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 2px dashed #3f3f46;
+  padding-top: 0.75rem;
+}
+
+.meta-info {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+}
+
+.valor-proposta {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #22d3ee;
+  margin: 0;
+}
+
+/* LISTA DE CANDIDATOS */
+.titulo-secao {
+  font-size: 1rem;
+  font-weight: 900;
+  margin: 0 0 1rem 0;
+}
+
+.lista-candidatos {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card-candidato {
+  background-color: #fff;
+  border: 3px solid #000;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+.gerenciar-proposta--escuro .card-candidato {
+  background-color: #27272a;
+  border-color: #52525b;
+  box-shadow: 4px 4px 0 0 #000;
+}
+
+.card-candidato__perfil {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.avatar-candidato {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 3px solid #000;
+  object-fit: cover;
+}
+
+.gerenciar-proposta--escuro .avatar-candidato { border-color: #a3e635; }
+
+.info-candidato { flex: 1; }
+
+.linha-nome {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.linha-nome h4 {
+  font-size: 1rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.selo-verificado {
+  color: #16a34a; /* green-600 */
+  background-color: #dcfce7;
+  border: 1px solid #16a34a;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.linha-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #57534e;
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+.gerenciar-proposta--escuro .linha-meta { color: #a1a1aa; }
+
+.nota, .distancia {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.icone-estrela { fill: #facc15; stroke: #ca8a04; }
+
+.mensagem-candidato {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background-color: #f5f5f4;
+  border: 2px dashed #000;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.gerenciar-proposta--escuro .mensagem-candidato {
+  background-color: #18181b;
+  border-color: #52525b;
+}
+
+.icone-msg { color: #a8a29e; flex-shrink: 0; margin-top: 2px; }
+.mensagem-candidato p {
+  font-size: 0.8rem;
+  margin: 0;
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* BOTOES DE DECISÃO */
+.botoes-decisao {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-decisao {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  border: 3px solid #000;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 #000;
+  color: #000;
+  transition: transform 0.1s;
+}
+
+.btn-decisao:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 #000;
+}
+
+.btn-decisao--recusar { background-color: #fca5a5; } /* red-300 */
+.btn-decisao--recusar:hover { background-color: #f87171; }
+
+.btn-decisao--aceitar { background-color: #a3e635; } /* lime-400 */
+.btn-decisao--aceitar:hover { background-color: #84cc16; }
+
+.gerenciar-proposta--escuro .btn-decisao { border-color: #000; }
+
+/* ESTADO VAZIO */
+.estado-vazio {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: #fff;
+  border: 3px dashed #000;
+  border-radius: 1rem;
+  font-weight: 700;
+}
+
+.gerenciar-proposta--escuro .estado-vazio {
+  background-color: #18181b;
+  border-color: #52525b;
+}
+
+.txt-opaco { opacity: 0.3; margin: 0 auto 1rem auto; }
+
+.btn-voltar-feed {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #22d3ee;
+  border: 3px solid #000;
+  border-radius: 0.5rem;
+  font-weight: 900;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 #000;
+}

@@ -1,0 +1,60 @@
+.barra-lateral__wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.barra-lateral__desktop-root {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  transition: width 0.3s ease;
+}
+
+.barra-lateral__desktop-root[data-state="expandido"] { width: 16rem; }
+.barra-lateral__desktop-root[data-state="colapsado"] { width: 3rem; }
+
+.barra-lateral__container {
+  position: absolute;
+  height: 100%;
+  background-color: #ffffff;
+  border-right: 2px solid #000000;
+  box-shadow: 2px 0px 0px 0px #000000;
+  z-index: 40;
+}
+
+.barra-lateral__interno {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.barra-lateral__menu-botao {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+}
+
+.barra-lateral__menu-botao:hover {
+  background-color: #facc15; /* Amarelo Neo-Brutalista */
+  border-color: #000;
+}
+
+.barra-lateral__menu-botao.ativo {
+  background-color: #22d3ee; /* Ciano ConectaLar */
+  border-color: #000;
+}
+
+/* Esconder texto quando colapsado */
+[data-state="colapsado"] .barra-lateral__menu-botao span {
+  display: none;
+}

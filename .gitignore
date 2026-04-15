@@ -1,4 +1,4 @@
-### Java / Spring (master)
+cd ### Java / Spring (master)
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -47,42 +47,141 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Dependencies
-frontend/node_modules/
-
-# Builds
-frontend/dist/
-frontend/dist-ssr/
-
 # Vite cache
-frontend/.vite/
 
-# Env files
-frontend/.env
 frontend/.env.*
-!.env.example
 
-
-frontend/*.local
-
-### Editor directories and files
 .vscode/*
+
+
+# === JAVA / SPRING ===
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.classpath
+.factorypath
+.project
+.settings/
+.apt_generated
+.springBeans
+.sts4-cache
+
+# === IDEs ===
+.idea/
+*.iws
+*.iml
+*.ipr
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+.vscode/
 !.vscode/extensions.json
-.vscode/settings.json
-.vscode/launch.json
-.vscode/tasks.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# === OS / System ===
 .DS_Store
 Thumbs.db
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+ehthumbs.db
+Icon?
 
+# === Node / Vite / Frontend ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+frontend/*.local
+
+# === Legacy Frontend ===
+ConectLarFront/node_modules/
+ConectLarFront/dist/
+ConectLarFront/.env
+
+# === Android release ===
+frontend/android/key.properties
+frontend/android/*.jks
+frontend/android/*.keystore
+
+# === Env files ===
 .env
 .env.*
 !.env.example
 
-### Android release
-frontend/android/key.properties
-frontend/android/*.jks
+# === Misc ===
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.user
+*.vspscc
+*.vssscc
+*.orig
+*.rej
+*.patch
+*.coverage
+*.tgz
+*.gz
+*.zip
+*.7z
+*.tar
+*.rar
+*.bak
+*.tmp
+*.cache
+*.pid
+*.seed
+*.pid.lock
+*.log.*
+*.log-*
+
+# === Test / Coverage ===
+coverage/
+lcov-report/
+nyc_output/
+test-output/
+test-results/
+
+# === VSCode Workspace Storage ===
+.vscode-test/
+.history/
+.vscode-server/
+.vscode-remote/
+
+# === JetBrains Rider ===
+.idea/
+.idea_modules/
+.idea_config/
+.idea-workspace/
+
+# === Others ===
+node_modules/
+dist/
+tmp/
+temp/
+out/
+bin/
+logs/
+*.local
 frontend/android/*.keystore

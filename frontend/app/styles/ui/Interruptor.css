@@ -1,0 +1,48 @@
+.interruptor {
+  display: inline-flex;
+  height: 1.15rem;
+  width: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+.interruptor[data-state="checked"] {
+  background-color: var(--primary);
+}
+
+.interruptor[data-state="unchecked"] {
+  background-color: var(--switch-background);
+}
+
+.interruptor:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px rgba(var(--ring-rgb), 0.5);
+}
+
+.interruptor:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.interruptor__polegar {
+  pointer-events: none;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background-color: var(--card);
+  ring: 0;
+  transition: transform 0.2s ease-in-out;
+}
+
+.interruptor__polegar[data-state="checked"] {
+  transform: translateX(calc(100% - 2px));
+}
+
+.interruptor__polegar[data-state="unchecked"] {
+  transform: translateX(0);
+}

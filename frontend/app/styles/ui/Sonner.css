@@ -1,0 +1,11 @@
+/* Estilos para o componente de toaster (Sonner) */
+
+.toaster {
+	--normal-bg: var(--popover);
+	--normal-text: var(--popover-foreground);
+	--normal-border: var(--border);
+}
+
+.toaster.group {
+	/* Mantém a possibilidade de estilizar via utilitários/CSS globais se necessário */
+}

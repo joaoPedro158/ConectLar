@@ -1,0 +1,22 @@
+.rotulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1;
+  font-weight: 500;
+  user-select: none;
+}
+
+.rotulo[data-disabled="true"],
+.rotulo.peer-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Para elementos de grupo desabilitados */
+:is([data-disabled="true"]) .rotulo {
+  pointer-events: none;
+  opacity: 0.5;
+}

@@ -1,0 +1,28 @@
+/* No seu arquivo global.css */
+:root {
+  --cor-fundo: #fafaf9;
+  --cor-texto: #1c1917;
+  --cor-borda: #000000;
+}
+
+.dark {
+  --cor-fundo: #09090b;
+  --cor-texto: #fafafa;
+  --cor-borda: #22d3ee; /* Ciano no modo escuro fica top no brutalismo */
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.75rem; /* ~12px base */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
