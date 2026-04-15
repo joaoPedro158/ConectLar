@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class LocalizacaoServiceImpl implements LocalizacaoService {
@@ -28,31 +30,36 @@ public class LocalizacaoServiceImpl implements LocalizacaoService {
     @Override
     @Transactional
     public LocalizacaoDTO cadastralocalizacao(LocalizacaoRecord localizacao, UsuarioRole role, Long id) {
-        String roleEnum = role.getRole();
         Localizacao localizacaoModel = mapper.toModel(localizacao);
         LocalizacaoEntity entityToSave = mapper.toEntity(localizacaoModel);
         repository.save(entityToSave);
 
-        // 3. Usa o Enum no switch ou if
-        switch (roleEnum) {
-            case "usuario" -> {
-                UsuarioEntity usuario = usuarioRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
+        List<LocalizacaoEntity> listaDoDono = buscarListaLocalizacoesPorRole(role,id);
+        listaDoDono.add(entityToSave);
 
-                // O Lombok criou o getLocalizacoes() automaticamente
-                usuario.getLocalizacao().add(entityToSave);
-                usuarioRepository.save(usuario);
-            }
-            case "profissional" -> {
-                ProfissionalEntity profissional = profissionalRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Profissional não encontrado!"));
-
-                profissional.getLocalizacao().add(entityToSave);
-                profissionalRepository.save(profissional);
-            }
-            default -> throw new RuntimeException("Role não suportada para localização: " + role);
-
-        }
         return mapper.toDTO(entityToSave);
     }
+
+    @Override
+    public List<LocalizacaoDTO> listaLocalizacao( UsuarioRole role, Long id) {
+        List<LocalizacaoEntity> entidades = buscarListaLocalizacoesPorRole(role,id);
+
+        return mapper.toDTOlist(entidades);
+    }
+
+    // auxilixar
+    private List<LocalizacaoEntity> buscarListaLocalizacoesPorRole(UsuarioRole role, Long id) {
+        return switch (role) {
+            case USUARIO -> usuarioRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado!"))
+                    .getLocalizacao(); // Retorna a lista do Usuario
+
+            case PROFISSIONAL -> profissionalRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Profissional não encontrado!"))
+                    .getLocalizacao(); // Retorna a lista do Profissional
+
+            default -> throw new RuntimeException("Role não suportada: " + role);
+        };
+    }
+
 }

@@ -13,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(RotasPrincipais.Localizacao)
@@ -30,6 +29,14 @@ public class LocalizacaoController {
         UsuarioRole role = user.getRole();
         LocalizacaoDTO localizacaoDto = localizacaoService.cadastralocalizacao(localizacao,role,id);
         return ResponseEntity.ok().body(localizacaoDto);
+    }
+
+    @GetMapping(RotasBases.Lista)
+    public ResponseEntity listaLocalizacao(@AuthenticationPrincipal UsuarioDetails user) {
+        Long id = user.getId();
+        UsuarioRole role = user.getRole();
+        List<LocalizacaoDTO> listaLocalizacao = localizacaoService.listaLocalizacao(role,id);
+        return ResponseEntity.ok().body(listaLocalizacao);
     }
 
 }

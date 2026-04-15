@@ -7,10 +7,13 @@ import br.ifrn.conectlar.Repository.Entity.LocalizacaoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface LocalizacaoMapper {
     Localizacao toModel(LocalizacaoRecord localizacao);
     LocalizacaoEntity toEntity( Localizacao  localizacao );
     LocalizacaoDTO toDTO(LocalizacaoEntity localizacaoEntity);
+    List<LocalizacaoDTO> toDTOlist(List<LocalizacaoEntity> localizacaoEntityList);
 }
