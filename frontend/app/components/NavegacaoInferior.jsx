@@ -15,9 +15,9 @@ const menuCliente = [
 
 // Menu para quem está prestando serviços / motorista
 const menuProfissional = [
-  { rotulo: "Serviços", icone: Briefcase, caminho: "/" },
+  { rotulo: "Início", icone: Home, caminho: "/profissional" }, // Corrigido para ir para o dashboard profissional
+  { rotulo: "Serviços", icone: Briefcase, caminho: "/servicos" },
   { rotulo: "Corridas", icone: MapPin, caminho: "/motoristaride" },
-  { rotulo: "Ganhos", icone: TrendingUp, caminho: "/ganhos" },
   { rotulo: "Perfil", icone: User, caminho: "/perfil" },
 ];
 

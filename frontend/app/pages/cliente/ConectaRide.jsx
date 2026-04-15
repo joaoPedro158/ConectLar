@@ -5,8 +5,9 @@ import {
   Clock, DollarSign, Zap, Plus, Minus, ChevronRight, Sun, Moon
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useTemaEscuro } from "../context/ContextoTemaEscuro";
-import "../styles/pages/ConectaRide.css";
+import { useTemaEscuro } from "../../context/ContextoTemaEscuro.jsx";
+import { useCorridas } from "../../context/ContextoCorridas.jsx";
+import "../../styles/pages/ConectaRide.css";
 
 const OPCOES_ESPERA = [0, 5, 10, 15, 20];
 const PRECO_ESPERA_POR_MIN = 1.5;
@@ -15,6 +16,7 @@ const SUGESTAO_MINIMA = 12;
 export function ConectaRide() {
   const navigate = useNavigate();
   const { temaEscuro, alternarTema } = useTemaEscuro();
+  const { criarCorrida } = useCorridas();
   
   const [veiculo, setVeiculo] = useState("mototaxi");
   const [origem, setOrigem] = useState("");
@@ -40,6 +42,16 @@ export function ConectaRide() {
   };
 
   const realizarChamada = () => {
+    // cria uma corrida "real" na sessão para o modo profissional
+    criarCorrida({
+      origem,
+      destino,
+      tipoVeiculo: veiculo,
+      valor: totalSugerido,
+      minutosEspera,
+      comEncomenda,
+    });
+
     setChamando(true);
     setTimeout(() => setChamando(false), 3000);
   };

@@ -6,8 +6,10 @@ import {
   Zap, Droplets, Sparkles, PaintBucket, Leaf, Heart, Gift, Copy,
   Plus, X, Mail, Phone, FileText, Upload, User // Adicionado o ícone User aqui
 } from "lucide-react";
-import { useTemaEscuro } from "../context/ContextoTemaEscuro";
-import "../styles/pages/ClientFeed.css";
+import { useTemaEscuro } from "../../context/ContextoTemaEscuro.jsx";
+import { useAuth } from "../../context/ContextoAutenticacao.jsx";
+import api from "../../services/api";
+import "../../styles/pages/ClientFeed.css";
 
 // ----------------------------------------------------------------------
 // DADOS MOCKADOS (Somente Frontend)
@@ -26,20 +28,7 @@ const todasCategorias = [
   { id: "cat3", label: "Reformas", icon: PaintBucket, color: "bg-orange-400", subs: ["Pintura", "Alvenaria", "Gesso"] },
 ];
 
-const profissionais = [
-  {
-    id: 1, nome: "João Eletricista", especialidade: "Elétrica",
-    avatar: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=400",
-    role: "Eletricista", corTag: "#facc15", avaliacaoMedia: "4,8",
-    totalAvaliacoes: 32, valorBase: "R$ 80,00+", distancia: "1,2 km", disponivel: true,
-  },
-  {
-    id: 2, nome: "Maria Rita", especialidade: "Limpeza",
-    avatar: "https://cdn.pixabay.com/photo/2024/04/05/16/12/ai-generated-8677656_960_720.jpg",
-    role: "Faxina", corTag: "#e879f9", avaliacaoMedia: "4,9",
-    totalAvaliacoes: 18, valorBase: "R$ 100,00+", distancia: "2,4 km", disponivel: true,
-  },
-];
+// categorias de profissionais virão do backend; este mock foi removido
 
 const favoritosMock = [
   {
@@ -48,21 +37,16 @@ const favoritosMock = [
   }
 ];
 
-const servicosHistorico = [
-  { id: 1, titulo: "Instalação de tomada", profissional: "João Eletricista", data: "Ontem · 14:30", status: "Concluído", valor: "R$ 80,00", avaliado: false, estrelas: 0 },
-  { id: 2, titulo: "Faxina pós-obra", profissional: "Maria Rita", data: "Seg · 09:00", status: "Concluído", valor: "R$ 150,00", avaliado: true, estrelas: 5 },
-  { id: 3, titulo: "Reparo hidráulico", profissional: "Carlos Encanador", data: "Semana passada", status: "Cancelado", valor: "R$ 120,00", avaliado: false, estrelas: 0 },
-];
-
 const cuponsMock = [
   { id: 1, title: "Primeira Limpeza", description: "15% off na sua primeira faxina pelo app", code: "LIMPA15", icon: Sparkles, colorClass: "bg-fuchsia-400" },
   { id: 2, title: "Reparo Rápido", description: "R$ 20 de desconto em serviços elétricos", code: "ELETRO20", icon: Zap, colorClass: "bg-yellow-400" }
 ];
-
-const usuarioLogado = {
-  nome: "Leno Brega",
-  foto: "https://cdns-images.dzcdn.net/images/artist/da6e2311935138af5c5dc6c3bcb982bd/500x500.jpg",
-  notificacoes: 2
+const CATEGORIA_ENUM_MAP = {
+  eletrica: "ELETRICISTA",
+  hidraulica: "ENCANADOR",
+  limpeza: "LIMPEZA",
+  pintura: "PINTOR",
+  jardim: "JARDINEIRO",
 };
 
 const ABAS_NAVEGACAO = [
@@ -76,6 +60,7 @@ const ABAS_NAVEGACAO = [
 export function ClientFeed() {
   const navigate = useNavigate();
   const { temaEscuro, alternarTema } = useTemaEscuro();
+  const { usuario } = useAuth();
 
   const [abaAtiva, setAbaAtiva] = useState("inicio");
   const [usarEnderecoManual, setUsarEnderecoManual] = useState(false);
@@ -93,7 +78,11 @@ export function ClientFeed() {
   const [modalPropostaAberto, setModalPropostaAberto] = useState(false);
   const [imagemProblemaPreview, setImagemProblemaPreview] = useState("");
   const [propostasCriadas, setPropostasCriadas] = useState([]);
+  const [servicosHistorico, setServicosHistorico] = useState([]);
   const [erroProposta, setErroProposta] = useState("");
+  const [profissionais, setProfissionais] = useState([]);
+  const [loadingProfissionais, setLoadingProfissionais] = useState(false);
+  const [erroProfissionais, setErroProfissionais] = useState("");
   const [formularioProposta, setFormularioProposta] = useState({
     titulo: "",
     descricao: "",
@@ -114,6 +103,58 @@ export function ClientFeed() {
 
   const [expandedCat, setExpandedCat] = useState(null);
   const [copiedCode, setCopiedCode] = useState(null);
+
+  useEffect(() => {
+    if (!usuario) return;
+
+    const carregarDados = async () => {
+      try {
+        const historico = await api.get("/usuario/historico");
+        if (Array.isArray(historico)) {
+          setServicosHistorico(historico);
+        }
+      } catch {
+        // mantém vazio
+      }
+
+      try {
+        const trabalhos = await api.get("/trabalho/list");
+        if (Array.isArray(trabalhos) && usuario?.id) {
+          const meusTrabalhos = trabalhos.filter(
+            (t) => t.idUsuario === usuario.id
+          );
+          setPropostasCriadas(meusTrabalhos);
+        }
+      } catch {
+        // ignora erro
+      }
+    };
+
+    carregarDados();
+  }, [usuario]);
+
+  // Carrega profissionais reais do backend para o carrossel "Serviços Domésticos"
+  useEffect(() => {
+    const carregarProfissionais = async () => {
+      try {
+        setLoadingProfissionais(true);
+        setErroProfissionais("");
+        const lista = await api.get("/profissional/list");
+        if (Array.isArray(lista)) {
+          setProfissionais(lista);
+        } else {
+          setProfissionais([]);
+        }
+      } catch (e) {
+        setErroProfissionais("Não foi possível carregar profissionais no momento.");
+        setProfissionais([]);
+      } finally {
+        setLoadingProfissionais(false);
+      }
+    };
+
+    carregarProfissionais();
+  }, []);
 
   useEffect(() => {
     if (!modalPropostaAberto) return undefined;
@@ -218,6 +259,9 @@ export function ClientFeed() {
     if (!formularioProposta.cidade.trim()) return "Informe a cidade.";
     if (!formularioProposta.estado.trim()) return "Informe o estado.";
     if (cepSomenteDigitos.length !== 8) return "Informe um CEP válido com 8 dígitos.";
+    if (!formularioProposta.valor.toString().trim()) return "Informe um valor proposto para o serviço.";
+    const valorNumero = Number(String(formularioProposta.valor).replace(",", "."));
+    if (!Number.isFinite(valorNumero) || valorNumero <= 0) return "O valor proposto deve ser maior que zero.";
     if (!formularioProposta.imagem) return "Adicione uma imagem do problema.";
 
     return "";
@@ -232,17 +276,60 @@ export function ClientFeed() {
       return;
     }
 
-    const novaProposta = {
-      ...formularioProposta,
-      valor: formularioProposta.valor ? Number(String(formularioProposta.valor).replace(",", ".")) : null,
-      imagemPreview: imagemProblemaPreview,
-      status: "ABERTO",
-      criadoEm: new Date().toISOString(),
+    const enviar = async () => {
+      try {
+        const valorNumero = Number(
+          String(formularioProposta.valor).replace(",", ".")
+        );
+
+        const categoriaEnum =
+          CATEGORIA_ENUM_MAP[formularioProposta.categoria] || "GERAL";
+
+        const dadosTrabalho = {
+          localizacao: {
+            rua: formularioProposta.rua,
+            bairro: formularioProposta.bairro,
+            numero: formularioProposta.numero,
+            cidade: formularioProposta.cidade,
+            cep: formularioProposta.cep,
+            estado: formularioProposta.estado,
+            complemento: formularioProposta.complemento,
+          },
+          problema: formularioProposta.titulo,
+          pagamento: valorNumero,
+          descricao: formularioProposta.descricao,
+          status: "ABERTO",
+          idProfissional: null,
+          categoria: categoriaEnum,
+          idUsuario: usuario?.id || null,
+        };
+
+        const formData = new FormData();
+        formData.append(
+          "dados",
+          new Blob([JSON.stringify(dadosTrabalho)], {
+            type: "application/json",
+          })
+        );
+
+        if (formularioProposta.imagem) {
+          formData.append("imagen", formularioProposta.imagem);
+        }
+
+        const criado = await api.post("/trabalho/cadastrar", formData);
+
+        if (criado) {
+          setPropostasCriadas((atual) => [criado, ...atual]);
+        }
+
+        redefinirFormulario();
+        fecharModalProposta();
+      } catch (err) {
+        setErroProposta("Nao foi possivel criar o trabalho. Tente novamente.");
+      }
     };
 
-    setPropostasCriadas((atual) => [novaProposta, ...atual]);
-    redefinirFormulario();
-    fecharModalProposta();
+    enviar();
   };
 
   return (
@@ -253,7 +340,7 @@ export function ClientFeed() {
           <div className="feed-cabecalho__topo">
             <div className="feed-cabecalho__saudacao">
               <span className="feed-cabecalho__boas-vindas">Bom dia,</span>
-              <h1 className="feed-cabecalho__nome">{usuarioLogado.nome} 👋</h1>
+              <h1 className="feed-cabecalho__nome">{usuario?.nome || "Cliente"} 👋</h1>
             </div>
 
             <div className="feed-cabecalho__acoes">
@@ -262,12 +349,10 @@ export function ClientFeed() {
               </button>
               <button className="btn-icone btn-icone--notificacao" aria-label="Notificações">
                 <Bell size={20} />
-                {usuarioLogado.notificacoes > 0 && (
-                    <span className="badge-notificacao">{usuarioLogado.notificacoes}</span>
-                )}
+                <span className="badge-notificacao">0</span>
               </button>
               <div className="feed-cabecalho__perfil">
-                <img src={usuarioLogado.foto} alt="Perfil" className="avatar-usuario" />
+                <img src={usuario?.fotoPerfil || "https://placehold.co/64x64"} alt="Perfil" className="avatar-usuario" />
                 <span className="status-online" aria-hidden="true" />
               </div>
             </div>
@@ -281,7 +366,7 @@ export function ClientFeed() {
           >
             <MapPin size={18} className="icone-pino" strokeWidth={2.5} />
             <div className="info-endereco">
-              <span className="enviar-para">Atendimento para {usuarioLogado.nome}</span>
+              <span className="enviar-para">Atendimento para {usuario?.nome || "cliente"}</span>
               {enderecoSalvo ? (
                 <span className="texto-endereco">
                   {enderecoSalvo.rua}, {enderecoSalvo.numero} - {enderecoSalvo.bairro}
@@ -373,30 +458,51 @@ export function ClientFeed() {
                   <p className="bloco-subtitulo">Profissionais recomendados para você</p>
 
                   <div className="carrossel-profissionais">
-                    {profissionais.map((pro) => (
+                    {loadingProfissionais && (
+                      <p className="mensagem-vazio">Carregando profissionais...</p>
+                    )}
+                    {!loadingProfissionais && erroProfissionais && (
+                      <p className="mensagem-vazio">{erroProfissionais}</p>
+                    )}
+                    {!loadingProfissionais && !erroProfissionais && profissionais.length === 0 && (
+                      <p className="mensagem-vazio">Nenhum profissional encontrado na sua região.</p>
+                    )}
+                    {!loadingProfissionais && !erroProfissionais && profissionais.map((pro) => {
+                      const foto = pro.fotoPerfil || pro.caminhoImagem || "https://placehold.co/200x200";
+                      const avaliacao = typeof pro.mediaAvaliacao === "number" ? pro.mediaAvaliacao.toFixed(1) : "--";
+                      const totalAvaliacoes = pro.totalAvaliacoes || pro.totalServicos || 0;
+                      const categoria = pro.categoria || "Profissional";
+
+                      return (
                         <article key={pro.id} className="card-pro-recomendado">
                           <div className="card-pro-recomendado__imagem-wrapper">
-                            <img src={pro.avatar} alt={pro.nome} className="card-pro-recomendado__imagem" />
-                            <span className="card-pro-recomendado__tag" style={{ backgroundColor: pro.corTag }}>
-                        {pro.role}
-                      </span>
-                            {pro.disponivel && <span className="card-pro-recomendado__online" />}
+                            <img src={foto} alt={pro.nome} className="card-pro-recomendado__imagem" />
+                            <span className="card-pro-recomendado__tag">
+                              {categoria}
+                            </span>
+                            <span className="card-pro-recomendado__online" />
                           </div>
                           <div className="card-pro-recomendado__dados">
                             <h3 className="card-pro-recomendado__nome">{pro.nome}</h3>
                             <div className="card-pro-recomendado__avaliacao">
                               <Star size={11} className="icone-estrela" />
-                              <span className="nota">{pro.avaliacaoMedia}</span>
-                              <span className="total">({pro.totalAvaliacoes})</span>
+                              <span className="nota">{avaliacao}</span>
+                              {totalAvaliacoes > 0 && (
+                                <span className="total">({totalAvaliacoes})</span>
+                              )}
                             </div>
                             <div className="card-pro-recomendado__detalhes">
-                              <span className="preco">{pro.valorBase}</span>
-                              <div className="distancia"><MapPin size={11} /> {pro.distancia}</div>
+                              <span className="preco">Serviços sob consulta</span>
+                              <div className="distancia">
+                                <MapPin size={11} />
+                                {pro.localizacaoPrincipal?.cidade || "Cidade não inf."}
+                              </div>
                             </div>
                             <button className="btn-solicitar">Solicitar</button>
                           </div>
                         </article>
-                    ))}
+                      );
+                    })}
                   </div>
                 </section>
 

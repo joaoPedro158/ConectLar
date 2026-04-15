@@ -58,28 +58,42 @@ export function ProvedorAutenticacao({ children }) {
     }
   };
 
-  const login = (respostaLogin) => {
+  const login = async (respostaLogin) => {
     const nextToken = respostaLogin?.token ?? null;
-    const jwtPayload = nextToken ? parseJwt(nextToken) : null;
-    const usuarioApi = respostaLogin?.usuario ?? {};
-    const role = usuarioApi.role || respostaLogin?.tipoLogin || jwtPayload?.role || "USUARIO";
+    if (!nextToken) return;
+
+    api.setToken(nextToken);
+    setTokenState(nextToken);
+
+    const jwtPayload = parseJwt(nextToken);
+    const role = jwtPayload?.role || "USUARIO";
     const isProfissional = role === "PROFISSIONAL";
+    const tipo = isProfissional ? "PROFISSIONAL" : "USUARIO";
+    const modoInicial = isProfissional ? "profissional" : "cliente";
+
+    let usuarioApi = null;
+    try {
+      const path = isProfissional ? "/profissional/meusdados" : "/usuario/meusdados";
+      usuarioApi = await api.get(path);
+    } catch (e) {
+      // se falhar, seguimos só com os dados do token
+      usuarioApi = null;
+    }
 
     const usuarioNormalizado = {
-      id: usuarioApi.id ?? jwtPayload?.id ?? null,
-      nome: usuarioApi.nome ?? jwtPayload?.nome ?? "Usuário",
-      email: usuarioApi.email ?? jwtPayload?.email ?? "",
-      telefone: usuarioApi.telefone ?? jwtPayload?.telefone ?? "",
-      fotoPerfil: usuarioApi.fotoPerfil ?? jwtPayload?.fotoPerfil ?? "",
-      localizacao: Array.isArray(usuarioApi.localizacao) ? usuarioApi.localizacao : [],
+      id: usuarioApi?.id ?? jwtPayload?.id ?? null,
+      nome: usuarioApi?.nome ?? jwtPayload?.nome ?? "Usuário",
+      email: usuarioApi?.email ?? jwtPayload?.sub ?? "",
+      telefone: usuarioApi?.telefone ?? jwtPayload?.telefone ?? "",
+      fotoPerfil: usuarioApi?.fotoPerfil ?? jwtPayload?.fotoPerfil ?? "",
+      localizacao: Array.isArray(usuarioApi?.localizacao) ? usuarioApi.localizacao : [],
       role,
-      tipoLogin: respostaLogin?.tipoLogin ?? jwtPayload?.tipoLogin ?? role,
-      categoria: usuarioApi.categoria ?? null,
+      tipoLogin: tipo,
+      categoria: usuarioApi?.categoria ?? null,
       isProfissional,
     };
 
-    const modoInicial = isProfissional ? "profissional" : "cliente";
-    salvarSessao(nextToken, usuarioNormalizado, usuarioNormalizado.tipoLogin, modoInicial);
+    salvarSessao(nextToken, usuarioNormalizado, tipo, modoInicial);
   };
 
   const logout = () => {

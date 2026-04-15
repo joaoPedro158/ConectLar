@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, Navigation, Bike, Clock, User, Check, X, HandCoins } from "lucide-react";
-import { useTemaEscuro } from "../context/ContextoTemaEscuro";
-import "../styles/pages/ConectaRide.css";
+import { ArrowLeft, MapPin, Navigation, Bike, Clock, User, Check, X, HandCoins, Package } from "lucide-react";
+import { useTemaEscuro } from "../../context/ContextoTemaEscuro.jsx";
+import "../../styles/pages/ConectaRide.css";
 
 // Mock de uma corrida a tocar
 const corridaPendente = {

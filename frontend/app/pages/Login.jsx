@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Briefcase, Smartphone, Globe, Zap, LogIn, Camera } from "lucide-react";
 import { useTemaEscuro } from "../context/ContextoTemaEscuro";
 import { useAuth } from "../context/ContextoAutenticacao";
@@ -8,8 +9,10 @@ import { Abas, AbasLista, AbasGatilho } from "../components/ui/Abas";
 
 export function Login() {
   const { temaEscuro } = useTemaEscuro();
-  const { login } = useAuth();
+  const { login, usuario } = useAuth();
+  const navigate = useNavigate();
   const [modoTela, setModoTela] = useState("login"); // "login" | "cadastro" | "esqueci"
+  const [mensagemCadastro, setMensagemCadastro] = useState("");
 
   const [identificador, setIdentificador] = useState("");
   const [senha, setSenha] = useState("");
@@ -43,6 +46,15 @@ export function Login() {
     "Eletricista", "Encanador", "Pintor", "Diarista", "Faxineiro(a)", "Montador de Móveis", "Pedreiro", "Gesseiro", "Jardineiro", "Paisagista", "Chaveiro", "Vidraceiro", "Marceneiro", "Passadeira", "Zelador", "Bombeiro Hidráulico", "Cuidador de Animais", "Capinador", "Limpeza de Estofados", "Ajudante de Obras", "Montador de Estruturas", "Instalador de Antena", "Reparador de Eletrodomésticos", "Pintor Automotivo", "Lavador de Carros", "Serralheiro", "Técnico em Informática", "Babá", "Motorista", "Mototaxista", "Entregador"
   ];
 
+  const CATEGORIA_ENUM_MAP = {
+    "Eletricista": "ELETRICISTA",
+    "Encanador": "ENCANADOR",
+    "Pintor": "PINTOR",
+    "Marceneiro": "MARCENEIRO",
+    "Jardineiro": "JARDINEIRO",
+    // Demais entram como categoria geral
+  };
+
   const confirmarLogin = async (e) => {
     e.preventDefault();
     setErroLogin("");
@@ -58,17 +70,83 @@ export function Login() {
         senha,
       });
 
-      login(resposta);
+      const usuarioLogado = await login(resposta);
+      // Redirecionamento imediato e garantido para profissional
+      if (usuarioLogado?.role === "PROFISSIONAL" || usuarioLogado?.isProfissional) {
+        navigate("/profissional", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     } catch (error) {
-      const mensagem = error?.message || "Nao foi possivel entrar. Verifique email e senha.";
+      // Tenta extrair mensagem do backend ou status
+      let mensagem = "Não foi possível entrar. Verifique e-mail e senha.";
+      if (error?.response?.status === 403) {
+        mensagem = "Usuário inexistente ou senha incorreta.";
+      } else if (error?.response?.data?.message) {
+        mensagem = error.response.data.message;
+      }
       setErroLogin(mensagem);
     }
   };
 
-  const confirmarCadastro = (e) => {
+  const confirmarCadastro = async (e) => {
     e.preventDefault();
-    // Aqui você pode chamar a API de cadastro real
-    console.log("A registar:", { nomeCadastro, emailCadastro, telefoneCadastro, senhaCadastro, tipoCadastro, categoriaProfissional });
+    setMensagemCadastro("");
+    console.log("A registar:", {
+      nomeCadastro,
+      emailCadastro,
+      telefoneCadastro,
+      senhaCadastro,
+      tipoCadastro,
+      categoriaProfissional,
+    });
+
+    if (!nomeCadastro || !emailCadastro || !senhaCadastro) {
+      return;
+    }
+
+    try {
+      const isProfissional = tipoCadastro === "PROFISSIONAL";
+      const endpoint = isProfissional
+        ? "/profissional/cadastrar"
+        : "/usuario/cadastrar";
+
+      const dadosUsuarioOuProfissional = {
+        nome: nomeCadastro,
+        email: emailCadastro,
+        senha: senhaCadastro,
+        telefone: telefoneCadastro,
+        role: tipoCadastro,
+        // por enquanto sem endereço detalhado
+        localizacao: [],
+      };
+
+      if (isProfissional) {
+        const categoriaEnum =
+          CATEGORIA_ENUM_MAP[categoriaProfissional] || "GERAL";
+        dadosUsuarioOuProfissional.categoria = categoriaEnum;
+      }
+
+      const formData = new FormData();
+      formData.append(
+        "dados",
+        new Blob([JSON.stringify(dadosUsuarioOuProfissional)], {
+          type: "application/json",
+        })
+      );
+
+      if (fotoArquivo) {
+        formData.append("arquivo", fotoArquivo);
+      }
+
+      await api.post(endpoint, formData);
+
+      // Sempre volta para tela de login e mostra mensagem de sucesso
+      setModoTela("login");
+      setMensagemCadastro("Cadastro realizado com sucesso! Faça login para continuar.");
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+    }
   };
 
   const confirmarEsqueci = (e) => {
@@ -142,6 +220,9 @@ export function Login() {
 
             {modoTela === "login" && (
               <form className="login-passo" onSubmit={confirmarLogin}>
+                {mensagemCadastro && (
+                  <div className="login-sucesso-msg">{mensagemCadastro}</div>
+                )}
                 <div className="login-grupo">
                   <label>E-mail ou Telefone</label>
                   <input
