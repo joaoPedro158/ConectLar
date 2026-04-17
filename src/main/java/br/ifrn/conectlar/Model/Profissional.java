@@ -2,6 +2,7 @@ package br.ifrn.conectlar.Model;
 
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
+import br.ifrn.conectlar.Model.Interface.PerfilModel;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.flywaydb.core.internal.util.StringUtils;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Getter
 @SuperBuilder
-public class Profissional extends Usuario {
+public class Profissional extends Usuario implements PerfilModel {
     private CategoriaEnum categoria;
 
 

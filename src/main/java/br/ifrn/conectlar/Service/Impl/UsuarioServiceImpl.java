@@ -32,7 +32,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class UsuarioServiceImpl implements UsuarioService {
+public class UsuarioServiceImpl extends BaseService implements UsuarioService  {
 
     private final UsuarioJpaRepository usuarioRepository;
     private final UsuarioMapper mapper;
@@ -41,6 +41,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     private final AvaliacaoJparepository avaliacaoRepository;
     private final PasswordEncoder passwordEncoder;
     private final SalvaArquivoService salvaArquivoService;
+
+    
 
     @Override
     @Transactional
@@ -101,31 +103,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         Usuario usuarioModel = mapper.toModel(entityToUpdate);
 
-        if (usuario != null){
-            if (usuario.email() != null && !usuario.email().equals(usuarioModel.getEmail())) {
-                if (usuarioRepository.findByEmailAndIdNot(usuario.email(), id).isPresent()) {
-                    throw new IllegalArgumentException("Este e-mail já está em uso por outro usuário.");
-                }
-            }
-            if (usuario.telefone() != null && !usuario.telefone().equals(usuarioModel.getTelefone())) {
-                if (usuarioRepository.findByTelefoneAndIdNot(usuario.telefone(), id).isPresent()) {
-                    throw new IllegalArgumentException("Este telefone já está em uso por outro usuário.");
-                }
-            }
-            if (usuario.senha() != null && !usuario.senha().isBlank()) {
-                usuarioModel.validarSenha(usuario.senha());
-                String senhaCriptografada = passwordEncoder.encode(usuarioModel.getSenha());
-                entityToUpdate.setSenha(senhaCriptografada);
-            }
-            usuarioModel.atualizarDados(
-                    usuario.nome(),
-                    usuario.email(),
-                    usuario.telefone()
-
+        if (usuario != null) {
+            validarEAtualizar(id, usuario.nome(), usuario.email(), usuario.telefone(), usuario.senha(),
+                    usuarioModel, entityToUpdate,
+                    (email, _id) -> usuarioRepository.findByEmailAndIdNot(email, _id).isPresent(),
+                    (tel, _id) -> usuarioRepository.findByTelefoneAndIdNot(tel, _id).isPresent(),
+                    (m) -> mapper.updateEntityFromModel(m, entityToUpdate)
             );
-
-            mapper.updateEntityFromModel(usuarioModel, entityToUpdate);
         }
+
 
         try {
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {

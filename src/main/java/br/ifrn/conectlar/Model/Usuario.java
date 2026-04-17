@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Model;
 
 import br.ifrn.conectlar.Model.Enum.UsuarioRole;
+import br.ifrn.conectlar.Model.Interface.PerfilModel;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
 
 @Getter
 @SuperBuilder
-public class Usuario {
+public class Usuario implements PerfilModel {
 
     private Long id;
     private String nome;
@@ -49,10 +50,6 @@ public class Usuario {
 
         if (this.nome == null || this.nome.trim().length() < 3) {
             throw new IllegalArgumentException("O nome do usuário é obrigatório e deve ter pelo menos 3 letras.");
-        }
-
-        if (this.localizacao == null) {
-            throw new IllegalArgumentException("A localização (endereço) é obrigatória para o cadastro.");
         }
 
 
@@ -146,7 +143,7 @@ public class Usuario {
     }
 
     public void validarSenha(String senha) {
-        if (senha == null || this.senha.isBlank()) {
+        if (senha == null || senha.isBlank()) {
             throw new IllegalArgumentException("A senha é obrigatória.");
         }
 

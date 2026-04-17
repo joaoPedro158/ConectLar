@@ -1,6 +1,7 @@
 package br.ifrn.conectlar.Repository.Entity;
 
 import br.ifrn.conectlar.Model.Enum.CategoriaEnum;
+import br.ifrn.conectlar.Model.Interface.PerfilEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProfissionalEntity extends BaseUsuarioEntity {
+public class ProfissionalEntity extends BaseUsuarioEntity implements PerfilEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 150)
     private CategoriaEnum categoria;
