@@ -127,7 +127,11 @@ Envio de imagens (foto de perfil, imagem do trabalho) é feito via `multipart/fo
 ## Frontend
 
 O repositório também contém um frontend em **React + Vite**, responsável por consumir essa API. Este README tem como foco a documentação do backend; detalhes do frontend podem ser expandidos futuramente.
+### 👨‍💻 Autores
 
-## Autor
+**João Pedro**
 
-Desenvolvido por [João Pedro](https://github.com/joaoPedro158), estudante de Análise e Desenvolvimento de Sistemas no IFRN — Campus Nova Cruz.
+- 🌐 LinkedIn: [João Pedro](https://www.linkedin.com/in/joão-pedro-69384b335/)
+
+**Carlos Eduardo**
+**Lucas Gabriel**
