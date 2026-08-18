@@ -134,4 +134,5 @@ O repositório também contém um frontend em **React + Vite**, responsável por
 - 🌐 LinkedIn: [João Pedro](https://www.linkedin.com/in/joão-pedro-69384b335/)
 
 **Carlos Eduardo**
+
 **Lucas Gabriel**
